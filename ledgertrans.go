@@ -3,16 +3,16 @@ package efs
 import (
 	"time"
 
-	. "github.com/eaciit/orm"
+	"github.com/eaciit/orm/v1"
 )
 
 type LedgerTrans struct {
-	ModelBase `bson:"-",json:"-"`
-	ID        string
-	JournalNo string
-	TransDate time.Time
-	Amount    float64
-	Account   string
+	orm.ModelBase `bson:"-",json:"-"`
+	ID            string `bson:"_id" , json:"_id"`
+	JournalNo     string
+	TransDate     time.Time
+	Amount        float64
+	Account       string
 }
 
 func (e *LedgerTrans) RecordID() interface{} {

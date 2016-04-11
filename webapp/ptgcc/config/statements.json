@@ -1,0 +1,27 @@
+[{
+    "id":"donation",
+    "title":"donation",
+    "enable":true,
+    "elements":[
+        {
+            "index":1,
+            "title":"Depre (Add back)",
+            "type":1,
+            "datavalue":["depre"],
+            "show":true,
+            "bold":false,
+            "negatevalue":false,
+            "negatedisplay":false
+        },
+        {
+            "index":2,
+            "title":"Depre (Add back) 50%",
+            "type":50,
+            "datavalue":["@1/2"],
+            "show":true,
+            "bold":false,
+            "negatevalue":false,
+            "negatedisplay":false
+        }
+    ]
+}]

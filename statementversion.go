@@ -1,14 +1,14 @@
 package efs
 
 import (
-	. "github.com/eaciit/orm"
+	"github.com/eaciit/orm/v1"
 )
 
 type StatementVersion struct {
-	ModelBase   `bson:"-",json:"-"`
-	ID          string ` bson:"_id" , json:"_id" `
-	Title       string
-	StatementID string
+	orm.ModelBase `bson:"-",json:"-"`
+	ID            string ` bson:"_id" , json:"_id" `
+	Title         string
+	StatementID   string
 
 	Element []VersionElement
 }
@@ -28,14 +28,14 @@ func (e *StatementVersion) TableName() string {
 
 type VersionElement struct {
 	/*
-    Index    int
+		    Index    int
+			IsTxt    bool
+			ValueTxt string
+			ValueNum float64
+			Bold     bool
+	*/
+	StatementElement
 	IsTxt    bool
-	ValueTxt string
-	ValueNum float64
-	Bold     bool
-    */
-    StatementElement
-    IsTxt    bool
 	ValueTxt string
 	ValueNum float64
 }
