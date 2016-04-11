@@ -9,6 +9,8 @@ type StatementVersion struct {
 	ID          string ` bson:"_id" , json:"_id" `
 	Title       string
 	StatementID string
+
+	Element []VersionElement
 }
 
 func (e *StatementVersion) RecordID() interface{} {
@@ -22,4 +24,12 @@ func NewStatementVersion() *StatementVersion {
 
 func (e *StatementVersion) TableName() string {
 	return "statementversions"
+}
+
+type VersionElement struct {
+	Index    int
+	IsTxt    bool
+	ValueTxt string
+	ValueNum float64
+	Bold     bool
 }
