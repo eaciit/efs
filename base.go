@@ -3,7 +3,9 @@ package efs
 import (
 	"errors"
 	"github.com/eaciit/dbox"
+	_ "github.com/eaciit/dbox/dbc/json"
 	_ "github.com/eaciit/dbox/dbc/jsons"
+	_ "github.com/eaciit/dbox/dbc/mongo"
 	"github.com/eaciit/orm/v1"
 	"github.com/eaciit/toolkit"
 	"os"
@@ -28,6 +30,13 @@ func validateConfig() error {
 
 func SetDb(conn dbox.IConnection) error {
 	CloseDb()
+
+	e := conn.Connect()
+	if e != nil {
+		_dbErr = errors.New("efs.SetDB: Test Connect: " + e.Error())
+		return _dbErr
+	}
+
 	_db = orm.New(conn)
 	return nil
 }
@@ -42,40 +51,8 @@ func DB() *orm.DataContext {
 	return _db
 }
 
-func getConnection() (dbox.IConnection, error) {
-	if e := validateConfig(); e != nil {
-		return nil, errors.New("GetConnection: " + e.Error())
-	}
-
-	//jsonpath := getJsonFilePath(o)
-	c, e := dbox.NewConnection("jsons", &dbox.ConnectionInfo{ConfigPath, "", "", "", toolkit.M{}.Set("newfile", true)})
-	if e != nil {
-		return nil, errors.New("GetConnection: " + e.Error())
-	}
-	e = c.Connect()
-	if e != nil {
-		return nil, errors.New("GetConnection: Connect: " + e.Error())
-	}
-	return c, nil
-}
-
-func ctx() *orm.DataContext {
-	var econn error
-	if _db == nil {
-		if _conn == nil {
-			_conn, econn = getConnection()
-			if econn != nil {
-				_dbErr = errors.New("Connection error: " + econn.Error())
-				return nil
-			}
-		}
-		_db = orm.New(_conn)
-	}
-	return _db
-}
-
 func Delete(o orm.IModel) error {
-	e := ctx().Delete(o)
+	e := DB().Delete(o)
 	if e != nil {
 		return errors.New("Delete: " + e.Error())
 	}
@@ -84,7 +61,7 @@ func Delete(o orm.IModel) error {
 }
 
 func Save(o orm.IModel) error {
-	e := ctx().Save(o)
+	e := DB().Save(o)
 	if e != nil {
 		return errors.New("Save: " + e.Error())
 	}
@@ -92,19 +69,30 @@ func Save(o orm.IModel) error {
 }
 
 func Get(o orm.IModel, id interface{}) error {
-	e := ctx().GetById(o, id)
+	e := DB().GetById(o, id)
 	if e != nil {
 		return errors.New("Get: " + e.Error())
 	}
 	return e
 }
 
-func Find(o orm.IModel, filter *dbox.Filter) (dbox.ICursor, error) {
+func Find(o orm.IModel, filter *dbox.Filter, config toolkit.M) (dbox.ICursor, error) {
 	var filters []*dbox.Filter
 	if filter != nil {
 		filters = append(filters, filter)
 	}
-	c, e := ctx().Find(o, toolkit.M{}.Set("where", filters))
+
+	dconf := toolkit.M{}.Set("where", filters)
+	if config != nil {
+		if config.Has("take") {
+			dconf.Set("limit", config["take"])
+		}
+		if config.Has("skip") {
+			dconf.Set("skip", config["skip"])
+		}
+	}
+
+	c, e := DB().Find(o, dconf)
 	if e != nil {
 		return nil, errors.New("Find: " + e.Error())
 	}

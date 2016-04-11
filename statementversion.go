@@ -27,13 +27,6 @@ func (e *StatementVersion) TableName() string {
 }
 
 type VersionElement struct {
-	/*
-		    Index    int
-			IsTxt    bool
-			ValueTxt string
-			ValueNum float64
-			Bold     bool
-	*/
 	StatementElement
 	IsTxt    bool
 	ValueTxt string

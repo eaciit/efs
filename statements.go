@@ -34,20 +34,25 @@ func (e *Statements) Save() error {
 	return nil
 }
 
-func (e *Statements) GetById() error {
-	if err := Get(e, e.ID); err != nil {
-		return err
-	}
-	return nil
-}
+func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion) {
+	sv = new(StatementVersion)
 
-func (e *Statements) Delete() error {
-	if err := Delete(e); err != nil {
-		return err
-	}
-	return nil
-}
+	sv.ID = toolkit.RandomString(32)
+	sv.Title = toolkit.ToString(ins.Get("title", ""))
+	sv.StatementID = e.ID
+	sv.Element = make([]VersionElement, 0, 0)
 
-func (e *Statements) Run(ins toolkit.M) *StatementVersion {
-	return nil
+	for _, v := range e.Elements {
+		tve := VersionElement{}
+
+		tve.StatementElement = v
+		tve.IsTxt = false
+		tve.ValueTxt = ""
+		tve.ValueNum = 0
+
+		sv.Element = append(sv.Element, tve)
+
+	}
+
+	return
 }
