@@ -31,7 +31,8 @@ func (e *LedgerSummary) TableName() string {
 LedgerSummaries:
 [
     {1, 1-Jan-2016, 200000, "depre"},
-    {2, 1-Jan-2016, 100000, "xxx"}
+    {2, 1-Jan-2016, 100000, "xxx"},
+    {2, 2-Jan-2016, 100000, "depre"}
 ]
 
 Statements:
@@ -49,7 +50,24 @@ Statements:
             bold:false,
             negatevalue:false,
             negatedisplay:false
+        },
+        {
+            index:2,
+            title:"Depre (Add back) 50%",
+            type:50,
+            datavalue:["@1/2"],
+            show:true,
+            bold:false,
+            negatevalue:false,
+            negatedisplay:false
         }
     ]
 }
+
+StatementGetByID("donation").Run(nil)
+=
+[
+    1=300000
+    2=150000
+]
 */
