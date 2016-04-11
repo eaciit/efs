@@ -1,0 +1,39 @@
+package efs 
+
+struct Ledger     
+TableName:ledgers
+ID:string:primary_key:bson`_id:json`_id
+Title:string:default_empty
+Enable:bool:default_true
+Group:string
+GetByID()         
+FindByTitle()       
+FindByEnable() 
+
+
+struct LedgerTrans
+TableName:ledgertrans
+ID:string:primary_key
+JournalNo:string
+TransDate:time.Time
+Amount:float64
+Account:string
+
+struct LedgerSummary
+TableName:ledgersummaries
+ID:string:primary_key:bson`_id:json`_id
+TransDate:time.Time
+Amount:float64
+Account:string
+
+struct Statements
+TableName:statements
+ID:string:primary_key:bson`_id:json`_id
+Title:string
+Enable:bool:default_true
+
+struct StatementVersion
+TableName:statementversions
+ID:string:primary_key:bson`_id:json`_id
+Title:string
+StatementID:string
