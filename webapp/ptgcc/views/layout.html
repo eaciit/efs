@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script>var viewModel = {};</script>
+		{{template "_head.html"}}
+		
+	</head>
+	<body data-bind="with: viewModel">
+		<div class="navbar navbar-fixed-top">
+			<div class="container-fluid" id="header">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="#">
+						<img src="/res/img/logoeaciittrans.png" class="headimage">
+						<p class="headlogo">Enhanced Financial Statement</p>
+					</a>
+				</div>
+				<div class="clearfix"></div>				
+			</div>
+
+			<div class="navbar-collapse collapse" id="nav">
+				<div class="container-fluid" id="nav-ul">
+				</div>
+			</div>
+		</div>
+
+		<div class="container-fluid" id="container">
+			<div class="row">
+				{{.Content}}
+			</div>
+		</div>
+
+		<!-- {{template "_miniloader.html"}} -->
+
+		<script type="text/javascript">
+		    ko.applyBindings(viewModel);
+		</script>
+	</body>
+</html>
