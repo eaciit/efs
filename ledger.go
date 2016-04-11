@@ -2,16 +2,16 @@ package efs
 
 import (
 	"github.com/eaciit/dbox"
-	. "github.com/eaciit/orm"
+	"github.com/eaciit/orm/v1"
 	"github.com/eaciit/toolkit"
 )
 
 type Ledger struct {
-	ModelBase `bson:"-",json:"-"`
-	ID        string ` bson:"_id" , json:"_id" `
-	Title     string
-	Enable    bool
-	Group     string
+	orm.ModelBase `bson:"-",json:"-"`
+	ID            string ` bson:"_id" , json:"_id" `
+	Title         string
+	Enable        bool
+	Group         string
 }
 
 func LedgerGetByID(id string) *Ledger {

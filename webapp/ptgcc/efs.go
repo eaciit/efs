@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/eaciit/efs"
 	"github.com/eaciit/efs/webapp/ptgcc/controller"
 	"github.com/eaciit/knot/knot.v1"
 	"net/http"
@@ -19,6 +20,7 @@ func main() {
 	}*/
 
 	runtime.GOMAXPROCS(4)
+	efs.ConfigPath = controller.EFS_CONFIG_PATH
 
 	server = new(knot.Server)
 	server.Address = "localhost:8000"
