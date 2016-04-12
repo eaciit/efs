@@ -17,12 +17,16 @@ fp.templateFormula = {
 };
 fp.configFormula = ko.mapping.fromJS(fp.templateFormula);
 fp.konstanta = ko.observable("");
+fp.dataFormula = ko.observableArray([]);
+fp.dataVersion = ko.observableArray([]);
 fp.selectListAkun = function(index, data){
 	// $('#formula-editor').ecLookupDD("addLookup",{id:'@'+index, value: "@"+index+"("+data.title1+" "+data.title2+")"});
 	$('#formula-editor').ecLookupDD("addLookup",{id:'@'+index, value: "@"+(index+1)});
 };
 fp.showFormula = function(index,data){
-	$("#formula-popup").modal("show");
+    // if (data.Type == 50){
+    	$("#formula-popup").modal("show");
+    // }
 };
 fp.selectKoefisien = function(event){
 	$('#formula-editor').ecLookupDD("addLookup",{id:event, value: event});
@@ -34,52 +38,40 @@ fp.selectKoefisienGroup = function(event){
 };
 fp.clearFormula = function(){
 	$('#formula-editor').ecLookupDD("clear");
+};
+fp.getDataStatement = function(){
+    app.ajaxPost("/statement/getstatementversion",{}, function(res){
+        if(!app.isFine(res)){
+            return;
+        }
+        if (!res.data) {
+            res.data = [];
+        }
+        fp.dataFormula(res.data);
+    })
+};
+fp.removeColumnFormula = function(index){
+    console.log(index);
 }
-
-fp.dataFormula = ko.observableArray([
-	{
-        index:1,
-        title1:"EBT(Acc Base)",
-        title2:"",
-        type:1,
-        datavalue:[],
-        datavalue2:["200000"],
-        value: "6400000",
-        show:true,
-        bold:true,
-        negatevalue:false,
-        negatedisplay:false
-    },
-	{
-        index:1,
-        title1:"Step 1",
-        title2:"Depre (Add back)",
-        type:1,
-        datavalue:[],
-        datavalue2:["200000"],
-        value: "200000",
-        show:true,
-        bold:false,
-        negatevalue:false,
-        negatedisplay:false
-    },
-    {
-        index:2,
-        title1:"EBT 2",
-        title2:"Depre (Add back) 50%",
-        type:50,
-        datavalue:[],
-        datavalue2:["@1/2"],
-        value: "@1/2",
-        show:true,
-        bold:false,
-        negatevalue:false,
-        negatedisplay:false
-    }
-]);
+fp.addColumn = function(){
+    fp.dataVersion.push({"Index":1,"Title1":"","Title2":"EBT (Acc Base)","Type":1,"DataValue":[],"Show":true,"Bold":false,"NegateValue":false,"NegateDisplay":false,"IsTxt":false,"ValueTxt":"","ValueNum":0});
+    var index = $("#tableFormula>thead>tr input.searchversion").length + 1;
+    $("#tableFormula>thead>tr").append("<td indexid='"+index+"'><div class='searchversion'><input class='searchversion' id='version"+index+"' /></div><div class='row-remove'><span class='glyphicon glyphicon-remove' onClick='fp.removeColumnFormula("+index+")'></span></td>");
+    $('#version'+index).ecLookupDD({
+        dataSource:{
+            data:[],
+        },
+        placeholder: "Search Version",
+        inputType: "ddl",
+        idField: "id", 
+        idText: "value", 
+        displayFields: "value", 
+    });
+}
 
 $(function (){
     // $("#kostanta").kendoNumericTextBox();
+    fp.getDataStatement();
 	$('#formula-editor').ecLookupDD({
 		dataSource:{
 			data:[],
@@ -97,7 +89,7 @@ $(function (){
         dataSource:{
             data:[],
         },
-        placeholder: "Title Version",
+        placeholder: "Search Version",
         inputType: "ddl",
         idField: "id", 
         idText: "value", 
