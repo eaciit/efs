@@ -3,15 +3,15 @@ package efs
 import (
 	"time"
 
-	. "github.com/eaciit/orm"
+	"github.com/eaciit/orm/v1"
 )
 
 type LedgerSummary struct {
-	ModelBase `bson:"-",json:"-"`
-	ID        string ` bson:"_id" , json:"_id" `
-	TransDate time.Time
-	Amount    float64
-	Account   string
+	orm.ModelBase `bson:"-",json:"-"`
+	ID            string ` bson:"_id" , json:"_id" `
+	TransDate     time.Time
+	Amount        float64
+	Account       string
 }
 
 func (e *LedgerSummary) RecordID() interface{} {
