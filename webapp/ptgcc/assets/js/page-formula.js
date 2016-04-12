@@ -16,6 +16,7 @@ fp.templateFormula = {
     negatedisplay:false
 };
 fp.configFormula = ko.mapping.fromJS(fp.templateFormula);
+fp.konstanta = ko.observable("");
 fp.selectListAkun = function(index, data){
 	// $('#formula-editor').ecLookupDD("addLookup",{id:'@'+index, value: "@"+index+"("+data.title1+" "+data.title2+")"});
 	$('#formula-editor').ecLookupDD("addLookup",{id:'@'+index, value: "@"+(index+1)});
@@ -25,6 +26,8 @@ fp.showFormula = function(index,data){
 };
 fp.selectKoefisien = function(event){
 	$('#formula-editor').ecLookupDD("addLookup",{id:event, value: event});
+    $("#konstanta").focus();
+    console.log()
 };
 fp.selectKoefisienGroup = function(event){
 	$('#formula-editor').ecLookupDD("addLookup",{id:event, value: event});
@@ -41,8 +44,7 @@ fp.dataFormula = ko.observableArray([
         type:1,
         datavalue:[],
         datavalue2:["200000"],
-        value1: "",
-        value2: "6400000",
+        value: "6400000",
         show:true,
         bold:true,
         negatevalue:false,
@@ -55,8 +57,7 @@ fp.dataFormula = ko.observableArray([
         type:1,
         datavalue:[],
         datavalue2:["200000"],
-        value1: "",
-        value2: "",
+        value: "200000",
         show:true,
         bold:false,
         negatevalue:false,
@@ -69,8 +70,7 @@ fp.dataFormula = ko.observableArray([
         type:50,
         datavalue:[],
         datavalue2:["@1/2"],
-        value1: "",
-        value2: "@1/2",
+        value: "@1/2",
         show:true,
         bold:false,
         negatevalue:false,
@@ -79,6 +79,7 @@ fp.dataFormula = ko.observableArray([
 ]);
 
 $(function (){
+    // $("#kostanta").kendoNumericTextBox();
 	$('#formula-editor').ecLookupDD({
 		dataSource:{
 			data:[],
@@ -91,4 +92,15 @@ $(function (){
 		idText: "value", 
 		displayFields: "value", 
 	});
+
+    $('#version1').ecLookupDD({
+        dataSource:{
+            data:[],
+        },
+        placeholder: "Title Version",
+        inputType: "ddl",
+        idField: "id", 
+        idText: "value", 
+        displayFields: "value", 
+    });
 });

@@ -683,7 +683,7 @@ body {
 .form-formula .formula-command {
   border-bottom: 1px solid #DDDDDD;
   width: 100%;
-  padding-bottom: 10px;
+  padding-bottom: 8px;
   margin-bottom: 10px; }
 .form-formula .btnKoefisien {
   margin-bottom: 5px; }
@@ -699,6 +699,9 @@ body {
     .form-formula .nav-command .nav li a:hover {
       background-color: #3A8BDF;
       color: whitesmoke; }
+
+.area-editor {
+  margin-bottom: 6px; }
 
 .dropdown-menu .icon-submenu {
   position: absolute;
