@@ -41,7 +41,7 @@ func (st *StatementController) GetStatementVersion(r *knot.WebContext) interface
 
 	// err := r.GetPayload(&payload)
 	//ID or other filter will get and generated from payload
-	sid := "qZ-SesL2s0Q7VODxyWj6-RVlqsa56ZMJ"
+	sid := "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j"
 
 	ds := new(efs.Statements)
 	err := efs.Get(ds, sid)

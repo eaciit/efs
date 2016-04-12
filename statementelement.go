@@ -9,6 +9,7 @@ const (
 	ElementFromTo                     = 3
 	ElementParmNumber                 = 10
 	ElementParmDate                   = 11
+	ElementParmString                 = 12
 	ElementFormula                    = 50
 )
 
