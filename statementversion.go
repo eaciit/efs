@@ -6,7 +6,7 @@ import (
 
 type StatementVersion struct {
 	orm.ModelBase `bson:"-",json:"-"`
-	ID            string ` bson:"_id" , json:"_id" `
+	ID            string `json:"_id",bson:"_id"`
 	Title         string
 	StatementID   string
 
@@ -32,3 +32,13 @@ type VersionElement struct {
 	ValueTxt string
 	ValueNum float64
 }
+
+//-- Index         int
+// Title1        string
+// Title2        string
+//-- Type          ElementTypeEnum
+// DataValue     []string
+// Show          bool
+// Bold          bool
+// NegateValue   bool
+// NegateDisplay bool

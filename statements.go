@@ -7,7 +7,7 @@ import (
 
 type Statements struct {
 	orm.ModelBase `bson:"-",json:"-"`
-	ID            string `bson:"_id" , json:"_id"`
+	ID            string `json:"_id",bson:"_id"`
 	Title         string
 	Enable        bool
 	Elements      []StatementElement
@@ -37,21 +37,35 @@ func (e *Statements) Save() error {
 func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion) {
 	sv = new(StatementVersion)
 
+	//build inst from ins
+	inst := toolkit.M{}
+
+	sv.ID = toolkit.ToString(ins.Get("ID", ""))
 	if sv.ID == "" {
 		sv.ID = toolkit.RandomString(32)
 	}
 
 	sv.Title = toolkit.ToString(ins.Get("title", ""))
 	sv.StatementID = e.ID
-	sv.Element = make([]VersionElement, 0, 0)
 
+	sv.Element = make([]VersionElement, 0, 0)
 	for _, v := range e.Elements {
 		tve := VersionElement{}
-
 		tve.StatementElement = v
+
 		tve.IsTxt = false
-		tve.ValueTxt = ""
-		tve.ValueNum = 0
+		switch {
+		case v.Type == ElementParmString || v.Type == ElementParmDate:
+			tve.IsTxt = true
+			tve.ValueTxt = toolkit.ToString(inst.Get(toolkit.Sprintf("@%v", v.Index), ""))
+		case v.Type == ElementParmNumber:
+			toolkit.Println("two")
+		case v.Type == ElementFormula:
+			toolkit.Println("three")
+		}
+
+		// tve.ValueTxt = ""
+		// tve.ValueNum = 0
 
 		sv.Element = append(sv.Element, tve)
 

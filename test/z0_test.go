@@ -88,7 +88,7 @@ func TestCreateStatement(t *testing.T) {
 }
 
 func TestRunStatement(t *testing.T) {
-	// t.Skip("Skip : Comment this line to do test")
+	t.Skip("Skip : Comment this line to do test")
 	sid := "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j"
 
 	ds := new(efs.Statements)
@@ -102,4 +102,34 @@ func TestRunStatement(t *testing.T) {
 	sv := ds.Run(ins)
 	toolkit.Printf("%#v\n", sv)
 
+}
+
+func TestSaveStatementVersion(t *testing.T) {
+	// t.Skip("Skip : Comment this line to do test")
+	sid := "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j"
+
+	ds := new(efs.Statements)
+	err := efs.Get(ds, sid)
+	if err != nil {
+		t.Errorf("Error to get statement by id, found : %s \n", err.Error())
+		return
+	}
+
+	ins := toolkit.M{}.Set("title", "base-v1")
+	sv := ds.Run(ins)
+
+	filter := dbox.And(dbox.Eq("statementid", sv.StatementID), dbox.Eq("title", sv.Title))
+	tsv := new(efs.StatementVersion)
+
+	c, err := efs.Find(tsv, filter, nil)
+	_ = c.Fetch(&tsv, 1, false)
+
+	toolkit.Printf("%#v\n", tsv.ID)
+	if tsv.ID != "" {
+		sv.ID = tsv.ID
+	}
+
+	err = efs.Save(sv)
+	toolkit.Printf("%#v\n", sv.ID)
+	toolkit.Printf("%#v\n", err)
 }

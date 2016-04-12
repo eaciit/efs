@@ -8,7 +8,7 @@ import (
 
 type Ledger struct {
 	orm.ModelBase `bson:"-",json:"-"`
-	ID            string ` bson:"_id" , json:"_id" `
+	ID            string `json:"_id",bson:"_id"`
 	Title         string
 	Enable        bool
 	Group         string
