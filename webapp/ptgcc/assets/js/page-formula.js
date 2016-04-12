@@ -16,12 +16,22 @@ fp.templateFormula = {
     negatedisplay:false
 };
 fp.configFormula = ko.mapping.fromJS(fp.templateFormula);
-fp.selectListAkun = function(index){
-
+fp.selectListAkun = function(index, data){
+	// $('#formula-editor').ecLookupDD("addLookup",{id:'@'+index, value: "@"+index+"("+data.title1+" "+data.title2+")"});
+	$('#formula-editor').ecLookupDD("addLookup",{id:'@'+index, value: "@"+(index+1)});
 };
 fp.showFormula = function(index,data){
 	$("#formula-popup").modal("show");
 };
+fp.selectKoefisien = function(event){
+	$('#formula-editor').ecLookupDD("addLookup",{id:event, value: event});
+};
+fp.selectKoefisienGroup = function(event){
+	$('#formula-editor').ecLookupDD("addLookup",{id:event, value: event});
+};
+fp.clearFormula = function(){
+	$('#formula-editor').ecLookupDD("clear");
+}
 
 fp.dataFormula = ko.observableArray([
 	{
@@ -67,3 +77,18 @@ fp.dataFormula = ko.observableArray([
         negatedisplay:false
     }
 ]);
+
+$(function (){
+	$('#formula-editor').ecLookupDD({
+		dataSource:{
+			data:[],
+		}, 
+		placeholder: "Area Formula",
+		areaDisable: true,
+		inputType: 'multiple', 
+		inputSearch: "value", 
+		idField: "id", 
+		idText: "value", 
+		displayFields: "value", 
+	});
+});
