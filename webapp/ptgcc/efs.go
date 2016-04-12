@@ -51,7 +51,7 @@ func main() {
 
 func prepareconnection() (conn dbox.IConnection, err error) {
 	conn, err = dbox.NewConnection("mongo",
-		&dbox.ConnectionInfo{"localhost:27017", "efs", "", "", toolkit.M{}.Set("timeout", 3)})
+		&dbox.ConnectionInfo{"192.168.0.200:27017", "efspttgcc", "", "", toolkit.M{}.Set("timeout", 3)})
 	if err != nil {
 		return
 	}

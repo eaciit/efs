@@ -11,9 +11,13 @@ import (
 	"testing"
 )
 
+var wd, _ = os.Getwd()
+
 func prepareconnection() (conn dbox.IConnection, err error) {
 	conn, err = dbox.NewConnection("mongo",
-		&dbox.ConnectionInfo{"localhost:27017", "efs", "", "", toolkit.M{}.Set("timeout", 3)})
+		&dbox.ConnectionInfo{"192.168.0.200:27017", "efspttgcc", "", "", toolkit.M{}.Set("timeout", 3)})
+	// conn, err = dbox.NewConnection("jsons",
+	// 	&dbox.ConnectionInfo{wd, "", "", "", toolkit.M{}.Set("newfile", true)})
 	if err != nil {
 		return
 	}
@@ -36,7 +40,6 @@ func TestInitialSetDatabase(t *testing.T) {
 }
 
 func loaddatasample() (arrtkm []efs.StatementElement, err error) {
-	wd, _ := os.Getwd()
 
 	conn, err := dbox.NewConnection("json",
 		&dbox.ConnectionInfo{toolkit.Sprintf("%v/sample.json", wd), "", "", "", nil})
@@ -70,7 +73,8 @@ func TestCreateStatement(t *testing.T) {
 
 	// toolkit.Println(arrdata)
 	ds := efs.NewStatements()
-	ds.ID = toolkit.RandomString(32)
+	// ds.ID = toolkit.RandomString(32)
+	ds.ID = "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j"
 	ds.Title = "donation"
 	ds.Elements = make([]efs.StatementElement, 0, 0)
 
@@ -85,7 +89,7 @@ func TestCreateStatement(t *testing.T) {
 
 func TestRunStatement(t *testing.T) {
 	// t.Skip("Skip : Comment this line to do test")
-	sid := "qZ-SesL2s0Q7VODxyWj6-RVlqsa56ZMJ"
+	sid := "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j"
 
 	ds := new(efs.Statements)
 	err := efs.Get(ds, sid)

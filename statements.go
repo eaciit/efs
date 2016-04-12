@@ -37,7 +37,10 @@ func (e *Statements) Save() error {
 func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion) {
 	sv = new(StatementVersion)
 
-	sv.ID = toolkit.RandomString(32)
+	if sv.ID == "" {
+		sv.ID = toolkit.RandomString(32)
+	}
+
 	sv.Title = toolkit.ToString(ins.Get("title", ""))
 	sv.StatementID = e.ID
 	sv.Element = make([]VersionElement, 0, 0)
