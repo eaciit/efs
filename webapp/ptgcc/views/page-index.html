@@ -10,6 +10,8 @@
 		    <div class="panel-body table-formula">
 		    	<div class="col-md-12">
 		    		<button class="btn btn-sm btn-primary" data-bind="click:fp.addColumn"><span class="glyphicon glyphicon-plus"></span> Add Column</button>
+		    		<button class="btn btn-sm btn-warning"><span class="glyphicon glyphicon-refresh"></span> Refresh</button>
+		    		<button class="btn btn-sm btn-success" data-bind="click:fp.saveStatement"><span class="glyphicon glyphicon-floppy-disk"></span> Save</button>
 		    	</div>
 		    	<div class="col-md-12">
 		    		<table id="tableFormula" class="table table-striped table-bordered">
@@ -31,39 +33,44 @@
 </div>
 
 <script id="formulaTemplate" type="text/html">
-	<tr data-bind="click: function(){fp.showFormula($index(),$data)}">
+	<tr>
 		<td data-bind="html:$index()+1"></td>
 		<td data-bind="html:Title1, style: {fontWeight: Bold == true ? 'bold':'normal'}"></td>
 		<td data-bind="html:Title2, style: {fontWeight: Bold == true ? 'bold':'normal'}"></td>
 		<!-- ko if: Type == 50 || Type == 1 -->
-		<td data-bind="html:ValueNum.toString(), style: {fontWeight: Bold == true ? 'bold':'normal'}"></td>
+		<td data-bind="html:ValueNum.toString(), style: {fontWeight: Bold == true ? 'bold':'normal'}, click: function(){fp.showFormula($index(),$data,1)}, attr:{'indexid':'1'}"></td>
 		<!-- /ko -->
-		<!-- ko if: Type == 12 || Type == 11 -->
-		<td>
+		<!-- ko if: Type == 12 -->
+		<td data-bind="attr:{'indexid':'1'}">
 			<input type="text" class="form-control input-sm" data-bind="value:ValueTxt"/>
 		</td>
 		<!-- /ko -->
+		<!-- ko if: Type == 11-->
+		<td data-bind="attr:{'indexid':'1'}">
+			<input data-bind="attr:{'id':'valueversion'+$index()}, kendoNumericTextBox:{value:ValueNum}"/>
+		</td>
+		<!-- /ko -->
 		<!-- ko if: Type == 10 -->
-		<td>
-			<input data-bind="attr:{'id':'valueversion'+$index()}"/>
+		<td data-bind="attr:{'indexid':'1'}">
+			<input data-bind="attr:{'id':'valueversion'+$index()}, kendoDateTimePicker:{value:ValueTxt, format: 'dd MMM yyyy'}"/>
 		</td>
 		<!-- /ko -->
 		<!-- ko foreach: fp.dataVersion -->
 			<!-- ko if: Type == 50 || Type == 1 -->
-			<td data-bind="html:ValueNum.toString(), style: {fontWeight: Bold == true ? 'bold':'normal'}"></td>
+			<td data-bind="html:ValueNum.toString(), style: {fontWeight: Bold == true ? 'bold':'normal'}, attr:{'indexid':($index()+2).toString()}, click: function(){fp.showFormula($($element).index(),$data,($index()+2))}"></td>
 			<!-- /ko -->
 			<!-- ko if: Type == 12 -->
-			<td>
+			<td data-bind="attr:{'indexid':($index()+2).toString()}">
 				<input type="text" class="form-control input-sm" data-bind="value:ValueTxt"/>
 			</td>
 			<!-- /ko -->
 			<!-- ko if: Type == 11 -->
-			<td>
+			<td data-bind="attr:{'indexid':($index()+2).toString()}">
 				<input data-bind="attr:{'id':'valueversion'+$index()}, kendoNumericTextBox:{value:ValueNum}"/>
 			</td>
 			<!-- /ko -->
 			<!-- ko if: Type == 10 -->
-			<td>
+			<td data-bind="attr:{'indexid':($index()+2).toString()}">
 				<input data-bind="attr:{'id':'valueversion'+$index()}, kendoDateTimePicker:{value:ValueTxt, format: 'dd MMM yyyy'}"/>
 			</td>
 			<!-- /ko -->
@@ -121,7 +128,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">OK</button>
+        <button type="button" class="btn btn-primary" data-bind="click:fp.saveFormulaEditor">OK</button>
       </div>
 
     </div>
