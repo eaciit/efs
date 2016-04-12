@@ -1,0 +1,167 @@
+{
+    "_id" : "rQj0jpcxNvZG_Q5cZ2kHDz9ihqG3Zw98",
+    "title" : "base-v4",
+    "statementid" : "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j",
+    "element" : [ 
+        {
+            "statementelement" : {
+                "index" : 1,
+                "title1" : "",
+                "title2" : "EBT (Acc Base)",
+                "type" : 1,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000
+        }, 
+        {
+            "statementelement" : {
+                "index" : 2,
+                "title1" : "AB",
+                "title2" : "",
+                "type" : 1,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000
+        }, 
+        {
+            "statementelement" : {
+                "index" : 3,
+                "title1" : "",
+                "title2" : "Depre (Add back)",
+                "type" : 1,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000
+        }, 
+        {
+            "statementelement" : {
+                "index" : 4,
+                "title1" : "",
+                "title2" : "Educational support",
+                "type" : 1,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000
+        }, 
+        {
+            "statementelement" : {
+                "index" : 5,
+                "title1" : "",
+                "title2" : "Contribution for public charities",
+                "type" : 1,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000
+        }, 
+        {
+            "statementelement" : {
+                "index" : 6,
+                "title1" : "",
+                "title2" : "Expenses for education or sports",
+                "type" : 1,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000
+        }, 
+        {
+            "statementelement" : {
+                "index" : 7,
+                "title1" : "LB",
+                "title2" : "",
+                "type" : 1,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000
+        }, 
+        {
+            "statementelement" : {
+                "index" : 8,
+                "title1" : "",
+                "title2" : "Dividend Paid",
+                "type" : 1,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000
+        }, 
+        {
+            "statementelement" : {
+                "index" : 9,
+                "title1" : "",
+                "title2" : "",
+                "type" : 1,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000
+        }, 
+        {
+            "statementelement" : {
+                "index" : 10,
+                "title1" : "EBT",
+                "title2" : "",
+                "type" : 1,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000
+        }
+    ]
+}
