@@ -2,6 +2,11 @@ package helper
 
 import (
 	"fmt"
+	"github.com/eaciit/knot/knot.v1"
+	"github.com/eaciit/toolkit"
+	"io"
+	"os"
+	"path/filepath"
 )
 
 var (
@@ -39,4 +44,23 @@ func CreateResult(success bool, data interface{}, message string) map[string]int
 		"success": success,
 		"message": message,
 	}
+}
+
+func ImageUploadHandler(r *knot.WebContext, filename, dstpath string) (error, string) {
+	file, handler, err := r.Request.FormFile(filename)
+	if err != nil {
+		return err, ""
+	}
+	defer file.Close()
+
+	newImageName := toolkit.RandomString(32) + filepath.Ext(handler.Filename)
+	dstSource := dstpath + toolkit.PathSeparator + newImageName
+	f, err := os.OpenFile(dstSource, os.O_WRONLY|os.O_CREATE, 0666)
+	if err != nil {
+		return err, ""
+	}
+	defer f.Close()
+	io.Copy(f, file)
+
+	return nil, newImageName
 }
