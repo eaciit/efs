@@ -39,24 +39,16 @@ func (e *Statements) Save() error {
 
 func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion, err error) {
 	sv = new(StatementVersion)
-	// toolkit.Println("data format, : ", toolkit.TypeName(ins["data"]))
-	inst := toolkit.M{}
+	inst, aformula := toolkit.M{}, toolkit.M{}
 	if ins.Has("data") && strings.Contains(toolkit.TypeName(ins["data"]), "StatementVersion") {
 		sv = ins["data"].(*StatementVersion)
-		inst, err = generateinst(sv)
+		inst, aformula, err = extractdatainput(ins["data"].(*StatementVersion))
 	} else if ins.Has("data") && toolkit.TypeName(ins["data"]) != "*StatementVersion" {
 		err = errors.New("Data has wrong format.")
 		return
 	}
 
-	// sv.ID = toolkit.ToString(ins.Get("ID", ""))
-	// if sv.ID == "" {
-	// 	sv.ID = toolkit.RandomString(32)
-	// }
-
-	// sv.Title = toolkit.ToString(ins.Get("title", ""))
 	sv.StatementID = e.ID
-	// toolkit.Printf("Debug Elements : %#v\n", e.Elements)
 	sv.Element = make([]*VersionElement, 0, 0)
 	for _, v := range e.Elements {
 		tve := new(VersionElement)
@@ -72,7 +64,13 @@ func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion, err error) {
 			decimalPoint := len(str) - (strings.Index(str, ".") + 1)
 			tve.ValueNum = toolkit.ToFloat64(str, decimalPoint, toolkit.RoundingAuto)
 		case v.Type == ElementFormula:
-			str := toolkit.ToString(inst.Get(toolkit.Sprintf("@%v", v.Index), ""))
+			str := ""
+			if toolkit.IsSlice(inst.Get(toolkit.Sprintf("@%v", v.Index), "")) {
+				str = strings.Join(inst[toolkit.Sprintf("@%v", v.Index)].([]string), "")
+			} else {
+				str = toolkit.ToString(inst.Get(toolkit.Sprintf("@%v", v.Index), ""))
+			}
+
 			if isnum(str) {
 				decimalPoint := len(str) - (strings.Index(str, ".") + 1)
 				tve.ValueNum = toolkit.ToFloat64(str, decimalPoint, toolkit.RoundingAuto)
@@ -81,16 +79,10 @@ func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion, err error) {
 				tve.ValueTxt = str
 			}
 
-			// if strings.Contains(str, "@") {
-			// 	//checkinstvar(str, inst); please do check as well to find condition require field with formula
-			// 	f, erf := toolkit.NewFormula(str)
-			// 	if erf != nil {
-			// 		err = errors.New(erf.Error())
-			// 		return
-			// 	}
-			// 	inst.Set(toolkit.Sprintf("@%v", v.Index), f.Run(inst))
-			// 	str = toolkit.ToString(inst.Get(toolkit.Sprintf("@%v", v.Index), ""))
-			// }
+			if aformula.Has(toolkit.Sprintf("@%v", v.Index)) {
+				tve.Formula = aformula[toolkit.Sprintf("@%v", v.Index)].([]string)
+			}
+
 		}
 
 		sv.Element = append(sv.Element, tve)
@@ -100,15 +92,23 @@ func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion, err error) {
 	return
 }
 
-func generateinst(inputsv *StatementVersion) (tkm toolkit.M, err error) {
+func extractdatainput(inputsv *StatementVersion) (tkm, aformula toolkit.M, err error) {
 	// toolkit.Println("ID of Statement version : ", inputsv.ID)
-	tkm = toolkit.M{}
+	tkm, aformula = toolkit.M{}, toolkit.M{}
 	arrint := make([]int, 0, 0)
 
 	for _, val := range inputsv.Element {
 		//spare for other case depend on type and mode from config
 		switch {
 		case val.StatementElement.Type == ElementFormula:
+			//get formula
+			arr := []string{}
+			for _, as := range val.Formula {
+				arr = append(arr, as)
+			}
+			aformula.Set(toolkit.Sprintf("@%v", val.StatementElement.Index), arr)
+			// ====
+
 			tkm.Set(toolkit.Sprintf("@%v", val.StatementElement.Index), val.Formula)
 		case val.StatementElement.Type == ElementParmString || val.StatementElement.Type == ElementParmDate:
 			tkm.Set(toolkit.Sprintf("@%v", val.StatementElement.Index), val.ValueTxt)
@@ -127,17 +127,22 @@ func generateinst(inputsv *StatementVersion) (tkm toolkit.M, err error) {
 		tkcond = true
 		in += 1
 		for _, i := range arrint {
-			val := toolkit.ToString(tkm[toolkit.Sprintf("@%v", i)])
-
-			switch {
-			case strings.Contains(val, "fn"):
-				//
-			case strings.Contains(val, "@"):
-				//split the formula and check that
-				str := toolkit.ToString(val)
-				if isnotcompletedependency(str, tkm) {
+			// val := toolkit.ToString(tkm[toolkit.Sprintf("@%v", i)])
+			if toolkit.TypeName(tkm[toolkit.Sprintf("@%v", i)]) == "[]string" {
+				arrstr := tkm[toolkit.Sprintf("@%v", i)].([]string)
+				if hasdependencyarr(arrstr, tkm) {
 					tkcond = false
 				} else {
+					str := strings.Join(arrstr, "")
+					if strings.Contains(str, "fn:") {
+						err = executefunction(arrstr, tkm)
+						if err != nil {
+							err = errors.New(toolkit.Sprintf("Execute function found : %v", err.Error()))
+							return
+						}
+						str = strings.Join(arrstr, "")
+					}
+
 					f, err := toolkit.NewFormula(str)
 					if err != nil {
 						err = errors.New(toolkit.Sprintf("Error found : %v \n", err.Error()))
@@ -194,7 +199,19 @@ func isnum(str string) bool {
 	return matchFloat && matchNumber
 }
 
-func isnotcompletedependency(str string, tkm toolkit.M) (cond bool) {
+func hasdependencyarr(arrstr []string, tkm toolkit.M) (cond bool) {
+	cond = false
+	for _, v := range arrstr {
+		if strings.Contains(v, "@") && toolkit.TypeName(tkm[v]) == "[]string" {
+			cond = true
+			return
+		}
+	}
+
+	return
+}
+
+func hasdependencystr(str string, tkm toolkit.M) (cond bool) {
 	cond = false
 
 	tvar := ""
@@ -217,5 +234,9 @@ func isnotcompletedependency(str string, tkm toolkit.M) (cond bool) {
 			}
 		}
 	}
+	return
+}
+
+func executefunction(arrstr []string, tkm toolkit.M) (err error) {
 	return
 }
