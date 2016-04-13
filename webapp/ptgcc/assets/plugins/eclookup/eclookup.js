@@ -59,6 +59,7 @@ var Settings_EcLookup = {
 	areaDisable: false,
 	showSearch: true,
 	focusable: false,
+	typesearch: "string", // string or number
 	minChar: 0,
 	displayTemplate: function(){
 		return "";
@@ -123,7 +124,10 @@ var methodsLookupDD = {
 		$liLookupTxt = $('<li class="eclookup-txt"></li>');
 		$liLookupTxt.appendTo($ulLookup);
 
-		$textSearch = $('<input type="number"/>');
+		if (options.typesearch == "number")
+			$textSearch = $('<input type="number"/>');
+		else
+			$textSearch = $('<input type="text"/>');
 		$textSearch.attr({'placeholder': options.placeholder});
 		if (options.areaDisable == true)
 			$textSearch.prop('disabled',true);
