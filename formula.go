@@ -141,7 +141,8 @@ func parseFormulaSub(formulaTxt string, fisubs []*Formula) (*Formula, error) {
 					if !strings.Contains(tmp, "@") {
 						//-- it is a value
 						f64 := toolkit.ToFloat64(tmp, 4, toolkit.RoundingAuto)
-						if tmp != "0" && f64 == float64(0) {
+						//remark for check @alip
+						if tmp != "0" && tmp != "0.000000" && f64 == float64(0) {
 							return nil, errors.New("parseFormula: " + tmp + " Can not render to float")
 						}
 						//Printf("%s value is %.2f\n", tmp, f64)

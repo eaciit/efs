@@ -135,7 +135,7 @@ func extractdatainput(inputsv *StatementVersion) (tkm, aformula toolkit.M, err e
 				} else {
 					str := strings.Join(arrstr, "")
 					if strings.Contains(str, "fn:") {
-						err = executefunction(arrstr, tkm)
+						err = executefunction(toolkit.Sprintf("@%v", i), arrstr, tkm)
 						if err != nil {
 							err = errors.New(toolkit.Sprintf("Execute function found : %v", err.Error()))
 							return
@@ -143,7 +143,7 @@ func extractdatainput(inputsv *StatementVersion) (tkm, aformula toolkit.M, err e
 						str = strings.Join(arrstr, "")
 					}
 
-					f, err := toolkit.NewFormula(str)
+					f, err := NewFormula(str)
 					if err != nil {
 						err = errors.New(toolkit.Sprintf("Error found : %v \n", err.Error()))
 					} else {
@@ -159,30 +159,16 @@ func extractdatainput(inputsv *StatementVersion) (tkm, aformula toolkit.M, err e
 		}
 	}
 
-	// 	str := toolkit.ToString(inst.Get(toolkit.Sprintf("@%v", v.Index), ""))
-	// if strings.Contains(str, "@") {
-	// 	//checkinstvar(str, inst); please do check as well to find condition require field with formula
-	// 	f, erf := toolkit.NewFormula(str)
-	// 	if erf != nil {
-	// 		err = errors.New(erf.Error())
-	// 		return
-	// 	}
-	// 	inst.Set(toolkit.Sprintf("@%v", v.Index), f.Run(inst))
-	// 	str = toolkit.ToString(inst.Get(toolkit.Sprintf("@%v", v.Index), ""))
-	// }
-
-	// decimalPoint := len(str) - (strings.Index(str, ".") + 1)
-	// tve.ValueNum = toolkit.ToFloat64(str, decimalPoint, toolkit.RoundingAuto)
 	return
 }
 
-func sumdata(formula string, inst toolkit.M) (snum float64) {
-	return
-}
+// func sumdata(formula string, inst toolkit.M) (snum float64) {
+// 	return
+// }
 
-func ifcond(formula string, inst toolkit.M) (sif interface{}) {
-	return
-}
+// func ifcond(formula string, inst toolkit.M) (sif interface{}) {
+// 	return
+// }
 
 func isnum(str string) bool {
 
@@ -202,7 +188,7 @@ func isnum(str string) bool {
 func hasdependencyarr(arrstr []string, tkm toolkit.M) (cond bool) {
 	cond = false
 	for _, v := range arrstr {
-		if strings.Contains(v, "@") && toolkit.TypeName(tkm[v]) == "[]string" {
+		if strings.Contains(v, "@") && tkm.Has(v) && toolkit.TypeName(tkm[v]) == "[]string" {
 			cond = true
 			return
 		}
@@ -237,6 +223,27 @@ func hasdependencystr(str string, tkm toolkit.M) (cond bool) {
 	return
 }
 
-func executefunction(arrstr []string, tkm toolkit.M) (err error) {
+func executefunction(key string, arrstr []string, tkm toolkit.M) (err error) {
+	for i, val := range arrstr {
+		cval := ""
+		if strings.Contains(val, "fn:") {
+			cval = string(val[3:])
+		} else {
+			continue
+		}
+
+		cname := ""
+		for i := 0; i < len(cval); i++ {
+			c := string(cval[i])
+			if c == "(" {
+				break
+			}
+			cname += c
+		}
+
+		// toolkit.Printf("DEBUG 242 : %v - %v - %v \n\n", len(efsfunc), cname, efsfunc.Has(cname))
+		arrstr[i] = toolkit.ToString(efsfunc[cname](tkm, cval))
+		// tkm.Set(key, efsfunc[cname](tkm, cval))
+	}
 	return
 }
