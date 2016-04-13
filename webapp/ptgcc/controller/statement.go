@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/eaciit/dbox"
 	"github.com/eaciit/efs"
 	"github.com/eaciit/efs/webapp/ptgcc/helper"
 	"github.com/eaciit/knot/knot.v1"
@@ -15,6 +16,28 @@ func CreateStatementController(s *knot.Server) *StatementController {
 	var controller = new(StatementController)
 	controller.Server = s
 	return controller
+}
+
+func (st *StatementController) Get(search toolkit.M) ([]efs.StatementVersion, error) {
+	var query *dbox.Filter
+	if search.Has("key") && search.Has("val") {
+		key := toolkit.ToString(search.Get("key", ""))
+		val := toolkit.ToString(search.Get("val", ""))
+		if key != "" && val != "" {
+			query = dbox.Eq(key, val)
+		}
+	}
+
+	data := []efs.StatementVersion{}
+	cursor, err := efs.Find(new(efs.StatementVersion), query, nil)
+	if err != nil {
+		return nil, err
+	}
+	if err := cursor.Fetch(&data, 0, false); err != nil {
+		return nil, err
+	}
+	defer cursor.Close()
+	return data, nil
 }
 
 func (st *StatementController) SaveStatement(r *knot.WebContext) interface{} {
@@ -42,6 +65,19 @@ func (st *StatementController) SaveStatementVersion(r *knot.WebContext) interfac
 	payload := new(efs.StatementVersion)
 	if err := r.GetPayload(&payload); err != nil {
 		return helper.CreateResult(false, "", err.Error())
+	}
+	query := dbox.And(dbox.Eq("statementid", payload.StatementID), dbox.Eq("title", payload.Title))
+
+	sv := new(efs.StatementVersion)
+	cursor, _ := efs.Find(sv, query, nil)
+	cursor.Fetch(&sv, 1, false)
+	defer cursor.Close()
+
+	if cursor.Count() > 0 && payload.ID == "" {
+		return helper.CreateResult(false, "", "please choose another new title")
+	}
+	if payload.ID == "" {
+		payload.ID = toolkit.RandomString(32)
 	}
 	if err := efs.Save(payload); err != nil {
 		return helper.CreateResult(false, "", err.Error())
@@ -71,10 +107,8 @@ func (st *StatementController) GetSVBySID(r *knot.WebContext) interface{} {
 	if err := r.GetPayload(&payload); err != nil {
 		return helper.CreateResult(false, "", err.Error())
 	}
-	keyword := toolkit.M{}
-	keyword.Set("key", "statementid")
-	keyword.Set("val", toolkit.ToString(payload.Get("statementid", "")))
-	sv, err := new(efs.StatementVersion).Get(keyword)
+	keyword := toolkit.M{}.Set("key", "statementid").Set("val", toolkit.ToString(payload.Get("statementid", "")))
+	sv, err := st.Get(keyword)
 	if err != nil {
 		return helper.CreateResult(false, "", err.Error())
 	}
@@ -93,29 +127,42 @@ func (st *StatementController) GetSVBySID(r *knot.WebContext) interface{} {
 func (st *StatementController) GetStatementVersion(r *knot.WebContext) interface{} {
 	r.Config.OutputType = knot.OutputJson
 
-	// payload := new(efs.Statements)
 	payload := toolkit.M{}
 	if err := r.GetPayload(&payload); err != nil {
 		return helper.CreateResult(false, "", err.Error())
 	}
 	statement := new(efs.Statements)
-	//ID or other filter will get and generated from payload
-	// sid := "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j"
 	if err := efs.Get(statement, toolkit.ToString(payload.Get("statementid", ""))); err != nil {
 		return helper.CreateResult(false, "", toolkit.Sprintf("Error to get statement by id, found : %s \n", err.Error()))
 	}
 	sv := new(efs.StatementVersion)
+	var err error
 
 	mode := toolkit.ToString(payload.Get("mode", ""))
 	if mode == "new" {
-		sv = statement.Run(nil)
+		sv, err = statement.Run(nil)
+		if err != nil {
+			return helper.CreateResult(false, "", err.Error())
+		}
 	} else if mode == "find" {
 		sv.ID = toolkit.ToString(payload.Get("_id", ""))
 		if err := efs.Get(sv, sv.ID); err != nil {
 			return helper.CreateResult(false, "", err.Error())
 		}
 	} else if mode == "simulate" {
-		sv = statement.Run(payload)
+		data := toolkit.M{}
+		data.Set("mode", payload.Get("mode"))
+		payload.Unset("mode")
+		if err := toolkit.Serde(payload, sv, "json"); err != nil {
+			return helper.CreateResult(false, "", err.Error())
+		}
+		data.Set("data", sv)
+		toolkit.Println("data", data)
+		sv = nil
+		sv, err = statement.Run(data)
+		if err != nil {
+			return helper.CreateResult(false, "", err.Error())
+		}
 	}
 
 	return helper.CreateResult(true, sv, "")
