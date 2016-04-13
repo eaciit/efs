@@ -1,7 +1,11 @@
 <script src="/res/js/page-formula.js"></script>
 <script src="/res/plugins/eclookup/eclookup.js"></script>
 <link rel="stylesheet" href="/res/plugins/eclookup/eclookup.css" />
-
+<style>
+	.modal#formula-popup .modal-dialog {
+		width: 85%;
+	}
+</style>
 <!-- main area -->
 <div class="col-xs-12 col-sm-12" id="content" data-bind="with: FormulaPage">
 	<div class="col-md-12" data-bind="visible: (app.section() == 'formula')">
@@ -23,7 +27,7 @@
 			    				<td indexid="1"><div class="searchversion"><input class='searchversion' id="version1" /></div></td>
 			    			</tr>
 			    		</thead>
-			    		<tbody data-bind="template:{name:'formulaTemplate', foreach:fp.dataFormula().Element}">
+			    		<tbody data-bind="template:{name:'formulaTemplate', foreach:fp.dataFormula.Element()}">
 			    		</tbody>
 		    		</table>
 		    	</div>
@@ -37,39 +41,39 @@
 		<td data-bind="html:$index()+1"></td>
 		<td data-bind="html:Title1, style: {fontWeight: Bold == true ? 'bold':'normal'}"></td>
 		<td data-bind="html:Title2, style: {fontWeight: Bold == true ? 'bold':'normal'}"></td>
-		<!-- ko if: Type == 50 || Type == 1 -->
-		<td data-bind="html:ValueNum.toString(), style: {fontWeight: Bold == true ? 'bold':'normal'}, click: function(){fp.showFormula($index(),$data,1)}, attr:{'indexid':'1'}"></td>
+		<!-- ko if: Type() == 50 || Type() == 1 -->
+		<td data-bind="html:ValueNum().toString(), style: {fontWeight: Bold == true ? 'bold':'normal', textAlign: 'Right'}, click: function(){fp.showFormula($index(),$data,1)}, attr:{'indexid':'1'}"></td>
 		<!-- /ko -->
-		<!-- ko if: Type == 12 -->
+		<!-- ko if: Type() == 12 -->
 		<td data-bind="attr:{'indexid':'1'}">
 			<input type="text" class="form-control input-sm" data-bind="value:ValueTxt"/>
 		</td>
 		<!-- /ko -->
-		<!-- ko if: Type == 11-->
+		<!-- ko if: Type() == 11-->
 		<td data-bind="attr:{'indexid':'1'}">
 			<input data-bind="attr:{'id':'valueversion'+$index()}, kendoNumericTextBox:{value:ValueNum}"/>
 		</td>
 		<!-- /ko -->
-		<!-- ko if: Type == 10 -->
+		<!-- ko if: Type() == 10 -->
 		<td data-bind="attr:{'indexid':'1'}">
 			<input data-bind="attr:{'id':'valueversion'+$index()}, kendoDateTimePicker:{value:ValueTxt, format: 'dd MMM yyyy'}"/>
 		</td>
 		<!-- /ko -->
-		<!-- ko foreach: fp.dataVersion -->
-			<!-- ko if: Type == 50 || Type == 1 -->
-			<td data-bind="html:ValueNum.toString(), style: {fontWeight: Bold == true ? 'bold':'normal'}, attr:{'indexid':($index()+2).toString()}, click: function(){fp.showFormula($($element).index(),$data,($index()+2))}"></td>
+		<!-- ko foreach: ElementVersion -->
+			<!-- ko if: Type() == 50 || Type() == 1 -->
+			<td data-bind="html:ValueNum().toString(), style: {fontWeight: Bold == true ? 'bold':'normal', textAlign: 'Right'}, attr:{'indexid':($index()+2).toString()}, click: function(){fp.showFormula($($element).index(),$data,($index()+2))}"></td>
 			<!-- /ko -->
-			<!-- ko if: Type == 12 -->
+			<!-- ko if: Type() == 12 -->
 			<td data-bind="attr:{'indexid':($index()+2).toString()}">
 				<input type="text" class="form-control input-sm" data-bind="value:ValueTxt"/>
 			</td>
 			<!-- /ko -->
-			<!-- ko if: Type == 11 -->
+			<!-- ko if: Type() == 11 -->
 			<td data-bind="attr:{'indexid':($index()+2).toString()}">
 				<input data-bind="attr:{'id':'valueversion'+$index()}, kendoNumericTextBox:{value:ValueNum}"/>
 			</td>
 			<!-- /ko -->
-			<!-- ko if: Type == 10 -->
+			<!-- ko if: Type() == 10 -->
 			<td data-bind="attr:{'indexid':($index()+2).toString()}">
 				<input data-bind="attr:{'id':'valueversion'+$index()}, kendoDateTimePicker:{value:ValueTxt, format: 'dd MMM yyyy'}"/>
 			</td>
@@ -79,7 +83,7 @@
 </script>
 
 <div class="modal fade" id="formula-popup" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog">
     <div class="modal-content">
       
       <div class="modal-header">
@@ -88,40 +92,81 @@
       </div>
       <div class="modal-body">
         <div class="row form-formula">
-        	<div class="col-md-4 nav-command">
-        		<label class="col-md-12 title-command">List Akun</label>
+        	<div class="col-md-3 nav-command">
+        		<label class="col-md-12 title-command">Account List</label>
         		<div class="col-md-12">
-        			<ul class="nav" data-bind="foreach: fp.dataFormula().Element">
-        				<li><a href="#" data-bind="click: function(){fp.selectListAkun($index(),$data)}, text: ($index()+1)+'. '+Title1+' '+Title2"></a></li>
+        			<ul class="nav" data-bind="foreach: fp.dataFormula.Element()">
+        				<li><a href="#" data-bind="click: function(){fp.selectListAkun($index(),$data)}, text: ($index()+1)+'. '+Title1()+' '+Title2()"></a></li>
         			</ul>
         		</div>
         	</div>
-        	<div class="col-md-8">
+        	<div class="col-md-6">
 	        	<label class="col-md-12 title-command">Formula Editor</label>
 	        	<div class="col-md-12 formula-command">
-	        		<div class="btn-group btnKoefisien" role="group" aria-label="...">
+	        		<div class="btn-group btnKoefisien" role="group" aria-label="..." data-bind="visible: fp.modeFormula() == ''">
 						<button type="button" class="btn btn-primary btn-sm" data-bind="click: function(){fp.selectKoefisien('+')}">+</button>
 						<button type="button" class="btn btn-primary btn-sm" data-bind="click: function(){fp.selectKoefisien('-')}">-</button>
 						<button type="button" class="btn btn-primary btn-sm" data-bind="click: function(){fp.selectKoefisien('*')}">*</button>
 						<button type="button" class="btn btn-primary btn-sm" data-bind="click: function(){fp.selectKoefisien('/')}">/</button>
 					</div>
-					<div class="btn-group btnKoefisien" role="group" aria-label="...">
+					<div class="btn-group btnKoefisien" role="group" aria-label="..." data-bind="visible: fp.modeFormula() == ''">
 						<button type="button" class="btn btn-primary btn-sm" data-bind="click: function(){fp.selectKoefisien('(')}">(</button>
 						<button type="button" class="btn btn-primary btn-sm" data-bind="click: function(){fp.selectKoefisien(')')}">)</button>
 					</div>
 					<div class="btn-group btnKoefisien" role="group" aria-label="...">
 						<button type="button" class="btn btn-primary btn-sm" data-bind="click: function(){fp.selectKoefisienGroup('SUM')}">SUM</button>
-						<button type="button" class="btn btn-primary btn-sm" data-bind="click: function(){fp.selectKoefisienGroup('AVERAGE')}">AVG</button>
+						<button type="button" class="btn btn-primary btn-sm" data-bind="click: function(){fp.selectKoefisienGroup('AVG')}">AVG</button>
 						<button type="button" class="btn btn-primary btn-sm" data-bind="click: function(){fp.selectKoefisienGroup('IF')}">IF</button>
 					</div>
 					<button class="btn btn-primary btnKoefisien btn-sm" data-bind="click: fp.clearFormula"><span class="glyphicon glyphicon-erase"></span></button>
 	        	</div>
-	        	<div class="col-md-12 area-editor">
-	        		<input id="kostanta" data-bind="kendoNumericTextBox:{value:fp.konstanta, placeholder: 'Konstanta'}"/>
-	        	</div>
-	        	<div class="col-md-12 area-editor">
-	        		<input type="text" id="formula-editor" />
-	        	</div>
+	        	<div class="row" data-bind="visible: fp.modeFormula() == ''">
+		        	<div class="col-md-12 area-editor">
+		        		<span class="col-md-2 databrowser-label">Konstanta</span>
+			    		<div class="col-md-10">
+				    		<input id="kostanta" data-bind="kendoNumericTextBox:{value:fp.konstanta, placeholder: 'Konstanta'}"/>
+			    		</div>
+		        	</div>
+		        	<div class="col-md-12 area-editor">
+		        		<input type="text" id="formula-editor" />
+		        	</div>
+		        </div>
+		        <div class="row" data-bind="visible: fp.modeFormula() == 'SUM' || fp.modeFormula() == 'AVG'">
+		        	<div class="col-md-12">
+			    		<button class="btn btn-sm btn-warning" data-bind="click: fp.backFormulaEditor"><span class="glyphicon glyphicon-chevron-left"></span> Back</button>
+			    		<button class="btn btn-sm btn-primary" data-bind="click: fp.addParameter"><span class="glyphicon glyphicon-plus"></span> Add Parameter</button>
+			    		<button class="btn btn-sm btn-success" data-bind="click: fp.addKostantaFormula"><span class="glyphicon glyphicon-ok"> OK</button>
+		        	</div>
+		        	<div class="col-md-12">
+		        		<table class="table" id="tablekoefisien">
+							<thead>
+								<tr style="width: 100%;">
+									<th width="45%">From</th>
+									<th width="45%">To</th>
+									<th width="10%"></th>
+								</tr>
+							</thead>
+							<tbody data-bind="foreach: fp.recordKoefisien">
+								<tr>
+									<td data-bind="attr:{idarea: 'koefisien1'+$index()}"><input class='areakoefisien' data-bind="attr:{'id':'koefisien1'+$index()}" /></td>
+									<td data-bind="attr:{idarea: 'koefisien2'+$index()}"><input class='areakoefisien' data-bind="attr:{'id':'koefisien2'+$index()}" /></td>
+									<td>
+										<button class="btn btn-sm btn-danger" data-bind="style: { 'visibility': ($index() > 0) ? 'visible' : 'hidden' }, click: function(){fp.removeKoefisien($data)}"><span class="glyphicon glyphicon-trash"></span></button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+		        	</div>
+		        </div>
+		        <div class="row" data-bind="visible: fp.modeFormula() == 'IF'">
+		        	<div class="col-md-12">
+		        		<button class="btn btn-sm btn-warning" data-bind="click: fp.backFormulaEditor"><span class="glyphicon glyphicon-chevron-left"></span> Back</button>
+			    		<button class="btn btn-sm btn-success"><span class="glyphicon glyphicon-plus"></span> Add Parameter</button>
+		        	</div>
+		        </div>
+        	</div>
+        	<div class="col-md-3">
+        		<!-- View Image -->
         	</div>
         </div>
         <div style="clear:both;"></div>

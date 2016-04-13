@@ -57,6 +57,8 @@ var Settings_EcLookup = {
 	// displayFields: 'value',
 	placeholder: 'Input Type Here !',
 	areaDisable: false,
+	showSearch: true,
+	focusable: false,
 	minChar: 0,
 	displayTemplate: function(){
 		return "";
@@ -121,13 +123,13 @@ var methodsLookupDD = {
 		$liLookupTxt = $('<li class="eclookup-txt"></li>');
 		$liLookupTxt.appendTo($ulLookup);
 
-		$textSearch = $('<input type="text"/>');
+		$textSearch = $('<input type="number"/>');
 		$textSearch.attr({'placeholder': options.placeholder});
 		if (options.areaDisable == true)
 			$textSearch.prop('disabled',true);
 		else
 			$textSearch.prop('disabled',false);
-		$textSearch.bind('keyup keydown').keyup(function(event){
+		$textSearch.bind('keyup keydown focus blur').keyup(function(event){
 			var search = $(this).val();
 			var $co = $container.find(".eclookup-dropdown ul.eclookup-listsearch");
 			switch(event.keyCode) {
@@ -153,12 +155,12 @@ var methodsLookupDD = {
 					$co.find('li.hlight').bind('click').click();
                 break;
 				case KEY.BACKSPACE:
-					if (search.length > 0){
+					if (search.length > 0 && options.showSearch == true){
 				    	$o.data('ecLookupDD').searchResult(search);
 					}
 					break;
 				default:
-					if (search.length >= options.minChar){
+					if (search.length >= options.minChar && options.showSearch == true){
 						$o.data('ecLookupDD').searchResult(search);
 					}
 			}
@@ -174,6 +176,14 @@ var methodsLookupDD = {
 				    }
 		    	break;
 		    }
+		}).focus(function(){
+			if(options.focusable == true){
+				$("#tablekoefisien>tbody .eclookup-container").removeClass("eclookup-selected");
+				$container.find(".eclookup-container").addClass("eclookup-selected");
+			}
+		}).blur(function(){
+			// if(options.focusable == true)
+			// 	$container.find(".eclookup-container").removeClass("eclookup-selected");
 		});
 		$textSearch.appendTo($liLookupTxt);
 
@@ -216,46 +226,48 @@ $.ecDataSourceDDLookup = function(element,options){
 		$(elementLookup).parent().find('ul.eclookup-list>.eclookup-item').remove();
 	}
 	this.addDataLookup = function(dataAdd){
-		var $searchtxt = $(elementLookup).parent().find('ul.eclookup-list>li.eclookup-txt');
-		var settings = $.extend({}, Settings_EcLookup, options || {});
-		if ($(elementLookup).data('ecLookupDDSettings').inputType == 'ddl'){
-			$liLookup = $('<li class="eclookup-item max"></li>');
-			$(elementLookup).parent().find('li.eclookup-txt').css('display','none');
-		}else{
-			$liLookup = $('<li class="eclookup-item"></li>');
-		}
+		if ($(elementLookup).data('ecLookupDDSettings').inputType == "multiple" || (this.ParamDataSource.dataSelect.length < 1 && $(elementLookup).data('ecLookupDDSettings').inputType == "ddl")){
+			var $searchtxt = $(elementLookup).parent().find('ul.eclookup-list>li.eclookup-txt');
+			var settings = $.extend({}, Settings_EcLookup, options || {});
+			if ($(elementLookup).data('ecLookupDDSettings').inputType == 'ddl'){
+				$liLookup = $('<li class="eclookup-item max"></li>');
+				$(elementLookup).parent().find('li.eclookup-txt').css('display','none');
+			}else{
+				$liLookup = $('<li class="eclookup-item"></li>');
+			}
 
-		$liLookup.insertBefore($searchtxt);
+			$liLookup.insertBefore($searchtxt);
 
-		$titleLookup = $('<p></p>');
-		$titleLookup.html(dataAdd.value);
-		$titleLookup.appendTo($liLookup);
+			$titleLookup = $('<p></p>');
+			$titleLookup.html(dataAdd.value);
+			$titleLookup.appendTo($liLookup);
 
-		var $searchtext = $(elementLookup).parent().find('li.eclookup-txt>input');
+			var $searchtext = $(elementLookup).parent().find('li.eclookup-txt>input');
 
-		$btnRemoveLookup = $('<span class="eclookup-remove"></span>');
-		$btnRemoveLookup.html('x');
-		$btnRemoveLookup.bind('click').click(function(){
-			$(elementLookup).parent().find('li.eclookup-txt').css('display','block');
-			$(this).parent().remove();
+			$btnRemoveLookup = $('<span class="eclookup-remove"></span>');
+			$btnRemoveLookup.html('x');
+			$btnRemoveLookup.bind('click').click(function(){
+				$(elementLookup).parent().find('li.eclookup-txt').css('display','block');
+				$(this).parent().remove();
+				$searchtext.val('');
+				$searchtext.focus();
+				var dataResult = $.grep($(elementLookup).data('ecLookupDD').ParamDataSource.dataSelect, function(e){ 
+					var idGrep = dataAdd.id;
+					if (typeof(e[$(elementLookup).data('ecLookupDDSettings').idField]) == 'number')
+						idGrep = parseInt(idGrep);
+					return e[$(elementLookup).data('ecLookupDDSettings').idField] != idGrep; 
+				});
+				$(elementLookup).data('ecLookupDD').ParamDataSource.dataSelect = dataResult;
+			});
+			$btnRemoveLookup.appendTo($liLookup);
+
 			$searchtext.val('');
 			$searchtext.focus();
-			var dataResult = $.grep($(elementLookup).data('ecLookupDD').ParamDataSource.dataSelect, function(e){ 
-				var idGrep = dataAdd.id;
-				if (typeof(e[$(elementLookup).data('ecLookupDDSettings').idField]) == 'number')
-					idGrep = parseInt(idGrep);
-				return e[$(elementLookup).data('ecLookupDDSettings').idField] != idGrep; 
-			});
-			$(elementLookup).data('ecLookupDD').ParamDataSource.dataSelect = dataResult;
-		});
-		$btnRemoveLookup.appendTo($liLookup);
 
-		$searchtext.val('');
-		$searchtext.focus();
-
-		var dataSelectTemp = $(elementLookup).data('ecLookupDD').ParamDataSource.dataSelect;
-		dataSelectTemp = dataSelectTemp.concat(dataAdd);
-		$(elementLookup).data('ecLookupDD').ParamDataSource.dataSelect = dataSelectTemp;
+			var dataSelectTemp = $(elementLookup).data('ecLookupDD').ParamDataSource.dataSelect;
+			dataSelectTemp = dataSelectTemp.concat(dataAdd);
+			$(elementLookup).data('ecLookupDD').ParamDataSource.dataSelect = dataSelectTemp;
+		}
 	}
 	this.getUrlData = function(query){
 		var dataPost = {}, contentType = '';
