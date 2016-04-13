@@ -7,7 +7,7 @@ import (
 	"github.com/eaciit/knot/knot.v1"
 	"github.com/eaciit/toolkit"
 	"net/http"
-	"path"
+	"path/filepath"
 	"runtime"
 )
 
@@ -22,11 +22,11 @@ func main() {
 	}*/
 
 	runtime.GOMAXPROCS(4)
-	// efs.ConfigPath = controller.EFS_CONFIG_PATH
+	// efs.ConfigPath = controller.EFS_DATA_PATH
 
 	server = new(knot.Server)
 	server.Address = "localhost:8000"
-	server.RouteStatic("res", path.Join(controller.AppBasePath, "assets"))
+	server.RouteStatic("res", filepath.Join(controller.AppBasePath, "assets"))
 	server.Register(controller.CreateWebController(server), "")
 	server.Register(controller.CreateStatementController(server), "")
 
