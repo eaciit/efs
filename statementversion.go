@@ -34,4 +34,5 @@ type VersionElement struct {
 	Formula          string
 	ValueTxt         string
 	ValueNum         float64
+	ImageName        string
 }

@@ -6,6 +6,8 @@ import (
 	"github.com/eaciit/efs/webapp/ptgcc/helper"
 	"github.com/eaciit/knot/knot.v1"
 	"github.com/eaciit/toolkit"
+	"os"
+	"path/filepath"
 )
 
 type StatementController struct {
@@ -98,6 +100,44 @@ func (st *StatementController) RemoveStatementVersion(r *knot.WebContext) interf
 	}
 
 	return helper.CreateResult(true, nil, "")
+}
+
+func (st *StatementController) SaveImageSV(r *knot.WebContext) interface{} {
+	r.Config.OutputType = knot.OutputJson
+
+	imageLocation := filepath.Join(EFS_DATA_PATH, "image")
+	index := toolkit.ToInt(r.Request.FormValue("index"), toolkit.RoundingAuto)
+
+	err, imageName := helper.ImageUploadHandler(r, "userfile", imageLocation)
+	if err != nil {
+		return helper.CreateResult(false, "", err.Error())
+	}
+
+	sv := new(efs.StatementVersion)
+	sv.ID = toolkit.ToString(r.Request.FormValue("_id"))
+	if err := efs.Get(sv, sv.ID); err != nil {
+		return helper.CreateResult(false, "", err.Error())
+	}
+
+	versionElement := sv.Element
+	sv.Element = nil
+	for _, val := range versionElement {
+		if val.StatementElement.Index == index {
+			if val.ImageName != "" { /*if existing formula already has image, delete existing image*/
+				if err := os.Remove(filepath.Join(imageLocation, val.ImageName)); err != nil {
+					return helper.CreateResult(false, "", err.Error())
+				}
+			}
+			val.ImageName = imageName
+		}
+		sv.Element = append(sv.Element, val)
+
+	}
+	if err := efs.Save(sv); err != nil {
+		return helper.CreateResult(false, "", err.Error())
+	}
+
+	return helper.CreateResult(true, imageLocation, "")
 }
 
 func (st *StatementController) GetSVBySID(r *knot.WebContext) interface{} {
