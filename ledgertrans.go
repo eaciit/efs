@@ -8,7 +8,7 @@ import (
 
 type LedgerTrans struct {
 	orm.ModelBase `bson:"-",json:"-"`
-	ID            string `bson:"_id" , json:"_id"`
+	ID            string `json:"_id",bson:"_id"`
 	JournalNo     string
 	TransDate     time.Time
 	Amount        float64

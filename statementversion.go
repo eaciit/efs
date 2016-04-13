@@ -1,16 +1,18 @@
 package efs
 
 import (
+	// "github.com/eaciit/dbox"
 	"github.com/eaciit/orm/v1"
+	// "github.com/eaciit/toolkit"
 )
 
 type StatementVersion struct {
 	orm.ModelBase `bson:"-",json:"-"`
-	ID            string ` bson:"_id" , json:"_id" `
+	ID            string `json:"_id",bson:"_id"`
 	Title         string
 	StatementID   string
 
-	Element []VersionElement
+	Element []*VersionElement
 }
 
 func (e *StatementVersion) RecordID() interface{} {
@@ -27,8 +29,9 @@ func (e *StatementVersion) TableName() string {
 }
 
 type VersionElement struct {
-	StatementElement
-	IsTxt    bool
-	ValueTxt string
-	ValueNum float64
+	StatementElement *StatementElement
+	IsTxt            bool
+	Formula          string
+	ValueTxt         string
+	ValueNum         float64
 }
