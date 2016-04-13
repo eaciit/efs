@@ -14,8 +14,10 @@ import (
 var wd, _ = os.Getwd()
 
 func prepareconnection() (conn dbox.IConnection, err error) {
+	// conn, err = dbox.NewConnection("mongo",
+	// 	&dbox.ConnectionInfo{"192.168.0.200:27017", "efspttgcc", "", "", toolkit.M{}.Set("timeout", 3)})
 	conn, err = dbox.NewConnection("mongo",
-		&dbox.ConnectionInfo{"192.168.0.200:27017", "efspttgcc", "", "", toolkit.M{}.Set("timeout", 3)})
+		&dbox.ConnectionInfo{"localhost:27017", "efs", "", "", toolkit.M{}.Set("timeout", 3)})
 	// conn, err = dbox.NewConnection("jsons",
 	// 	&dbox.ConnectionInfo{wd, "", "", "", toolkit.M{}.Set("newfile", true)})
 	if err != nil {
@@ -39,7 +41,7 @@ func TestInitialSetDatabase(t *testing.T) {
 	}
 }
 
-func loaddatasample() (arrtkm []efs.StatementElement, err error) {
+func loaddatasample() (arrtkm []*efs.StatementElement, err error) {
 
 	conn, err := dbox.NewConnection("json",
 		&dbox.ConnectionInfo{toolkit.Sprintf("%v/sample.json", wd), "", "", "", nil})
@@ -57,7 +59,7 @@ func loaddatasample() (arrtkm []efs.StatementElement, err error) {
 		return
 	}
 
-	arrtkm = make([]efs.StatementElement, 0, 0)
+	arrtkm = make([]*efs.StatementElement, 0, 0)
 	err = c.Fetch(&arrtkm, 0, false)
 
 	return
@@ -76,7 +78,7 @@ func TestCreateStatement(t *testing.T) {
 	// ds.ID = toolkit.RandomString(32)
 	ds.ID = "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j"
 	ds.Title = "donation"
-	ds.Elements = make([]efs.StatementElement, 0, 0)
+	ds.Elements = make([]*efs.StatementElement, 0, 0)
 
 	ds.Elements = append(ds.Elements, arrdata...)
 
@@ -88,6 +90,36 @@ func TestCreateStatement(t *testing.T) {
 }
 
 func TestRunStatement(t *testing.T) {
+	// t.Skip("Skip : Comment this line to do test")
+	sid := "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j"
+	sid = "qZ-SesL2s0Q7VODxyWj6-RVlqsa56ZMJ"
+
+	ds := new(efs.Statements)
+	err := efs.Get(ds, sid)
+	if err != nil {
+		t.Errorf("Error to get statement by id, found : %s \n", err.Error())
+		return
+	}
+	// toolkit.Printf("Statements : %#v\n\n", ds)
+
+	tsv := new(efs.StatementVersion)
+	tsv.ID = toolkit.RandomString(32)
+
+	ins := toolkit.M{}.Set("data", tsv)
+	sv, err := ds.Run(ins)
+	if err != nil {
+		t.Errorf("Error to get run, found : %s \n", err.Error())
+		return
+	}
+
+	toolkit.Printf("Statements Version :%#v - %v \n", sv.ID, sv.Title)
+	for _, val := range sv.Element {
+		// toolkit.Printf("%v \n", val)
+		toolkit.Printf("%v. %v:%v [%v - %v - %v] \n", val.StatementElement.Index, val.StatementElement.Title1, val.StatementElement.Title2, val.Formula, val.ValueTxt, val.ValueNum)
+	}
+}
+
+func TestSaveStatementVersion(t *testing.T) {
 	t.Skip("Skip : Comment this line to do test")
 	sid := "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j"
 
@@ -99,24 +131,7 @@ func TestRunStatement(t *testing.T) {
 	}
 
 	ins := toolkit.M{}.Set("title", "base-v1")
-	sv := ds.Run(ins)
-	toolkit.Printf("%#v\n", sv)
-
-}
-
-func TestSaveStatementVersion(t *testing.T) {
-	// t.Skip("Skip : Comment this line to do test")
-	sid := "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j"
-
-	ds := new(efs.Statements)
-	err := efs.Get(ds, sid)
-	if err != nil {
-		t.Errorf("Error to get statement by id, found : %s \n", err.Error())
-		return
-	}
-
-	ins := toolkit.M{}.Set("title", "base-v1")
-	sv := ds.Run(ins)
+	sv, _ := ds.Run(ins)
 
 	filter := dbox.And(dbox.Eq("statementid", sv.StatementID), dbox.Eq("title", sv.Title))
 	tsv := new(efs.StatementVersion)
