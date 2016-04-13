@@ -42,7 +42,8 @@ func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion, err error) {
 	// toolkit.Println("data format, : ", toolkit.TypeName(ins["data"]))
 	inst := toolkit.M{}
 	if ins.Has("data") && strings.Contains(toolkit.TypeName(ins["data"]), "StatementVersion") {
-		inst = generateinst(ins["data"].(*StatementVersion))
+		sv = ins["data"].(*StatementVersion)
+		inst, err = generateinst(sv)
 	} else if ins.Has("data") && toolkit.TypeName(ins["data"]) != "*StatementVersion" {
 		err = errors.New("Data has wrong format.")
 		return
@@ -58,7 +59,6 @@ func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion, err error) {
 	// toolkit.Printf("Debug Elements : %#v\n", e.Elements)
 	sv.Element = make([]*VersionElement, 0, 0)
 	for _, v := range e.Elements {
-		// toolkit.Printf("%#v\n", v)
 		tve := new(VersionElement)
 		tve.StatementElement = v
 
@@ -100,9 +100,10 @@ func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion, err error) {
 	return
 }
 
-func generateinst(inputsv *StatementVersion) (tkm toolkit.M) {
+func generateinst(inputsv *StatementVersion) (tkm toolkit.M, err error) {
 	// toolkit.Println("ID of Statement version : ", inputsv.ID)
 	tkm = toolkit.M{}
+	arrint := make([]int, 0, 0)
 
 	for _, val := range inputsv.Element {
 		//spare for other case depend on type and mode from config
@@ -114,27 +115,42 @@ func generateinst(inputsv *StatementVersion) (tkm toolkit.M) {
 		default:
 			tkm.Set(toolkit.Sprintf("@%v", val.StatementElement.Index), val.ValueNum)
 		}
+
+		if val.StatementElement.Type != ElementNone {
+			arrint = append(arrint, val.StatementElement.Index)
+		}
 	}
 
 	tkcond := false
-
+	in := 0
 	for !tkcond {
 		tkcond = true
-		for key, val := range tkm {
+		in += 1
+		for _, i := range arrint {
+			val := toolkit.ToString(tkm[toolkit.Sprintf("@%v", i)])
+
 			switch {
-			case strings.Contains(toolkit.ToString(val), "SUM("):
+			case strings.Contains(val, "fn"):
 				//
-			case strings.Contains(toolkit.ToString(val), "IF("):
-				//
-			case strings.Contains(toolkit.ToString(val), "@"):
-				tkcond = false
-				f, err := toolkit.NewFormula(toolkit.ToString(val))
-				if err != nil {
-					continue
+			case strings.Contains(val, "@"):
+				//split the formula and check that
+				str := toolkit.ToString(val)
+				if isnotcompletedependency(str, tkm) {
+					tkcond = false
+				} else {
+					f, err := toolkit.NewFormula(str)
+					if err != nil {
+						err = errors.New(toolkit.Sprintf("Error found : %v \n", err.Error()))
+					} else {
+						tkm.Set(toolkit.Sprintf("@%v", i), f.Run(tkm))
+					}
 				}
-				ires := f.Run(tkm)
-				tkm.Set(key, ires)
 			}
+		}
+
+		if in > len(arrint) {
+			tkcond = true
+			err = errors.New("Formula not completed run")
 		}
 	}
 
@@ -178,4 +194,28 @@ func isnum(str string) bool {
 	return matchFloat && matchNumber
 }
 
-//sum and if function
+func isnotcompletedependency(str string, tkm toolkit.M) (cond bool) {
+	cond = false
+
+	tvar := ""
+	for i := 0; i < len(str); i++ {
+		c := string(str[i])
+		switch {
+		case c == "@":
+			tvar += c
+		case strings.Contains(signs, c):
+			if strings.Contains(tvar, "..") {
+				//for sum or other that use .. or comma
+			} else if len(tvar) > 0 && strings.Contains(toolkit.ToString(tkm.Get(tvar, "")), "@") {
+				cond = true
+				return
+			}
+			tvar = ""
+		default:
+			if len(tvar) > 0 {
+				tvar += c
+			}
+		}
+	}
+	return
+}

@@ -92,7 +92,7 @@ func TestCreateStatement(t *testing.T) {
 func TestRunStatement(t *testing.T) {
 	// t.Skip("Skip : Comment this line to do test")
 	sid := "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j"
-	sid = "qZ-SesL2s0Q7VODxyWj6-RVlqsa56ZMJ"
+	// sid = "qZ-SesL2s0Q7VODxyWj6-RVlqsa56ZMJ"
 
 	ds := new(efs.Statements)
 	err := efs.Get(ds, sid)
@@ -102,20 +102,33 @@ func TestRunStatement(t *testing.T) {
 	}
 	// toolkit.Printf("Statements : %#v\n\n", ds)
 
-	tsv := new(efs.StatementVersion)
-	tsv.ID = toolkit.RandomString(32)
+	tsv, _ := ds.Run(nil)
+	// tsv.StatementID = sid
 
+	// ======================
+	// Simulate the data will be change before send
+	// ======================
+	tsv.ID = toolkit.RandomString(32)
+	tsv.Title = "v.2015"
+
+	tsv.Element[0].ValueNum = 10000
+	tsv.Element[2].ValueNum = 1000
+	tsv.Element[3].Formula = "@5*10/100"
+	tsv.Element[4].Formula = "@4*5/100"
+	tsv.Element[9].Formula = "@1+@3+@4+@5"
+	// ======================
 	ins := toolkit.M{}.Set("data", tsv)
 	sv, err := ds.Run(ins)
 	if err != nil {
 		t.Errorf("Error to get run, found : %s \n", err.Error())
-		return
+		if err.Error() != "Formula not completed run" {
+			return
+		}
 	}
 
 	toolkit.Printf("Statements Version :%#v - %v \n", sv.ID, sv.Title)
 	for _, val := range sv.Element {
-		// toolkit.Printf("%v \n", val)
-		toolkit.Printf("%v. %v:%v [%v - %v - %v] \n", val.StatementElement.Index, val.StatementElement.Title1, val.StatementElement.Title2, val.Formula, val.ValueTxt, val.ValueNum)
+		toolkit.Printf("%v. %v:%v [%v - %v - %#v] \n", val.StatementElement.Index, val.StatementElement.Title1, val.StatementElement.Title2, val.Formula, val.ValueTxt, val.ValueNum)
 	}
 }
 
