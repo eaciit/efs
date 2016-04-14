@@ -43,21 +43,22 @@ fp.lastParam = ko.observable(true);
 fp.recordKoefisien = ko.observableArray([]);
 fp.recordCondition = ko.observableArray([]);
 fp.recordSugest = ko.observableArray([]);
+fp.imageName = ko.observable("");
 
 fp.saveImage = function(){
     var idstatement = "";
-    if (fp.selectColumn().indexcol == 1){
-        objFormula = $('#version1').ecLookupDD("get");
-        if (objFormula.length > 0){
-            idstatement = objFormula[0]._id;
-        }
-    } else {
-        objFormula = $('#version'+fp.selectColumn().indexcol).ecLookupDD("get");
-        if (objFormula.length > 0){
-            idstatement = objFormula[0]._id;
-        }
-    }
-    if (idstatement != ""){
+    // if (fp.selectColumn().indexcol == 1){
+    //     objFormula = $('#version1').ecLookupDD("get");
+    //     if (objFormula.length > 0){
+    //         idstatement = objFormula[0]._id;
+    //     }
+    // } else {
+    //     objFormula = $('#version'+fp.selectColumn().indexcol).ecLookupDD("get");
+    //     if (objFormula.length > 0){
+    //         idstatement = objFormula[0]._id;
+    //     }
+    // }
+    // if (idstatement != ""){
         var formData = new FormData();
         formData.append("_id", idstatement);
         formData.append("index", fp.selectColumn().index);
@@ -74,9 +75,14 @@ fp.saveImage = function(){
             if (!app.isFine(res)) {
                 return;
             }
-            // console.log(res.data)
+            swal({title: "Selector successfully deleted", type: "success"});
+            fp.imageName(res.data);
+            if (fp.selectColumn().indexcol == 1)
+                fp.dataFormula.Element()[fp.selectColumn().index].ImageName(res.data);
+            else
+                fp.dataFormula.Element()[fp.selectColumn().index].ElementVersion()[(fp.selectColumn().indexcol - 1)].ImageName(res.data);
         });
-    }
+    // }
 };
 fp.selectListAkun = function(index, data){
     if (fp.modeFormula() == ""){
@@ -103,11 +109,11 @@ fp.lastParamSelect = function(){
         fp.lastParam("");
 }
 fp.showFormula = function(index,data, indexColoumn){
-    console.log("index",index);
-    console.log("index coloum",indexColoumn);
-    console.log("data",ko.mapping.toJS(data));
-    // if (data.Type == 50){
-        viewModel.fileData().clear();
+    // console.log("index",index);
+    // console.log("index coloum",indexColoumn);
+    // console.log("data",ko.mapping.toJS(data));
+    // if (data.StatementElement.Type == 50){
+        // viewModel.fileData().clear();
         fp.modeFormula("");
     	$("#formula-popup").modal("show");
         fp.selectColumn({index:index,indexcol:indexColoumn});
@@ -194,33 +200,8 @@ fp.refreshAll = function(){
         }
     }
 }
-fp.refreshByIndex = function(index,data){
+fp.refreshSimulateByIndex = function(index,data){
     if (index == 1){
-        // var objFormula = [], postParam = {
-        //     _id : "",
-        //     statementid : "V7v6vdVLkDYavp7InulgLLJfY7cL9NcS",
-        // };
-        // objFormula = $('#version1').ecLookupDD("get");
-        // if (objFormula.length > 0){
-        //     postParam = {
-        //         _id : objFormula[0]._id,
-        //         statementid : objFormula[0].statementid,
-        //         mode: "find"
-        //     };
-        //     app.ajaxPost("/statement/getstatementversion", postParam, function(res){
-        //         if(!app.isFine(res)){
-        //             return;
-        //         }
-        //         if (!res.data) {
-        //             res.data = [];
-        //         }
-        //         var dataStatement = $.extend(true, {}, fp.templatestatement,ko.mapping.toJS(fp.dataFormula)), elemVer = {};
-        //         for(var i in res.data.Element){
-        //             dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], res.data.Element[i] || {});
-        //         }
-        //         ko.mapping.fromJS(dataStatement, fp.dataFormula);
-        //     });
-        // }
         var dataStatement = $.extend(true, {}, fp.templatestatement,ko.mapping.toJS(fp.dataFormula)), elemVer = {};
         for(var i in data.Element){
             dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], data.Element[i] || {});
@@ -230,36 +211,13 @@ fp.refreshByIndex = function(index,data){
         if (fp.dataFormula.Element()[0].ElementVersion().length > 0){
             var aa = (parseInt(index)-2);
             objFormula = $('#version'+aa).ecLookupDD("get");
-            // if (objFormula.length > 0){
-            //     postParam = {
-            //         _id : objFormula[0]._id,
-            //         statementid : objFormula[0].statementid,
-            //         mode: "find"
-            //     };
-            //     app.ajaxPost("/statement/getstatementversion", postParam, function(res){
-            //         if(!app.isFine(res)){
-            //             return;
-            //         }
-            //         if (!res.data) {
-            //             res.data = [];
-            //         }
-            //         var dataStatement = $.extend(true, {}, ko.mapping.toJS(fp.dataFormula)), elemVer = {}, indexVer = i+2, indexyo = 0;
-            //         for (var i in dataStatement.Element){
-            //             dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], ko.mapping.toJS(fp.dataFormula.Element()[i]) || {});
-            //             indexyo = parseInt(indexVer) - 2;
-            //             dataStatement.Element[i].ElementVersion[indexyo] = res.data.Element[i];
-            //         }
-            //         ko.mapping.fromJS(dataStatement, fp.dataFormula);
-            //     });
-            // } else {
-                var dataStatement = $.extend(true, {}, ko.mapping.toJS(fp.dataFormula)), elemVer = {}, indexVer = i+2, indexyo = 0;
-                for (var i in dataStatement.Element){
-                    dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], ko.mapping.toJS(fp.dataFormula.Element()[i]) || {});
-                    indexyo = parseInt(indexVer) - 2;
-                    dataStatement.Element[i].ElementVersion[indexyo] = data.Element[i];
-                }
-                ko.mapping.fromJS(dataStatement, fp.dataFormula);
-            // }
+            var dataStatement = $.extend(true, {}, ko.mapping.toJS(fp.dataFormula)), elemVer = {}, indexVer = i+2, indexyo = 0;
+            for (var i in dataStatement.Element){
+                dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], ko.mapping.toJS(fp.dataFormula.Element()[i]) || {});
+                indexyo = parseInt(indexVer) - 2;
+                dataStatement.Element[i].ElementVersion[indexyo] = data.Element[i];
+            }
+            ko.mapping.fromJS(dataStatement, fp.dataFormula);
         }
     }
 }
@@ -293,6 +251,7 @@ fp.saveStatement = function(){
         if (!res.data) {
             res.data = [];
         }
+        swal({title: "Selector successfully deleted", type: "success"});
         fp.refreshAll();
     });
     if (fp.dataFormula.Element()[0].ElementVersion().length > 0){
@@ -326,6 +285,7 @@ fp.saveStatement = function(){
                 if (!res.data) {
                     res.data = [];
                 }
+                swal({title: "Selector successfully deleted", type: "success"});
                 fp.refreshAll();
             });
         }
@@ -592,7 +552,7 @@ fp.selectSimulate = function(index){
             if (!res.data) {
                 res.data = [];
             }
-            fp.refreshByIndex(index);
+            fp.refreshSimulateByIndex(index,res.data);
         });
     } else {
         if (fp.dataFormula.Element()[0].ElementVersion().length > 0){
@@ -627,31 +587,42 @@ fp.selectSimulate = function(index){
                 if (!res.data) {
                     res.data = [];
                 }
-                fp.refreshByIndex(index);
+                fp.refreshSimulateByIndex(index,res.data);
             });
         }
     }
 };
 fp.addColumn = function(){
-    var dataStatement = $.extend(true, {}, ko.mapping.toJS(fp.dataFormula)), elemVer = {};
-    for (var i in dataStatement.Element){
-        elemVer = $.extend(true, {}, fp.templateFormula);
-        delete elemVer["ElementVersion"];
-        dataStatement.Element[i].ElementVersion.push(elemVer);
-    }
-    ko.mapping.fromJS(dataStatement, fp.dataFormula);
-    var index = $("#tableFormula>thead>tr.searchsv input.searchversion").length + 1;
-    $("#tableFormula>thead>tr.searchsv").append("<td indexid='"+index+"'><div class='searchversion'><button class=\"btn btn-sm btn-success btn-simulate\" onClick=\"fp.selectSimulate("+index+")\">Simulate</button></div><div class='searchversion'><input class='searchversion' id='version"+index+"' indexcolumn='"+index+"' /></div><div class='row-remove'><span class='glyphicon glyphicon-remove' onClick='fp.removeColumnFormula("+index+")'></span></td>");
-    $('#version'+index).ecLookupDD({
-        dataSource:{
-            data:fp.recordSugest(),
-        },
-        placeholder: "Search Version",
-        inputType: "ddl",
-        idField: "_id", 
-        idText: "title", 
-        displayFields: "title", 
-        inputSearch: "title",
+     app.ajaxPost("/statement/getstatementversion", {statementid: "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j", mode: "new"}, function(res){
+        if(!app.isFine(res)){
+            return;
+        }
+        if (!res.data) {
+            res.data = [];
+        }
+        for(var i in res.data.Element){
+            res.data.Element[i] = $.extend({}, fp.templateFormula, res.data.Element[i] || {});
+        }
+        var dataStatement = $.extend(true, {}, ko.mapping.toJS(res.data)), elemVer = {};
+        for (var i in dataStatement.Element){
+            elemVer = $.extend(true, {}, res.data.Element[i]);
+            delete elemVer["ElementVersion"];
+            dataStatement.Element[i].ElementVersion.push(elemVer);
+        }
+        ko.mapping.fromJS(dataStatement, fp.dataFormula);
+        var index = $("#tableFormula>thead>tr.searchsv input.searchversion").length + 1;
+        $("#tableFormula>thead>tr.searchsv").append("<td indexid='"+index+"'><div class='searchversion'><button class=\"btn btn-sm btn-success btn-simulate\" onClick=\"fp.selectSimulate("+index+")\">Simulate</button></div><div class='searchversion'><input class='searchversion' id='version"+index+"' indexcolumn='"+index+"' /></div><div class='row-remove'><span class='glyphicon glyphicon-remove' onClick='fp.removeColumnFormula("+index+")'></span></td>");
+        $('#version'+index).ecLookupDD({
+            dataSource:{
+                data:fp.recordSugest(),
+            },
+            placeholder: "Search Version",
+            inputType: "ddl",
+            idField: "_id", 
+            idText: "title", 
+            displayFields: "title", 
+            inputSearch: "title",
+        });
     });
 }
 
