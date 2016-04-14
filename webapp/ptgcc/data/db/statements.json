@@ -1,0 +1,119 @@
+[
+    {
+        "Elements": [
+            {
+                "Bold": false,
+                "DataValue": [],
+                "Index": 1,
+                "NegateDisplay": false,
+                "NegateValue": false,
+                "Show": true,
+                "Title1": "",
+                "Title2": "EBT (Acc Base)",
+                "Type": 10
+            },
+            {
+                "Bold": false,
+                "DataValue": [],
+                "Index": 2,
+                "NegateDisplay": false,
+                "NegateValue": false,
+                "Show": true,
+                "Title1": "AB",
+                "Title2": "",
+                "Type": 1
+            },
+            {
+                "Bold": false,
+                "DataValue": [],
+                "Index": 3,
+                "NegateDisplay": false,
+                "NegateValue": false,
+                "Show": true,
+                "Title1": "",
+                "Title2": "Depre (Add back)",
+                "Type": 10
+            },
+            {
+                "Bold": false,
+                "DataValue": [],
+                "Index": 4,
+                "NegateDisplay": false,
+                "NegateValue": false,
+                "Show": true,
+                "Title1": "",
+                "Title2": "Educational support",
+                "Type": 50
+            },
+            {
+                "Bold": false,
+                "DataValue": [],
+                "Index": 5,
+                "NegateDisplay": false,
+                "NegateValue": false,
+                "Show": true,
+                "Title1": "",
+                "Title2": "Contribution for public charities",
+                "Type": 50
+            },
+            {
+                "Bold": false,
+                "DataValue": [],
+                "Index": 6,
+                "NegateDisplay": false,
+                "NegateValue": false,
+                "Show": true,
+                "Title1": "",
+                "Title2": "Expenses for education or sports",
+                "Type": 10
+            },
+            {
+                "Bold": false,
+                "DataValue": [],
+                "Index": 7,
+                "NegateDisplay": false,
+                "NegateValue": false,
+                "Show": true,
+                "Title1": "LB",
+                "Title2": "",
+                "Type": 1
+            },
+            {
+                "Bold": false,
+                "DataValue": [],
+                "Index": 8,
+                "NegateDisplay": false,
+                "NegateValue": false,
+                "Show": true,
+                "Title1": "",
+                "Title2": "Dividend Paid",
+                "Type": 10
+            },
+            {
+                "Bold": false,
+                "DataValue": [],
+                "Index": 9,
+                "NegateDisplay": false,
+                "NegateValue": false,
+                "Show": true,
+                "Title1": "",
+                "Title2": "",
+                "Type": 1
+            },
+            {
+                "Bold": false,
+                "DataValue": [],
+                "Index": 10,
+                "NegateDisplay": false,
+                "NegateValue": false,
+                "Show": true,
+                "Title1": "EBT",
+                "Title2": "",
+                "Type": 50
+            }
+        ],
+        "Enable": true,
+        "Title": "donation",
+        "_id": "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j"
+    }
+]
