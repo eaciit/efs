@@ -1,0 +1,567 @@
+[{
+    "_id" : "V7v6vdVLkDYavp7InulgLLJfY7cL9NcS",
+    "title" : "base-v7",
+    "statementid" : "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j",
+    "element" : [ 
+        {
+            "statementelement" : {
+                "index" : 1,
+                "title1" : "",
+                "title2" : "EBT (Acc Base)",
+                "type" : 1,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "valuetxt" : "",
+            "valuenum" : 100000.0000000000000000,
+			"formula" : [],
+			"imagename" : ""
+        }, 
+        {
+            "statementelement" : {
+                "index" : 2,
+                "title1" : "AB",
+                "title2" : "",
+                "type" : 1,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000,
+			"formula" : ["@1+50000"],
+			"imagename" : ""
+        }, 
+        {
+            "statementelement" : {
+                "index" : 3,
+                "title1" : "",
+                "title2" : "Depre (Add back)",
+                "type" : 1,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "valuetxt" : "",
+            "valuenum" : 50000.0000000000000000,
+			"formula" : [],
+			"imagename" : ""
+        }, 
+        {
+            "statementelement" : {
+                "index" : 4,
+                "title1" : "",
+                "title2" : "Educational support",
+                "type" : 1,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000,
+			"formula" : ["@2+100000"],
+			"imagename" : ""
+        }, 
+        {
+            "statementelement" : {
+                "index" : 5,
+                "title1" : "",
+                "title2" : "Contribution for public charities",
+                "type" : 1,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "valuetxt" : "",
+            "valuenum" : 75000.0000000000000000,
+			"formula" : [],
+			"imagename" : ""
+        }, 
+        {
+            "statementelement" : {
+                "index" : 6,
+                "title1" : "",
+                "title2" : "Expenses for education or sports",
+                "type" : 1,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "valuetxt" : "",
+            "valuenum" : 90000.0000000000000000,
+			"formula" : [],
+			"imagename" : ""
+        }, 
+        {
+            "statementelement" : {
+                "index" : 7,
+                "title1" : "LB",
+                "title2" : "",
+                "type" : 1,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000,
+			"formula" : ["@3+75000"],
+			"imagename" : ""
+        }, 
+        {
+            "statementelement" : {
+                "index" : 8,
+                "title1" : "",
+                "title2" : "Dividend Paid",
+                "type" : 1,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "valuetxt" : "",
+            "valuenum" : 50000.0000000000000000,
+			"formula" : [],
+			"imagename" : ""
+        }, 
+        {
+            "statementelement" : {
+                "index" : 9,
+                "title1" : "",
+                "title2" : "",
+                "type" : 1,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "valuetxt" : "",
+            "valuenum" : 50000.0000000000000000,
+			"formula" : [],
+			"imagename" : ""
+        }, 
+        {
+            "statementelement" : {
+                "index" : 10,
+                "title1" : "EBT",
+                "title2" : "",
+                "type" : 1,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000,
+			"formula" : ["@4+25000"],
+			"imagename" : ""
+        }
+    ]
+},
+{
+    "_id" : "V7v6vdVLkDYavp7InulgLLJfY7cL9NcS",
+    "id" : "V7v6vdVLkDYavp7InulgLLJfY7cL9NcS",
+    "title" : "base.v1",
+    "statementid" : "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j",
+    "element" : [ 
+        {
+            "statementelement" : {
+                "index" : 1,
+                "title1" : "",
+                "title2" : "EBT (Acc Base)",
+                "type" : 10,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "formula" : [],
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000,
+            "imagename" : ""
+        }, 
+        {
+            "statementelement" : {
+                "index" : 2,
+                "title1" : "AB",
+                "title2" : "",
+                "type" : 1,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "formula" : [],
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000,
+            "imagename" : "Gyd85FVI5wH7hHqMDcr1h9crsyVBPpv7.png"
+        }, 
+        {
+            "statementelement" : {
+                "index" : 3,
+                "title1" : "",
+                "title2" : "Depre (Add back)",
+                "type" : 10,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "formula" : [],
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000,
+            "imagename" : "QBFRFQuZJy8smcV096x_GXrweXVJgDOY.png"
+        }, 
+        {
+            "statementelement" : {
+                "index" : 4,
+                "title1" : "",
+                "title2" : "Educational support",
+                "type" : 50,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : true,
+            "formula" : [],
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000,
+            "imagename" : ""
+        }, 
+        {
+            "statementelement" : {
+                "index" : 5,
+                "title1" : "",
+                "title2" : "Contribution for public charities",
+                "type" : 50,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : true,
+            "formula" : [],
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000,
+            "imagename" : ""
+        }, 
+        {
+            "statementelement" : {
+                "index" : 6,
+                "title1" : "",
+                "title2" : "Expenses for education or sports",
+                "type" : 10,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "formula" : [],
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000,
+            "imagename" : ""
+        }, 
+        {
+            "statementelement" : {
+                "index" : 7,
+                "title1" : "LB",
+                "title2" : "",
+                "type" : 1,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "formula" : [],
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000,
+            "imagename" : ""
+        }, 
+        {
+            "statementelement" : {
+                "index" : 8,
+                "title1" : "",
+                "title2" : "Dividend Paid",
+                "type" : 10,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "formula" : [],
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000,
+            "imagename" : ""
+        }, 
+        {
+            "statementelement" : {
+                "index" : 9,
+                "title1" : "",
+                "title2" : "",
+                "type" : 1,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "formula" : [],
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000,
+            "imagename" : ""
+        }, 
+        {
+            "statementelement" : {
+                "index" : 10,
+                "title1" : "EBT",
+                "title2" : "",
+                "type" : 50,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : true,
+            "formula" : [],
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000,
+            "imagename" : ""
+        }
+    ]
+},
+{
+    "_id" : "mwnLrxbnDjaQStvwZZLO5Kd0Zj0wgXsP",
+    "id" : "mwnLrxbnDjaQStvwZZLO5Kd0Zj0wgXsP",
+    "title" : "versi2",
+    "statementid" : "V7v6vdVLkDYavp7InulgLLJfY7cL9NcS",
+    "element" : [ 
+        {
+            "statementelement" : {
+                "index" : 1,
+                "title1" : "",
+                "title2" : "EBT (Acc Base)",
+                "type" : 10,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "formula" : [],
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000,
+            "imagename" : ""
+        }, 
+        {
+            "statementelement" : {
+                "index" : 2,
+                "title1" : "AB",
+                "title2" : "",
+                "type" : 1,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "formula" : [],
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000,
+            "imagename" : ""
+        }, 
+        {
+            "statementelement" : {
+                "index" : 3,
+                "title1" : "",
+                "title2" : "Depre (Add back)",
+                "type" : 10,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "formula" : [],
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000,
+            "imagename" : ""
+        }, 
+        {
+            "statementelement" : {
+                "index" : 4,
+                "title1" : "",
+                "title2" : "Educational support",
+                "type" : 50,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "formula" : [ 
+                "2", 
+                "+", 
+                "2"
+            ],
+            "valuetxt" : "",
+            "valuenum" : 4.0000000000000000,
+            "imagename" : ""
+        }, 
+        {
+            "statementelement" : {
+                "index" : 5,
+                "title1" : "",
+                "title2" : "Contribution for public charities",
+                "type" : 50,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : true,
+            "formula" : [],
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000,
+            "imagename" : ""
+        }, 
+        {
+            "statementelement" : {
+                "index" : 6,
+                "title1" : "",
+                "title2" : "Expenses for education or sports",
+                "type" : 10,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "formula" : [],
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000,
+            "imagename" : ""
+        }, 
+        {
+            "statementelement" : {
+                "index" : 7,
+                "title1" : "LB",
+                "title2" : "",
+                "type" : 1,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "formula" : [],
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000,
+            "imagename" : ""
+        }, 
+        {
+            "statementelement" : {
+                "index" : 8,
+                "title1" : "",
+                "title2" : "Dividend Paid",
+                "type" : 10,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "formula" : [],
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000,
+            "imagename" : ""
+        }, 
+        {
+            "statementelement" : {
+                "index" : 9,
+                "title1" : "",
+                "title2" : "",
+                "type" : 1,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : false,
+            "formula" : [],
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000,
+            "imagename" : ""
+        }, 
+        {
+            "statementelement" : {
+                "index" : 10,
+                "title1" : "EBT",
+                "title2" : "",
+                "type" : 50,
+                "datavalue" : [],
+                "show" : true,
+                "bold" : false,
+                "negatevalue" : false,
+                "negatedisplay" : false
+            },
+            "istxt" : true,
+            "formula" : [],
+            "valuetxt" : "",
+            "valuenum" : 0.0000000000000000,
+            "imagename" : ""
+        }
+    ]
+}]
