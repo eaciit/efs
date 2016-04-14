@@ -423,6 +423,7 @@ $.ecDataSourceDDLookup = function(element,options){
 							    }
 							    ko.mapping.fromJS(dataStatement, fp.dataFormula);
 							}
+							fp.refreshHeightTable();
 						});
 					}
 				});
