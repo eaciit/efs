@@ -39,20 +39,20 @@ var fnSUM Fn = func(tkm toolkit.M, formula string) interface{} {
 var fnIF Fn = func(tkm toolkit.M, formula string) interface{} {
 	var result interface{}
 	var operatorList = []string{"<>", "<=", ">=", ">", "<", "="}
-	ifVal := strings.Split(string(formula[3:len(formula)-1]), ",")
+	ifValList := strings.Split(string(formula[3:len(formula)-1]), ",")
 	var operator string
 	for _, op := range operatorList {
-		if strings.Contains(ifVal[0], op) {
+		if strings.Contains(ifValList[0], op) {
 			operator = op
 			break
 		}
 	}
-	trueVal := ifVal[toolkit.SliceLen(ifVal)-2]
-	falseVal := ifVal[toolkit.SliceLen(ifVal)-1]
+	trueVal := ifValList[toolkit.SliceLen(ifValList)-2]
+	falseVal := ifValList[toolkit.SliceLen(ifValList)-1]
 	var isTrue bool
-	for _, _ifVal := range ifVal {
-		if strings.Contains(_ifVal, operator) {
-			opVal := strings.Split(_ifVal, operator)
+	for _, ifVal := range ifValList {
+		if strings.Contains(ifVal, operator) {
+			opVal := strings.Split(ifVal, operator)
 			val1 := toolkit.ToFloat64(tkm.Get(opVal[0]), 6, toolkit.RoundingAuto)
 			val2 := toolkit.ToFloat64(tkm.Get(opVal[1]), 6, toolkit.RoundingAuto)
 			switch {
@@ -67,7 +67,7 @@ var fnIF Fn = func(tkm toolkit.M, formula string) interface{} {
 			case operator == "<":
 				isTrue = val1 < val2
 			default:
-				isTrue = opVal[0] == opVal[1]
+				isTrue = val1 == val2
 			}
 		}
 	}
