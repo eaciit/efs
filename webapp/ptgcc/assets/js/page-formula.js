@@ -44,6 +44,7 @@ fp.recordKoefisien = ko.observableArray([]);
 fp.recordCondition = ko.observableArray([]);
 fp.recordSugest = ko.observableArray([]);
 fp.imageName = ko.observable("");
+fp.boolHeightTable = ko.observable(0);
 
 fp.saveImage = function(){
     var idstatement = "";
@@ -631,7 +632,9 @@ fp.addColumn = function(){
     });
 };
 fp.refreshHeightTable = function(){
-    var height1 = 0, height2 = 0, heightSelect = 0;
+    var height1 = 0, height2 = 0, heightSelect = 0, plusheight = 15;
+    if (fp.boolHeightTable() == 1)
+        plusheight = 0;
     if (fp.dataFormula.Element()[0].ElementVersion().length>0){}
         $(".table-formula-data").css("width",(fp.dataFormula.Element()[0].ElementVersion().length+1)*300);
     for(var i in fp.dataFormula.Element()){
@@ -641,9 +644,10 @@ fp.refreshHeightTable = function(){
             heightSelect = height1;
         else
             heightSelect = height2;
-        $(".table-formula-head tr").eq(i).css('height',heightSelect+15);
-        $(".table-formula-data tr").eq(i).css('height',heightSelect+15);
+        $(".table-formula-head tr").eq(i).css('height',heightSelect+plusheight);
+        $(".table-formula-data tr").eq(i).css('height',heightSelect+plusheight);
     }
+    fp.boolHeightTable(1);
 }
 
 $(function (){
