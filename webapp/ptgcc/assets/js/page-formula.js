@@ -21,7 +21,7 @@ fp.templateFormula = {
         Title2:"",
         Type:1,
         DataValue:[],
-        Show: "",
+        Show: true,
         Bold: false,
         NegateValue: false,
         NegateDisplay: false,
@@ -564,7 +564,7 @@ fp.selectSimulate = function(index){
             mode: "simulate",
             _id : "",
             title : "",
-            statementid : "V7v6vdVLkDYavp7InulgLLJfY7cL9NcS",
+            statementid : "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j",
             element : []
         }, elementVer = [], mappingVer = {};
         objFormula = $('#version1').ecLookupDD("get");
@@ -581,7 +581,7 @@ fp.selectSimulate = function(index){
                 mode: "simulate",
                 _id : "",
                 title : $("#tableFormula>thead td[indexid="+1+"]").find(".eclookup-txt>input").val(),
-                statementid : "V7v6vdVLkDYavp7InulgLLJfY7cL9NcS",
+                statementid : "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j",
                 element : ko.mapping.toJS(fp.dataFormula.Element())
             };
         }
@@ -616,7 +616,7 @@ fp.selectSimulate = function(index){
                     mode: "simulate",
                     _id : "",
                     title : $("#tableFormula>thead td[indexid="+index+"]").find(".eclookup-txt>input").val(),
-                    statementid : "V7v6vdVLkDYavp7InulgLLJfY7cL9NcS",
+                    statementid : "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j",
                     element: elementVer
                 };
             }
