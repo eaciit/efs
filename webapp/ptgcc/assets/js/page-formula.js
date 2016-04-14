@@ -76,7 +76,7 @@ fp.saveImage = function(){
             if (!app.isFine(res)) {
                 return;
             }
-            swal({title: "Selector successfully deleted", type: "success"});
+            swal({title: "Selector successfully upload", type: "success"});
             fp.imageName(res.data);
             if (fp.selectColumn().indexcol == 1)
                 fp.dataFormula.Element()[fp.selectColumn().index].ImageName(res.data);
@@ -216,6 +216,7 @@ fp.refreshSimulateByIndex = function(index,data){
             ko.mapping.fromJS(dataStatement, fp.dataFormula);
         }
     }
+    swal({title: "Selector successfully simulate", type: "success"});
     fp.refreshHeightTable();
 }
 fp.saveStatement = function(){
@@ -248,7 +249,7 @@ fp.saveStatement = function(){
         if (!res.data) {
             res.data = [];
         }
-        swal({title: "Selector successfully deleted", type: "success"});
+        swal({title: "Selector successfully save", type: "success"});
         fp.refreshAll();
     });
     if (fp.dataFormula.Element()[0].ElementVersion().length > 0){
@@ -282,7 +283,7 @@ fp.saveStatement = function(){
                 if (!res.data) {
                     res.data = [];
                 }
-                swal({title: "Selector successfully deleted", type: "success"});
+                swal({title: "Selector successfully save", type: "success"});
                 fp.refreshAll();
             });
         }
