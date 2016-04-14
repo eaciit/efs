@@ -740,6 +740,10 @@ body {
   background-color: #fff;
   padding-left: 0px; }
 
+.btn-simulate {
+  margin-left: 10px;
+  margin-bottom: 5px; }
+
 .dropdown-submenu > li > a {
   display: block;
   padding: 3px 20px;

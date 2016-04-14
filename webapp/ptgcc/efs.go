@@ -28,6 +28,7 @@ func main() {
 	server = new(knot.Server)
 	server.Address = "localhost:8000"
 	server.RouteStatic("res", filepath.Join(controller.AppBasePath, "assets"))
+	server.RouteStatic("image", filepath.Join(controller.EFS_DATA_PATH, "image"))
 	server.Register(controller.CreateWebController(server), "")
 	server.Register(controller.CreateStatementController(server), "")
 

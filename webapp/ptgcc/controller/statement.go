@@ -105,7 +105,7 @@ func (st *StatementController) RemoveStatementVersion(r *knot.WebContext) interf
 func (st *StatementController) SaveImageSV(r *knot.WebContext) interface{} {
 	r.Config.OutputType = knot.OutputJson
 
-	imageLocation := filepath.Join(EFS_DATA_PATH, "image")
+	imageLocation := filepath.Join(EFS_DATA_PATH, "image","sv")
 	index := toolkit.ToInt(r.Request.FormValue("index"), toolkit.RoundingAuto)
 
 	err, imageName := helper.ImageUploadHandler(r, "userfile", imageLocation)
