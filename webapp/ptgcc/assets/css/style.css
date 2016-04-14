@@ -89,11 +89,11 @@ a {
 .align-left {
   text-align: left; }
 
-table.table {
-  cursor: pointer; }
-  table.table tr:hover td {
-    background-color: #E8F3FF; }
-
+/** table.table */
+/**	cursor: pointer */
+/**	tr:hover */
+/**		td */
+/**			background-color: #E8F3FF */
 .no-padding {
   padding: 0px;
   margin: 0px; }
@@ -699,6 +699,23 @@ body {
     .form-formula .nav-command .nav li a:hover {
       background-color: #3A8BDF;
       color: whitesmoke; }
+
+.table-con-formula {
+  display: inline-block; }
+
+.table-formula-data {
+  width: 300px;
+  float: left; }
+
+.table-formula-data > thead tr {
+  width: 150px; }
+
+.table-formula-head {
+  width: 40%;
+  float: left; }
+
+.right-formula {
+  overflow: auto; }
 
 .area-editor {
   margin-bottom: 6px; }

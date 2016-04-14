@@ -239,7 +239,7 @@ fp.saveStatement = function(){
     } else {
         postParam = {
             _id : "",
-            title : $("#tableFormula>thead td[indexid="+1+"]").find(".eclookup-txt>input").val(),
+            title : $(".table-formula-data>thead td[indexid="+1+"]").find(".eclookup-txt>input").val(),
             statementid : "V7v6vdVLkDYavp7InulgLLJfY7cL9NcS",
             element : ko.mapping.toJS(fp.dataFormula.Element())
         };
@@ -273,7 +273,7 @@ fp.saveStatement = function(){
             } else {
                 postParam = {
                     _id : "",
-                    title : $("#tableFormula>thead td[indexid="+(i+2)+"]").find(".eclookup-txt>input").val(),
+                    title : $(".table-formula-data>thead td[indexid="+(i+2)+"]").find(".eclookup-txt>input").val(),
                     statementid : "V7v6vdVLkDYavp7InulgLLJfY7cL9NcS",
                     element: elementVer
                 };
@@ -486,6 +486,7 @@ fp.getDataStatement = function(){
         }
         ko.mapping.fromJS(res.data, fp.dataFormula);
         fp.getListSugest();
+        fp.refreshHeightTable();
     });
     // for(var i in dataexample.Element){
     //     dataexample.Element[i] = $.extend({}, fp.templateFormula, dataexample.Element[i] || {});
@@ -540,7 +541,7 @@ fp.selectSimulate = function(index){
             postParam = {
                 mode: "simulate",
                 _id : "",
-                title : $("#tableFormula>thead td[indexid="+1+"]").find(".eclookup-txt>input").val(),
+                title : $(".table-formula-data>thead td[indexid="+1+"]").find(".eclookup-txt>input").val(),
                 statementid : "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j",
                 element : ko.mapping.toJS(fp.dataFormula.Element())
             };
@@ -575,7 +576,7 @@ fp.selectSimulate = function(index){
                 postParam = {
                     mode: "simulate",
                     _id : "",
-                    title : $("#tableFormula>thead td[indexid="+index+"]").find(".eclookup-txt>input").val(),
+                    title : $(".table-formula-data>thead td[indexid="+index+"]").find(".eclookup-txt>input").val(),
                     statementid : "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j",
                     element: elementVer
                 };
@@ -611,8 +612,10 @@ fp.addColumn = function(){
             dataStatement.Element[i].ElementVersion.push(elemVer);
         }
         ko.mapping.fromJS(dataStatement, fp.dataFormula);
-        var index = $("#tableFormula>thead>tr.searchsv input.searchversion").length + 1;
-        $("#tableFormula>thead>tr.searchsv").append("<td indexid='"+index+"'><div class='searchversion'><button class=\"btn btn-sm btn-success btn-simulate\" onClick=\"fp.selectSimulate("+index+")\">Simulate</button></div><div class='searchversion'><input class='searchversion' id='version"+index+"' indexcolumn='"+index+"' /></div><div class='row-remove'><span class='glyphicon glyphicon-remove' onClick='fp.removeColumnFormula("+index+")'></span></td>");
+        // var index = $("#tableFormula>thead>tr.searchsv input.searchversion").length + 1;
+        // $("#tableFormula>thead>tr.searchsv").append("<td indexid='"+index+"'><div class='searchversion'><button class=\"btn btn-sm btn-success btn-simulate\" onClick=\"fp.selectSimulate("+index+")\">Simulate</button></div><div class='searchversion'><input class='searchversion' id='version"+index+"' indexcolumn='"+index+"' /></div><div class='row-remove'><span class='glyphicon glyphicon-remove' onClick='fp.removeColumnFormula("+index+")'></span></td>");
+        var index = $(".table-formula-data>thead>tr.searchsv input.searchversion").length + 1;
+        $(".table-formula-data>thead>tr.searchsv").append("<td indexid='"+index+"'><div class='searchversion'><button class=\"btn btn-sm btn-success btn-simulate\" onClick=\"fp.selectSimulate("+index+")\">Simulate</button></div><div class='searchversion'><input class='searchversion' id='version"+index+"' indexcolumn='"+index+"' /></div><div class='row-remove'><span class='glyphicon glyphicon-remove' onClick='fp.removeColumnFormula("+index+")'></span></td>");
         $('#version'+index).ecLookupDD({
             dataSource:{
                 data:fp.recordSugest(),
@@ -624,7 +627,23 @@ fp.addColumn = function(){
             displayFields: "title", 
             inputSearch: "title",
         });
+        fp.refreshHeightTable();
     });
+};
+fp.refreshHeightTable = function(){
+    var height1 = 0, height2 = 0, heightSelect = 0;
+    if (fp.dataFormula.Element()[0].ElementVersion().length>0){}
+        $(".table-formula-data").css("width",(fp.dataFormula.Element()[0].ElementVersion().length+1)*300);
+    for(var i in fp.dataFormula.Element()){
+        height1 = $(".table-formula-head tr").eq(i).height();
+        height2 = $(".table-formula-data tr").eq(i).height();
+        if(height1>height2)
+            heightSelect = height1;
+        else
+            heightSelect = height2;
+        $(".table-formula-head tr").eq(i).css('height',heightSelect+15);
+        $(".table-formula-data tr").eq(i).css('height',heightSelect+15);
+    }
 }
 
 $(function (){
