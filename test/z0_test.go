@@ -113,9 +113,9 @@ func TestRunStatement(t *testing.T) {
 
 	tsv.Element[0].ValueNum = 10000
 	tsv.Element[2].ValueNum = 1000
-	tsv.Element[3].Formula = "@5*10/100"
-	tsv.Element[4].Formula = "@4*5/100"
-	tsv.Element[9].Formula = "@1+@3+@4+@5"
+	tsv.Element[3].Formula = []string{"@1", "*", "10", "/", "100"}
+	tsv.Element[4].Formula = []string{"@1", "*", "5", "/", "100"}
+	tsv.Element[9].Formula = []string{"@1", "+", "fn:SUM(@3..@5)"}
 	// ======================
 	ins := toolkit.M{}.Set("data", tsv)
 	sv, err := ds.Run(ins)

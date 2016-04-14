@@ -31,7 +31,7 @@ func (e *StatementVersion) TableName() string {
 type VersionElement struct {
 	StatementElement *StatementElement
 	IsTxt            bool
-	Formula          string
+	Formula          []string
 	ValueTxt         string
 	ValueNum         float64
 	ImageName        string
