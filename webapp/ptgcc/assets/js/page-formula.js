@@ -119,6 +119,7 @@ fp.showFormula = function(index,data, indexColoumn){
     	$("#formula-popup").modal("show");
         fp.selectColumn({index:index,indexcol:indexColoumn});
         var datatojs = ko.mapping.toJS(data);
+        $('#formula-editor').ecLookupDD("clear");
         viewModel.fileData().dataURL("/image/sv/"+datatojs.ImageName);
         for(var i in datatojs.Formula){
             if (datatojs.Formula[i] == "+" || datatojs.Formula[i] == "-" || datatojs.Formula[i] == "*" || datatojs.Formula[i] == "/")
@@ -221,6 +222,7 @@ fp.refreshSimulateByIndex = function(index,data){
             ko.mapping.fromJS(dataStatement, fp.dataFormula);
         }
     }
+    fp.refreshHeightTable();
 }
 fp.saveStatement = function(){
     var objFormula = [], postParam = {

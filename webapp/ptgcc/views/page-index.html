@@ -182,7 +182,7 @@
         <div class="row form-formula">
         	<div class="col-md-3 nav-command">
         		<label class="col-md-12 title-command">Account List</label>
-        		<div class="col-md-12">
+        		<div class="col-md-12" style="height:380px; overflow: auto;">
         			<ul class="nav" data-bind="foreach: fp.dataFormula.Element()">
         				<li><a href="#" data-bind="click: function(){fp.selectListAkun($index(),$data)}, text: ($index()+1)+'. '+StatementElement.Title1()+' '+StatementElement.Title2()"></a></li>
         			</ul>
