@@ -110,9 +110,6 @@ fp.lastParamSelect = function(){
         fp.lastParam("");
 }
 fp.showFormula = function(index,data, indexColoumn){
-    // console.log("index",index);
-    // console.log("index coloum",indexColoumn);
-    // console.log("data",ko.mapping.toJS(data));
     // if (data.StatementElement.Type == 50){
         // viewModel.fileData().clear();
         fp.modeFormula("");
@@ -138,9 +135,6 @@ fp.saveFormulaEditor = function(){
     if (fp.selectColumn().indexcol == 1){
         fp.dataFormula.Element()[fp.selectColumn().index].Formula(resultFormulaArr);
     } else {
-        // console.log(fp.selectColumn().index);
-        // console.log(fp.selectColumn().indexcol-2);
-        // console.log(fp.dataFormula.Element()[fp.selectColumn().index].ElementVersion()[(fp.selectColumn().indexcol-2)].Formula());
         fp.dataFormula.Element()[fp.selectColumn().index].ElementVersion()[(fp.selectColumn().indexcol-2)].Formula(resultFormulaArr);
     }
     $('#formula-editor').ecLookupDD("clear");
@@ -459,7 +453,7 @@ fp.addKostantaFormula = function(){
                 boolsuccess = false;
             }
             if (boolsuccess){
-                resultFormula += "("+objFormula1[0].value+fp.recordCondition()[i].condition+objFormula2[0].value+","+objFormula3[0].value+","+objFormula4[0].value;
+                resultFormula += "("+objFormula1[0].value+fp.recordCondition()[i].condition+objFormula2[0].value+","+objFormula3[0].value+","+objFormula4[0].value+")";
                 boolsuccess = true;
             }
         }
@@ -515,6 +509,7 @@ fp.getListSugest = function(){
             idText: "title", 
             displayFields: "title", 
             inputSearch: "title",
+            boolClickSearch: true,
         });
     });
 }
@@ -629,6 +624,7 @@ fp.addColumn = function(){
             idText: "title", 
             displayFields: "title", 
             inputSearch: "title",
+            boolClickSearch: true,
         });
         fp.refreshHeightTable();
     });

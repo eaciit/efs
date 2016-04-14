@@ -7,7 +7,7 @@ $(function() {
 	});
 	$('body').click(function(e) {
 		var target = $(e.target);
-		if(!target.is('div.eclookup-dropdown') && !target.is('ul.eclookup-list') && !target.is('ul.eclookup-listsearch') && !target.is('li.eclookup-itemsearch')) {
+		if(!target.is('div.eclookup-dropdown') && !target.is('ul.eclookup-list') && !target.is('ul.eclookup-listsearch') && !target.is('li.eclookup-itemsearch') && !target.is('.eclookup-txt>input')) {
 			$('div.eclookup-dropdown').hide();
 		}
 	});
@@ -61,6 +61,7 @@ var Settings_EcLookup = {
 	focusable: false,
 	typesearch: "string", // string or number
 	minChar: 0,
+	boolClickSearch: false,
 	displayTemplate: function(){
 		return "";
 	},
@@ -136,7 +137,7 @@ var methodsLookupDD = {
 			$textSearch.prop('disabled',true);
 		else
 			$textSearch.prop('disabled',false);
-		$textSearch.bind('keyup keydown focus blur').keyup(function(event){
+		$textSearch.bind('keyup keydown focus blur click').keyup(function(event){
 			var search = $(this).val();
 			var $co = $container.find(".eclookup-dropdown ul.eclookup-listsearch");
 			switch(event.keyCode) {
@@ -192,6 +193,11 @@ var methodsLookupDD = {
 		}).blur(function(){
 			// if(options.focusable == true)
 			// 	$container.find(".eclookup-container").removeClass("eclookup-selected");
+		}).click(function(){
+			if(options.boolClickSearch == true){
+				var search = $(this).val();
+				$o.data('ecLookupDD').searchResult(search);
+			}
 		});
 		$textSearch.appendTo($liLookupTxt);
 
@@ -322,7 +328,11 @@ $.ecDataSourceDDLookup = function(element,options){
 		if (chooseData == 'url' && searchData.length == 0){
 			this.getUrlData(query);
 		} else if (chooseData == 'data'){
-			this.resultSearchData(searchData, query);
+			if ($(elementLookup).data('ecLookupDDSettings').boolClickSearch == true && query == '')
+				this.resultSearchData(this.ParamDataSource.dataTemp, query);
+			else
+				this.resultSearchData(searchData, query);
+
 		} else if (chooseData == 'url' && searchData.length > 0){
 			this.resultSearchData(searchData, query);
 		}
@@ -333,7 +343,7 @@ $.ecDataSourceDDLookup = function(element,options){
 		$(elementLookup).parent().find('div.eclookup-dropdown').show();
 		$ulDropdown.html('');		
 
-		if (data.length > 0 && query !== ''){
+		if ($(elementLookup).data('ecLookupDDSettings').boolClickSearch == true || (data.length > 0 && query !== '')){
 			for (var key in data){
 				var changeElemSearch = $(elementLookup).data('ecLookupDDSettings').displayTemplate();
 				$liContentSearch = $('<li class="eclookup-itemsearch" idfield="'+ data[key][$(elementLookup).data('ecLookupDDSettings').idField] +'" valueDisplay="'+data[key][$(elementLookup).data('ecLookupDDSettings').displayFields]+'"></li>');
@@ -429,7 +439,7 @@ $.ecDataSourceDDLookup = function(element,options){
 				});
 				$liContentSearch.appendTo($ulDropdown);
 			}
-		} else if (query !== ''){
+		} else if ($(elementLookup).data('ecLookupDDSettings').boolClickSearch == false  || query !== ''){
 			$liContentSearch = $('<li class="eclookup-itemsearch">Search Not Found !</li>');
 			$liContentSearch.appendTo($ulDropdown);
 		}

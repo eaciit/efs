@@ -127,39 +127,39 @@
 		<td data-bind="html:ValueNum().toString(), style: {fontWeight: StatementElement.Bold == true ? 'bold':'normal', textAlign: 'Right'}, click: function(){fp.showFormula($index(),$data,1)}, attr:{'indexid':'1'}"></td>
 		<!-- /ko -->
 		<!-- ko if: StatementElement.Type() == 12 -->
-		<td data-bind="attr:{'indexid':'1'}">
+		<td data-bind="attr:{'indexid':'1'}, style: {fontWeight: StatementElement.Bold == true ? 'bold':'normal'}">
 			<input type="text" class="form-control input-sm" data-bind="value:ValueTxt"/>
 		</td>
 		<!-- /ko -->
 		<!-- ko if: StatementElement.Type() == 10-->
-		<td data-bind="attr:{'indexid':'1'}, style: {textAlign: 'Right'}">
+		<td data-bind="attr:{'indexid':'1'}, style: {textAlign: 'Right',fontWeight: StatementElement.Bold == true ? 'bold':'normal'}">
 			<input data-bind="attr:{'id':'valueversion'+$index()}, kendoNumericTextBox:{value:ValueNum}"/>
 		</td>
 		<!-- /ko -->
 		<!-- ko if: StatementElement.Type() == 11 -->
-		<td data-bind="attr:{'indexid':'1'}">
+		<td data-bind="attr:{'indexid':'1'}, style: {fontWeight: StatementElement.Bold == true ? 'bold':'normal'}">
 			<input data-bind="attr:{'id':'valueversion'+$index()}, kendoDateTimePicker:{value:ValueTxt, format: 'dd MMM yyyy'}"/>
 		</td>
 		<!-- /ko -->
 		<!-- ko if: StatementElement.Type() == 1 -->
-			<td data-bind="attr:{'indexid':($index()+2).toString()}"></td>
+			<td data-bind="attr:{'indexid':($index()+2).toString()}, style: {fontWeight: StatementElement.Bold == true ? 'bold':'normal'}"></td>
 			<!-- /ko -->
 		<!-- ko foreach: ElementVersion -->
 			<!-- ko if: StatementElement.Type() == 50 -->
 			<td data-bind="html:ValueNum().toString(), style: {fontWeight: StatementElement.Bold == true ? 'bold':'normal', textAlign: 'Right'}, attr:{'indexid':($index()+2).toString()}, click: function(){fp.showFormula($($element).index(),$data,($index()+2))}"></td>
 			<!-- /ko -->
 			<!-- ko if: StatementElement.Type() == 12 -->
-			<td data-bind="attr:{'indexid':($index()+2).toString()}">
+			<td data-bind="attr:{'indexid':($index()+2).toString()}, style: {fontWeight: StatementElement.Bold == true ? 'bold':'normal'}">
 				<input type="text" class="form-control input-sm" data-bind="value:ValueTxt"/>
 			</td>
 			<!-- /ko -->
 			<!-- ko if: StatementElement.Type() == 10 -->
-			<td data-bind="attr:{'indexid':($index()+2).toString()}, style: {textAlign: 'Right'}">
+			<td data-bind="attr:{'indexid':($index()+2).toString()}, style: {textAlign: 'Right', fontWeight: StatementElement.Bold == true ? 'bold':'normal'}">
 				<input data-bind="attr:{'id':'valueversion'+$index()}, kendoNumericTextBox:{value:ValueNum}"/>
 			</td>
 			<!-- /ko -->
 			<!-- ko if: StatementElement.Type() == 11 -->
-			<td data-bind="attr:{'indexid':($index()+2).toString()}">
+			<td data-bind="attr:{'indexid':($index()+2).toString()}, style: {fontWeight: StatementElement.Bold == true ? 'bold':'normal'}">
 				<input data-bind="attr:{'id':'valueversion'+$index()}, kendoDateTimePicker:{value:ValueTxt, format: 'dd MMM yyyy'}"/>
 			</td>
 			<!-- /ko -->
