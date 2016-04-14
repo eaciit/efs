@@ -186,6 +186,7 @@ var methodsLookupDD = {
 		}).focus(function(){
 			if(options.focusable == true){
 				$("#tablekoefisien>tbody .eclookup-container").removeClass("eclookup-selected");
+				$("#tableif>tbody .eclookup-container").removeClass("eclookup-selected");
 				$container.find(".eclookup-container").addClass("eclookup-selected");
 			}
 		}).blur(function(){

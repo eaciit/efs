@@ -20,11 +20,11 @@
 		    	<div class="col-md-12">
 		    		<table id="tableFormula" class="table table-striped table-bordered">
 		    			<thead>
-			    			<tr>
+			    			<tr class="searchsv">
 			    				<td></td>
 			    				<td></td>
 			    				<td></td>
-			    				<td indexid="1"><div class="searchversion"><input class='searchversion' id="version1" indexcolumn="1" /></div></td>
+			    				<td indexid="1"><div class="searchversion"><button class="btn btn-sm btn-success btn-simulate" onClick="fp.selectSimulate(1)">Simulate</button></div><div class="searchversion"><input class='searchversion' id="version1" indexcolumn="1" /></div></td>
 			    			</tr>
 			    		</thead>
 			    		<tbody data-bind="template:{name:'formulaTemplate', foreach:fp.dataFormula.Element()}">
@@ -49,12 +49,12 @@
 			<input type="text" class="form-control input-sm" data-bind="value:ValueTxt"/>
 		</td>
 		<!-- /ko -->
-		<!-- ko if: StatementElement.Type() == 11-->
+		<!-- ko if: StatementElement.Type() == 10-->
 		<td data-bind="attr:{'indexid':'1'}">
 			<input data-bind="attr:{'id':'valueversion'+$index()}, kendoNumericTextBox:{value:ValueNum}"/>
 		</td>
 		<!-- /ko -->
-		<!-- ko if: StatementElement.Type() == 10 -->
+		<!-- ko if: StatementElement.Type() == 11 -->
 		<td data-bind="attr:{'indexid':'1'}">
 			<input data-bind="attr:{'id':'valueversion'+$index()}, kendoDateTimePicker:{value:ValueTxt, format: 'dd MMM yyyy'}"/>
 		</td>
@@ -68,12 +68,12 @@
 				<input type="text" class="form-control input-sm" data-bind="value:ValueTxt"/>
 			</td>
 			<!-- /ko -->
-			<!-- ko if: StatementElement.Type() == 11 -->
+			<!-- ko if: StatementElement.Type() == 10 -->
 			<td data-bind="attr:{'indexid':($index()+2).toString()}">
 				<input data-bind="attr:{'id':'valueversion'+$index()}, kendoNumericTextBox:{value:ValueNum}"/>
 			</td>
 			<!-- /ko -->
-			<!-- ko if: StatementElement.Type() == 10 -->
+			<!-- ko if: StatementElement.Type() == 11 -->
 			<td data-bind="attr:{'indexid':($index()+2).toString()}">
 				<input data-bind="attr:{'id':'valueversion'+$index()}, kendoDateTimePicker:{value:ValueTxt, format: 'dd MMM yyyy'}"/>
 			</td>
@@ -160,13 +160,67 @@
 		        </div>
 		        <div class="row" data-bind="visible: fp.modeFormula() == 'IF'">
 		        	<div class="col-md-12">
-		        		<button class="btn btn-sm btn-warning" data-bind="click: fp.backFormulaEditor"><span class="glyphicon glyphicon-chevron-left"></span> Back</button>
-			    		<!-- <button class="btn btn-sm btn-success"><span class="glyphicon glyphicon-plus"></span> Add Parameter</button> -->
+			    		<button class="btn btn-sm btn-warning" data-bind="click: fp.backFormulaEditor"><span class="glyphicon glyphicon-chevron-left"></span> Back</button>
+			    		<!-- <button class="btn btn-sm btn-primary" data-bind="click: fp.addParameter"><span class="glyphicon glyphicon-plus"></span> Add Parameter</button> -->
+			    		<button class="btn btn-sm btn-success" data-bind="click: fp.addKostantaFormula"><span class="glyphicon glyphicon-ok"> OK</button>
+		        	</div>
+		        	<div class="col-md-12">
+		        		<table class="table" id="tableif">
+							<thead>
+								<tr style="width: 100%;">
+									<th width="20%">Value 1</th>
+									<th width="10%"></th>
+									<th width="20%">Value 2</th>
+									<th width="20%">Result 1</th>
+									<th width="20%">Result 2</th>
+								</tr>
+							</thead>
+							<tbody data-bind="foreach: fp.recordCondition">
+								<tr>
+									<td data-bind="attr:{idarea: 'condition1'+$index()}"><input class='areakoefisien' data-bind="attr:{'id':'condition1'+$index()}" /></td>
+									<td data-bind="attr:{idarea: 'condition'+$index()}">
+										<select class="form-control input-sm" data-bind="value:condition">
+											<option data-bind="text:'=='"></option>
+											<option data-bind="text:'>='"></option>
+											<option data-bind="text:'<='"></option>
+											<option data-bind="text:'>'"></option>
+											<option data-bind="text:'<'"></option>
+										</select>
+									</td>
+									<td data-bind="attr:{idarea: 'condition2'+$index()}"><input class='areakoefisien' data-bind="attr:{'id':'condition2'+$index()}" /></td>
+									<td data-bind="attr:{idarea: 'result1'+$index()}"><input class='areakoefisien' data-bind="attr:{'id':'result1'+$index()}" /></td>
+									<td data-bind="attr:{idarea: 'result2'+$index()}"><input class='areakoefisien' data-bind="attr:{'id':'result2'+$index()}" /></td>
+									<td>
+										<button class="btn btn-sm btn-danger" data-bind="style: { 'visibility': ($index() > 0) ? 'visible' : 'hidden' }, click: function(){fp.removeKoefisien($data)}"><span class="glyphicon glyphicon-trash"></span></button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
 		        	</div>
 		        </div>
         	</div>
         	<div class="col-md-3">
         		<!-- View Image -->
+        		<div class="well" data-bind="fileDrag: fileData">
+				    <div class="form-group row">
+				        <div class="row">
+				            <img style="height: 125px; width: 85%; margin-left:20px;" class="img-rounded  thumb" data-bind="attr: { src: fileData().dataURL }, visible: fileData().dataURL">
+				            <div data-bind="ifnot: fileData().dataURL">
+				                <label class="drag-label">Drag file here</label>
+				            </div>
+				        </div>
+				        <div class="row">
+				            <input type="file" data-bind="fileInput: fileData, customFileInput: {
+				              buttonClass: 'btn btn-success btn-sm imageefs',
+				              fileNameClass: 'disabled form-control input-sm',
+				              onClear: onClear,
+				            }" accept="image/*">
+				        </div>
+				    </div>
+				</div>
+				<div class="row">
+					<button class="btn btn-sm btn-primary" data-bind="click:fp.saveImage"><span class="glyphicon glyphicon-floppy-disk"></span> Save</button>
+				</div>
         	</div>
         </div>
         <div style="clear:both;"></div>
