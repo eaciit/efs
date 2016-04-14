@@ -76,7 +76,7 @@ fp.saveImage = function(){
             if (!app.isFine(res)) {
                 return;
             }
-            swal({title: "Selector successfully deleted", type: "success"});
+            swal({title: "Selector successfully upload", type: "success"});
             fp.imageName(res.data);
             if (fp.selectColumn().indexcol == 1)
                 fp.dataFormula.Element()[fp.selectColumn().index].ImageName(res.data);
@@ -110,9 +110,6 @@ fp.lastParamSelect = function(){
         fp.lastParam("");
 }
 fp.showFormula = function(index,data, indexColoumn){
-    // console.log("index",index);
-    // console.log("index coloum",indexColoumn);
-    // console.log("data",ko.mapping.toJS(data));
     // if (data.StatementElement.Type == 50){
         // viewModel.fileData().clear();
         fp.modeFormula("");
@@ -138,9 +135,6 @@ fp.saveFormulaEditor = function(){
     if (fp.selectColumn().indexcol == 1){
         fp.dataFormula.Element()[fp.selectColumn().index].Formula(resultFormulaArr);
     } else {
-        // console.log(fp.selectColumn().index);
-        // console.log(fp.selectColumn().indexcol-2);
-        // console.log(fp.dataFormula.Element()[fp.selectColumn().index].ElementVersion()[(fp.selectColumn().indexcol-2)].Formula());
         fp.dataFormula.Element()[fp.selectColumn().index].ElementVersion()[(fp.selectColumn().indexcol-2)].Formula(resultFormulaArr);
     }
     $('#formula-editor').ecLookupDD("clear");
@@ -222,6 +216,7 @@ fp.refreshSimulateByIndex = function(index,data){
             ko.mapping.fromJS(dataStatement, fp.dataFormula);
         }
     }
+    swal({title: "Selector successfully simulate", type: "success"});
     fp.refreshHeightTable();
 }
 fp.saveStatement = function(){
@@ -254,7 +249,7 @@ fp.saveStatement = function(){
         if (!res.data) {
             res.data = [];
         }
-        swal({title: "Selector successfully deleted", type: "success"});
+        swal({title: "Selector successfully save", type: "success"});
         fp.refreshAll();
     });
     if (fp.dataFormula.Element()[0].ElementVersion().length > 0){
@@ -288,7 +283,7 @@ fp.saveStatement = function(){
                 if (!res.data) {
                     res.data = [];
                 }
-                swal({title: "Selector successfully deleted", type: "success"});
+                swal({title: "Selector successfully save", type: "success"});
                 fp.refreshAll();
             });
         }
@@ -459,7 +454,7 @@ fp.addKostantaFormula = function(){
                 boolsuccess = false;
             }
             if (boolsuccess){
-                resultFormula += "("+objFormula1[0].value+fp.recordCondition()[i].condition+objFormula2[0].value+","+objFormula3[0].value+","+objFormula4[0].value;
+                resultFormula += "("+objFormula1[0].value+fp.recordCondition()[i].condition+objFormula2[0].value+","+objFormula3[0].value+","+objFormula4[0].value+")";
                 boolsuccess = true;
             }
         }
@@ -515,6 +510,7 @@ fp.getListSugest = function(){
             idText: "title", 
             displayFields: "title", 
             inputSearch: "title",
+            boolClickSearch: true,
         });
     });
 }
@@ -629,6 +625,7 @@ fp.addColumn = function(){
             idText: "title", 
             displayFields: "title", 
             inputSearch: "title",
+            boolClickSearch: true,
         });
         fp.refreshHeightTable();
     });
@@ -653,6 +650,7 @@ fp.refreshHeightTable = function(){
 }
 
 $(function (){
+    kendo.culture("de-DE");
     fp.getDataStatement();
     $("#kostanta").bind("keyup", function(e) {
         if (e.keyCode == 13){

@@ -5,16 +5,17 @@ ly.account  = ko.observable(false);
 ly.session  = ko.observable('');
 ly.username = ko.observable('');
 
-ly.varMenu = [{"id":"formula", "title":"Formula Editor", "childrens":[], "link":"/web/index"},
-			{"id":"simulation", "title":"Simulation", "childrens":[], "link":"/web/datasource"}];
+// ly.varMenu = [{"id":"formula", "title":"Formula Editor", "childrens":[], "link":"/web/index"},
+// 			{"id":"simulation", "title":"Simulation", "childrens":[], "link":"/web/datasource"}];
 
+ly.varMenu = [];
 ly.element = function(data){
 	console.log(data.length);
 	$parent = $('#nav-ul');
 	$navbar = $('<ul class="nav navbar-nav"></ul>');
 	$navbar.appendTo($parent);
 	if(data.length == 0){
-		$liparent = $("<li class='dropdown' id='liparent'><a>You don't have any access</a></li>");
+		$liparent = $("<li class='dropdown' id='liparent'><a>&nbsp;</a></li>");
 		$liparent.appendTo($navbar);
 	}else{
 		$.each(data, function(i, items){
