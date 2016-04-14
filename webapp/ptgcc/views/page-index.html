@@ -63,7 +63,7 @@
 			<td data-bind="attr:{'indexid':($index()+2).toString()}"></td>
 			<!-- /ko -->
 		<!-- ko foreach: ElementVersion -->
-			<!-- ko if: StatementElement.Type() == 50 || StatementElement.Type() == 1 -->
+			<!-- ko if: StatementElement.Type() == 50 -->
 			<td data-bind="html:ValueNum().toString(), style: {fontWeight: StatementElement.Bold == true ? 'bold':'normal', textAlign: 'Right'}, attr:{'indexid':($index()+2).toString()}, click: function(){fp.showFormula($($element).index(),$data,($index()+2))}"></td>
 			<!-- /ko -->
 			<!-- ko if: StatementElement.Type() == 12 -->
@@ -225,7 +225,7 @@
 				    </div>
 				</div>
 				<div class="row">
-					<button class="btn btn-sm btn-primary" data-bind="click:fp.saveImage"><span class="glyphicon glyphicon-floppy-disk"></span> Save</button>
+					<button class="btn btn-sm btn-primary" data-bind="click:fp.saveImage"><span class="glyphicon glyphicon-floppy-disk"></span> Image</button>
 				</div>
         	</div>
         </div>
