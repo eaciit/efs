@@ -24,7 +24,7 @@
 			    				<td></td>
 			    				<td></td>
 			    				<td></td>
-			    				<td indexid="1"><div class="searchversion"><input class='searchversion' id="version1" /></div></td>
+			    				<td indexid="1"><div class="searchversion"><input class='searchversion' id="version1" indexcolumn="1" /></div></td>
 			    			</tr>
 			    		</thead>
 			    		<tbody data-bind="template:{name:'formulaTemplate', foreach:fp.dataFormula.Element()}">
@@ -39,41 +39,41 @@
 <script id="formulaTemplate" type="text/html">
 	<tr>
 		<td data-bind="html:$index()+1"></td>
-		<td data-bind="html:Title1, style: {fontWeight: Bold == true ? 'bold':'normal'}"></td>
-		<td data-bind="html:Title2, style: {fontWeight: Bold == true ? 'bold':'normal'}"></td>
-		<!-- ko if: Type() == 50 || Type() == 1 -->
-		<td data-bind="html:ValueNum().toString(), style: {fontWeight: Bold == true ? 'bold':'normal', textAlign: 'Right'}, click: function(){fp.showFormula($index(),$data,1)}, attr:{'indexid':'1'}"></td>
+		<td data-bind="html:StatementElement.Title1, style: {fontWeight: StatementElement.Bold == true ? 'bold':'normal'}"></td>
+		<td data-bind="html:StatementElement.Title2, style: {fontWeight: StatementElement.Bold == true ? 'bold':'normal'}"></td>
+		<!-- ko if: StatementElement.Type() == 50 || StatementElement.Type() == 1 -->
+		<td data-bind="html:ValueNum().toString(), style: {fontWeight: StatementElement.Bold == true ? 'bold':'normal', textAlign: 'Right'}, click: function(){fp.showFormula($index(),$data,1)}, attr:{'indexid':'1'}"></td>
 		<!-- /ko -->
-		<!-- ko if: Type() == 12 -->
+		<!-- ko if: StatementElement.Type() == 12 -->
 		<td data-bind="attr:{'indexid':'1'}">
 			<input type="text" class="form-control input-sm" data-bind="value:ValueTxt"/>
 		</td>
 		<!-- /ko -->
-		<!-- ko if: Type() == 11-->
+		<!-- ko if: StatementElement.Type() == 11-->
 		<td data-bind="attr:{'indexid':'1'}">
 			<input data-bind="attr:{'id':'valueversion'+$index()}, kendoNumericTextBox:{value:ValueNum}"/>
 		</td>
 		<!-- /ko -->
-		<!-- ko if: Type() == 10 -->
+		<!-- ko if: StatementElement.Type() == 10 -->
 		<td data-bind="attr:{'indexid':'1'}">
 			<input data-bind="attr:{'id':'valueversion'+$index()}, kendoDateTimePicker:{value:ValueTxt, format: 'dd MMM yyyy'}"/>
 		</td>
 		<!-- /ko -->
 		<!-- ko foreach: ElementVersion -->
-			<!-- ko if: Type() == 50 || Type() == 1 -->
-			<td data-bind="html:ValueNum().toString(), style: {fontWeight: Bold == true ? 'bold':'normal', textAlign: 'Right'}, attr:{'indexid':($index()+2).toString()}, click: function(){fp.showFormula($($element).index(),$data,($index()+2))}"></td>
+			<!-- ko if: StatementElement.Type() == 50 || StatementElement.Type() == 1 -->
+			<td data-bind="html:ValueNum().toString(), style: {fontWeight: StatementElement.Bold == true ? 'bold':'normal', textAlign: 'Right'}, attr:{'indexid':($index()+2).toString()}, click: function(){fp.showFormula($($element).index(),$data,($index()+2))}"></td>
 			<!-- /ko -->
-			<!-- ko if: Type() == 12 -->
+			<!-- ko if: StatementElement.Type() == 12 -->
 			<td data-bind="attr:{'indexid':($index()+2).toString()}">
 				<input type="text" class="form-control input-sm" data-bind="value:ValueTxt"/>
 			</td>
 			<!-- /ko -->
-			<!-- ko if: Type() == 11 -->
+			<!-- ko if: StatementElement.Type() == 11 -->
 			<td data-bind="attr:{'indexid':($index()+2).toString()}">
 				<input data-bind="attr:{'id':'valueversion'+$index()}, kendoNumericTextBox:{value:ValueNum}"/>
 			</td>
 			<!-- /ko -->
-			<!-- ko if: Type() == 10 -->
+			<!-- ko if: StatementElement.Type() == 10 -->
 			<td data-bind="attr:{'indexid':($index()+2).toString()}">
 				<input data-bind="attr:{'id':'valueversion'+$index()}, kendoDateTimePicker:{value:ValueTxt, format: 'dd MMM yyyy'}"/>
 			</td>
@@ -96,7 +96,7 @@
         		<label class="col-md-12 title-command">Account List</label>
         		<div class="col-md-12">
         			<ul class="nav" data-bind="foreach: fp.dataFormula.Element()">
-        				<li><a href="#" data-bind="click: function(){fp.selectListAkun($index(),$data)}, text: ($index()+1)+'. '+Title1()+' '+Title2()"></a></li>
+        				<li><a href="#" data-bind="click: function(){fp.selectListAkun($index(),$data)}, text: ($index()+1)+'. '+StatementElement.Title1()+' '+StatementElement.Title2()"></a></li>
         			</ul>
         		</div>
         	</div>
@@ -134,7 +134,7 @@
 		        <div class="row" data-bind="visible: fp.modeFormula() == 'SUM' || fp.modeFormula() == 'AVG'">
 		        	<div class="col-md-12">
 			    		<button class="btn btn-sm btn-warning" data-bind="click: fp.backFormulaEditor"><span class="glyphicon glyphicon-chevron-left"></span> Back</button>
-			    		<button class="btn btn-sm btn-primary" data-bind="click: fp.addParameter"><span class="glyphicon glyphicon-plus"></span> Add Parameter</button>
+			    		<!-- <button class="btn btn-sm btn-primary" data-bind="click: fp.addParameter"><span class="glyphicon glyphicon-plus"></span> Add Parameter</button> -->
 			    		<button class="btn btn-sm btn-success" data-bind="click: fp.addKostantaFormula"><span class="glyphicon glyphicon-ok"> OK</button>
 		        	</div>
 		        	<div class="col-md-12">
@@ -161,7 +161,7 @@
 		        <div class="row" data-bind="visible: fp.modeFormula() == 'IF'">
 		        	<div class="col-md-12">
 		        		<button class="btn btn-sm btn-warning" data-bind="click: fp.backFormulaEditor"><span class="glyphicon glyphicon-chevron-left"></span> Back</button>
-			    		<button class="btn btn-sm btn-success"><span class="glyphicon glyphicon-plus"></span> Add Parameter</button>
+			    		<!-- <button class="btn btn-sm btn-success"><span class="glyphicon glyphicon-plus"></span> Add Parameter</button> -->
 		        	</div>
 		        </div>
         	</div>

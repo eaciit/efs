@@ -64,6 +64,9 @@ var Settings_EcLookup = {
 	displayTemplate: function(){
 		return "";
 	},
+	// selectData: function(res){
+
+	// },
 };
 var Setting_DataSource_Lookup = {
 	data: [],
@@ -353,6 +356,7 @@ $.ecDataSourceDDLookup = function(element,options){
 					if ($(elementLookup).data('ecLookupDDSettings').inputType == 'ddl'){
 						$liLookup = $('<li class="eclookup-item max"></li>');
 						$(elementLookup).parent().find('li.eclookup-txt').css('display','none');
+						$(elementLookup).parent().find('div.eclookup-dropdown').hide();
 					}else{
 						$liLookup = $('<li class="eclookup-item"></li>');
 					}
@@ -370,7 +374,7 @@ $.ecDataSourceDDLookup = function(element,options){
 					$btnRemoveLookup.bind('click').click(function(){
 						$(elementLookup).parent().find('li.eclookup-txt').css('display','block');
 						$(this).parent().remove();
-						// $searchtext.val('');
+						$searchtext.val('');
 						$searchtext.focus();
 						var dataResult = $.grep($(elementLookup).data('ecLookupDD').ParamDataSource.dataSelect, function(e){ 
 							var idGrep = idField;
@@ -382,7 +386,7 @@ $.ecDataSourceDDLookup = function(element,options){
 					});
 					$btnRemoveLookup.appendTo($liLookup);
 
-					// $searchtext.val('');
+					$searchtext.val('');
 					$searchtext.focus();
 
 					var dataResult = $.grep(data, function(e){ 
@@ -393,6 +397,33 @@ $.ecDataSourceDDLookup = function(element,options){
 					}), dataSelectTemp = $(elementLookup).data('ecLookupDD').ParamDataSource.dataSelect;
 					dataSelectTemp = dataSelectTemp.concat(dataResult);
 					$(elementLookup).data('ecLookupDD').ParamDataSource.dataSelect = dataSelectTemp;
+					// $(elementLookup).data('ecLookupDD').paramSetting.selectData(dataResult);
+					// HardCode
+					if (dataResult.length>0){
+						app.ajaxPost("/statement/getstatementversion", {statementid: dataResult[0].statementid, _id: dataResult[0]._id, mode: "find"}, function(res){
+							if(!app.isFine(res)){
+					            return;
+					        }
+					        if (!res.data) {
+					            res.data = [];
+					        }
+							if($(elementLookup).attr("id") == "version1"){
+								var dataStatement = $.extend(true, {}, fp.templatestatement,ko.mapping.toJS(fp.dataFormula)), elemVer = {};
+						        for(var i in res.data.Element){
+						            dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], res.data.Element[i] || {});
+						        }
+						        ko.mapping.fromJS(dataStatement, fp.dataFormula);
+							} else {
+					            var dataStatement = $.extend(true, {}, ko.mapping.toJS(fp.dataFormula)), elemVer = {}, indexVer = $(elementLookup).attr("indexcolumn"), indexyo = 0;
+							    for (var i in dataStatement.Element){
+							    	dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], ko.mapping.toJS(fp.dataFormula.Element()[i]) || {});
+							        indexyo = parseInt(indexVer) - 2;
+							        dataStatement.Element[i].ElementVersion[indexyo] = res.data.Element[i];
+							    }
+							    ko.mapping.fromJS(dataStatement, fp.dataFormula);
+							}
+						});
+					}
 				});
 				$liContentSearch.appendTo($ulDropdown);
 			}

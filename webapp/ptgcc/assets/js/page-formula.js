@@ -1,161 +1,28 @@
 app.section('formula');
-
-var dataexample = {
-    "ID": "3TfZVRgHLLY4BQQxMyYyuBG44O1nfKLe",
-    "Title": "base-v1",
-    "StatementID": "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j",
-    "Element": [{
-        "Index": 1,
-        "Title1": "",
-        "Title2": "EBT (Acc Base)",
-        "Type": 10,
-        "DataValue": [],
-        "Show": true,
-        "Bold": false,
-        "NegateValue": false,
-        "NegateDisplay": false,
-        "IsTxt": false,
-        "ValueTxt": "",
-        "ValueNum": 0
-    }, {
-        "Index": 2,
-        "Title1": "AB",
-        "Title2": "",
-        "Type": 11,
-        "DataValue": [],
-        "Show": true,
-        "Bold": false,
-        "NegateValue": false,
-        "NegateDisplay": false,
-        "IsTxt": false,
-        "ValueTxt": "",
-        "ValueNum": 0
-    }, {
-        "Index": 3,
-        "Title1": "",
-        "Title2": "Depre (Add back)",
-        "Type": 12,
-        "DataValue": [],
-        "Show": true,
-        "Bold": false,
-        "NegateValue": false,
-        "NegateDisplay": false,
-        "IsTxt": false,
-        "ValueTxt": "",
-        "ValueNum": 0
-    }, {
-        "Index": 4,
-        "Title1": "",
-        "Title2": "Educational support",
-        "Type": 1,
-        "DataValue": [],
-        "Show": true,
-        "Bold": false,
-        "NegateValue": false,
-        "NegateDisplay": false,
-        "IsTxt": false,
-        "ValueTxt": "",
-        "ValueNum": 0
-    }, {
-        "Index": 5,
-        "Title1": "",
-        "Title2": "Contribution for public charities",
-        "Type": 1,
-        "DataValue": [],
-        "Show": true,
-        "Bold": false,
-        "NegateValue": false,
-        "NegateDisplay": false,
-        "IsTxt": false,
-        "ValueTxt": "",
-        "ValueNum": 0
-    }, {
-        "Index": 6,
-        "Title1": "",
-        "Title2": "Expenses for education or sports",
-        "Type": 1,
-        "DataValue": [],
-        "Show": true,
-        "Bold": false,
-        "NegateValue": false,
-        "NegateDisplay": false,
-        "IsTxt": false,
-        "ValueTxt": "",
-        "ValueNum": 0
-    }, {
-        "Index": 7,
-        "Title1": "LB",
-        "Title2": "",
-        "Type": 1,
-        "DataValue": [],
-        "Show": true,
-        "Bold": false,
-        "NegateValue": false,
-        "NegateDisplay": false,
-        "IsTxt": false,
-        "ValueTxt": "",
-        "ValueNum": 0
-    }, {
-        "Index": 8,
-        "Title1": "",
-        "Title2": "Dividend Paid",
-        "Type": 1,
-        "DataValue": [],
-        "Show": true,
-        "Bold": false,
-        "NegateValue": false,
-        "NegateDisplay": false,
-        "IsTxt": false,
-        "ValueTxt": "",
-        "ValueNum": 0
-    }, {
-        "Index": 9,
-        "Title1": "",
-        "Title2": "",
-        "Type": 1,
-        "DataValue": [],
-        "Show": true,
-        "Bold": false,
-        "NegateValue": false,
-        "NegateDisplay": false,
-        "IsTxt": false,
-        "ValueTxt": "",
-        "ValueNum": 0
-    }, {
-        "Index": 10,
-        "Title1": "EBT",
-        "Title2": "",
-        "Type": 1,
-        "DataValue": [],
-        "Show": true,
-        "Bold": false,
-        "NegateValue": false,
-        "NegateDisplay": false,
-        "IsTxt": false,
-        "ValueTxt": "",
-        "ValueNum": 0
-    }]
-}
 viewModel.FormulaPage = {}; var fp = viewModel.FormulaPage;
 fp.templatestatement = {
-    ID: "",
+    _id: "",
     Title: "",
     StatementID: "",
     Element: [],
 };
 fp.templateFormula = {
-	Index:0,
-    Title1:"",
-    Title2:"",
-    Type:1,
-    DataValue:[],
-    Show: "",
-    Bold: false,
-    NegateValue: false,
-    NegateDisplay: false,
+    StatementElement: {
+    	Index:0,
+        Title1:"",
+        Title2:"",
+        Type:1,
+        DataValue:[],
+        Show: "",
+        Bold: false,
+        NegateValue: false,
+        NegateDisplay: false,
+    },
     IsTxt: false,
+    Formula: "",
     ValueTxt: "",
     ValueNum: 0,
+    ImageName: "",
     ElementVersion: [],
 };
 fp.configFormula = ko.mapping.fromJS(fp.templateFormula);
@@ -166,6 +33,7 @@ fp.dataVersion = ko.observableArray([]);
 fp.modeFormula = ko.observable("");
 fp.lastParam = ko.observable(true);
 fp.recordKoefisien = ko.observableArray([]);
+fp.recordSugest = ko.observableArray([]);
 fp.selectListAkun = function(index, data){
     if (fp.modeFormula() == ""){
     	$('#formula-editor').ecLookupDD("addLookup",{id:'@'+index, value: "@"+(index+1), koefisien:true});
@@ -189,23 +57,42 @@ fp.lastParamSelect = function(){
 fp.showFormula = function(index,data, indexColoumn){
     console.log("index",index);
     console.log("index coloum",indexColoumn);
+    console.log("data",ko.mapping.toJS(data));
     // if (data.Type == 50){
         fp.modeFormula("");
     	$("#formula-popup").modal("show");
         fp.selectColumn({index:index,indexcol:indexColoumn});
+        var datatojs = ko.mapping.toJS(data);
+        // for(var i in datatojs.Formula){
+        //     if (datatojs.Formula[i] == "+" || datatojs.Formula[i] == "-" || datatojs.Formula[i] == "*" || datatojs.Formula[i] == "/")
+        //         $('#formula-editor').ecLookupDD("addLookup",{id:datatojs.Formula[i], value: datatojs.Formula[i], koefisien:false});
+        //     else
+        //         $('#formula-editor').ecLookupDD("addLookup",{id:datatojs.Formula[i], value: datatojs.Formula[i], koefisien:true});
+        // }
     // }
 };
 fp.saveFormulaEditor = function(){
-    var objFormula = $('#formula-editor').ecLookupDD("get"), resultFormula = "";
+    var objFormula = $('#formula-editor').ecLookupDD("get"), resultFormula = "", resultFormulaArr = [];
     for (var i in objFormula){
         resultFormula += objFormula[i].value;
+        resultFormulaArr.push(objFormula[i].value);
     }
-    // if (fp.selectColumn()==1){
-
-    // }
+    if (fp.selectColumn().indexcol == 1){
+        fp.dataFormula.Element()[fp.selectColumn().index].Formula(resultFormula);
+    } else {
+        // console.log(fp.selectColumn().index);
+        // console.log(fp.selectColumn().indexcol-2);
+        // console.log(fp.dataFormula.Element()[fp.selectColumn().index].ElementVersion()[(fp.selectColumn().indexcol-2)].Formula());
+        fp.dataFormula.Element()[fp.selectColumn().index].ElementVersion()[(fp.selectColumn().indexcol-2)].Formula(resultFormula);
+    }
+    $('#formula-editor').ecLookupDD("clear");
+    fp.backFormulaEditor();
+    $("#formula-popup").modal("hide");
 };
 fp.saveStatement = function(){
-
+    app.ajaxPost("/statement/savestatementversion", {}, function(){
+        
+    });
 }
 fp.selectKoefisien = function(event){
     fp.modeFormula("");
@@ -256,8 +143,44 @@ fp.addParameter = function(){
     });
 };
 fp.addKostantaFormula = function(){
+    var resultFormula = "", boolsuccess = false;
+    if (fp.modeFormula() == "SUM")
+        resultFormula += "fn:sum";
+    else if (fp.modeFormula() == "AVG")
+        resultFormula += "fn:avg";
+    else
+        resultFormula += "fn:if";
 
-    fp.backFormulaEditor();
+    if (fp.modeFormula() != "IF"){
+        var objFormula1 = [], objFormula2 = [], index1 = 0, index2 = 0, boolyo = false;
+        for (var i in fp.recordKoefisien()){
+            objFormula1 = $('#koefisien1'+i).ecLookupDD("get");
+            objFormula2 = $('#koefisien2'+i).ecLookupDD("get");
+            if (objFormula1.length > 0){
+                index1 = parseInt(objFormula1[0].value.substring(0,objFormula1.length));
+            } else {
+                alert("Value From can't be empty");
+            }
+            if (objFormula2.length > 0){
+                index2 = parseInt(objFormula2[0].value.substring(0,objFormula2.length));
+            } else {
+                alert("Value To can't be empty");
+            }
+            if (index1 > index2){
+                alert("Value from must lower than to");
+            } else {
+                resultFormula += "("+objFormula1[0].value+".."+objFormula2[0].value+")";
+                boolsuccess = true;
+            }
+        }
+    } else {
+
+    }
+    // $('#formula-editor').ecLookupDD("addLookup",{id:, value: , koefisien:true});
+    if (boolsuccess){
+        $('#formula-editor').ecLookupDD("addLookup",{id:resultFormula, value:resultFormula , koefisien:true});
+        fp.backFormulaEditor();
+    }
 }
 fp.removeKoefisien = function(data){
     fp.recordKoefisien.remove(data)
@@ -266,43 +189,72 @@ fp.clearFormula = function(){
 	$('#formula-editor').ecLookupDD("clear");
 };
 fp.getDataStatement = function(){
-    // app.ajaxPost("/statement/getstatementversion",{}, function(res){
-    //     if(!app.isFine(res)){
-    //         return;
-    //     }
-    //     if (!res.data) {
-    //         res.data = [];
-    //     }
-    //     fp.dataFormula(res.data);
-    // });
-    for(var i in dataexample.Element){
-        dataexample.Element[i] = $.extend({}, fp.templateFormula, dataexample.Element[i] || {});
-    }
-    ko.mapping.fromJS(dataexample, fp.dataFormula);
+    app.ajaxPost("/statement/getstatementversion", {statementid: "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j", mode: "new"}, function(res){
+        if(!app.isFine(res)){
+            return;
+        }
+        if (!res.data) {
+            res.data = [];
+        }
+        for(var i in res.data.Element){
+            res.data.Element[i] = $.extend({}, fp.templateFormula, res.data.Element[i] || {});
+        }
+        ko.mapping.fromJS(res.data, fp.dataFormula);
+        fp.getListSugest();
+    });
+    // for(var i in dataexample.Element){
+    //     dataexample.Element[i] = $.extend({}, fp.templateFormula, dataexample.Element[i] || {});
+    // }
+    // ko.mapping.fromJS(dataexample, fp.dataFormula);
 };
+fp.getListSugest = function(){
+    app.ajaxPost("/statement/getsvbysid", {statementid: "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j"}, function(res){
+        if(!app.isFine(res)){
+            return;
+        }
+        if (!res.data) {
+            res.data = [];
+        }
+        fp.recordSugest(res.data);
+        $('#version1').ecLookupDD({
+            dataSource:{
+                data:fp.recordSugest(),
+            },
+            placeholder: "Search Version",
+            inputType: "ddl",
+            idField: "_id", 
+            idText: "title", 
+            displayFields: "title", 
+            inputSearch: "title",
+            selectData: function(res){
+                console.log(res.data);
+            }
+        });
+    });
+}
 fp.removeColumnFormula = function(index){
     console.log($("td[indexid="+index+"]"));
 }
 fp.addColumn = function(){
     var dataStatement = $.extend(true, {}, ko.mapping.toJS(fp.dataFormula)), elemVer = {};
     for (var i in dataStatement.Element){
-        elemVer = $.extend(true, {}, dataStatement.Element[i]);
+        elemVer = $.extend(true, {}, fp.templateFormula);
         delete elemVer["ElementVersion"];
         dataStatement.Element[i].ElementVersion.push(elemVer);
-        // fp.dataFormula.Element()[i].ElementVersion.push(fp.dataFormula.Element()[i]);
     }
     ko.mapping.fromJS(dataStatement, fp.dataFormula);
     var index = $("#tableFormula>thead>tr input.searchversion").length + 1;
-    $("#tableFormula>thead>tr").append("<td indexid='"+index+"'><div class='searchversion'><input class='searchversion' id='version"+index+"' /></div><div class='row-remove'><span class='glyphicon glyphicon-remove' onClick='fp.removeColumnFormula("+index+")'></span></td>");
+    $("#tableFormula>thead>tr").append("<td indexid='"+index+"'><div class='searchversion'><input class='searchversion' id='version"+index+"' indexcolumn='"+index+"' /></div><div class='row-remove'><span class='glyphicon glyphicon-remove' onClick='fp.removeColumnFormula("+index+")'></span></td>");
     $('#version'+index).ecLookupDD({
         dataSource:{
-            data:[],
+            data:fp.recordSugest(),
         },
         placeholder: "Search Version",
         inputType: "ddl",
-        idField: "id", 
-        idText: "value", 
-        displayFields: "value", 
+        idField: "_id", 
+        idText: "title", 
+        displayFields: "title", 
+        inputSearch: "title",
     });
 }
 
@@ -326,15 +278,4 @@ $(function (){
 		idText: "value", 
 		displayFields: "value", 
 	});
-
-    $('#version1').ecLookupDD({
-        dataSource:{
-            data:[],
-        },
-        placeholder: "Search Version",
-        inputType: "ddl",
-        idField: "id", 
-        idText: "value", 
-        displayFields: "value", 
-    });
 });
