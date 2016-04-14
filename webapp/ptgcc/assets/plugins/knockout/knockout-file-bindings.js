@@ -38,7 +38,7 @@
             noFileText: 'No file chosen',
             buttonGroupClass: 'input-group-btn',
             buttonClass: 'btn btn-primary',
-            clearButtonClass: 'btn btn-default',
+            clearButtonClass: 'btn btn-default btn-sm',
             buttonText: 'Choose File',
             changeButtonText: 'Change',
             clearButtonText: 'Clear',

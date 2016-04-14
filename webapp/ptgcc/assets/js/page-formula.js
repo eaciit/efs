@@ -1,5 +1,13 @@
 app.section('formula');
 viewModel.FormulaPage = {}; var fp = viewModel.FormulaPage;
+viewModel.fileData = ko.observable({
+    dataURL: ko.observable(),
+});
+viewModel.onClear = function(fileData){
+    if(confirm('Are you sure?')){
+        fileData.clear && fileData.clear();
+    }                            
+};
 fp.templatestatement = {
     _id: "",
     Title: "",
@@ -19,7 +27,7 @@ fp.templateFormula = {
         NegateDisplay: false,
     },
     IsTxt: false,
-    Formula: "",
+    Formula: [],
     ValueTxt: "",
     ValueNum: 0,
     ImageName: "",
@@ -34,6 +42,41 @@ fp.modeFormula = ko.observable("");
 fp.lastParam = ko.observable(true);
 fp.recordKoefisien = ko.observableArray([]);
 fp.recordSugest = ko.observableArray([]);
+
+fp.saveImage = function(){
+    var idstatement = "";
+    if (fp.selectColumn().indexcol == 1){
+        objFormula = $('#version1').ecLookupDD("get");
+        if (objFormula.length > 0){
+            idstatement = objFormula[0]._id;
+        }
+    } else {
+        objFormula = $('#version'+fp.selectColumn().indexcol).ecLookupDD("get");
+        if (objFormula.length > 0){
+            idstatement = objFormula[0]._id;
+        }
+    }
+    if (idstatement != ""){
+        var formData = new FormData();
+        formData.append("_id", idstatement);
+        formData.append("index", fp.selectColumn().index);
+        
+        var file = viewModel.fileData().dataURL();
+        if (file == "" && wl.scrapperMode() == "") {
+            sweetAlert("Oops...", 'Please choose file', "error");
+            return;
+        } else {
+            formData.append("userfile", viewModel.fileData().file());   
+        }
+
+        app.ajaxPost("/statement/saveimagesv", formData, function (res) {
+            if (!app.isFine(res)) {
+                return;
+            }
+            // console.log(res.data)
+        });
+    }
+};
 fp.selectListAkun = function(index, data){
     if (fp.modeFormula() == ""){
     	$('#formula-editor').ecLookupDD("addLookup",{id:'@'+index, value: "@"+(index+1), koefisien:true});
@@ -59,16 +102,18 @@ fp.showFormula = function(index,data, indexColoumn){
     console.log("index coloum",indexColoumn);
     console.log("data",ko.mapping.toJS(data));
     // if (data.Type == 50){
+        viewModel.fileData().clear();
         fp.modeFormula("");
     	$("#formula-popup").modal("show");
         fp.selectColumn({index:index,indexcol:indexColoumn});
         var datatojs = ko.mapping.toJS(data);
-        // for(var i in datatojs.Formula){
-        //     if (datatojs.Formula[i] == "+" || datatojs.Formula[i] == "-" || datatojs.Formula[i] == "*" || datatojs.Formula[i] == "/")
-        //         $('#formula-editor').ecLookupDD("addLookup",{id:datatojs.Formula[i], value: datatojs.Formula[i], koefisien:false});
-        //     else
-        //         $('#formula-editor').ecLookupDD("addLookup",{id:datatojs.Formula[i], value: datatojs.Formula[i], koefisien:true});
-        // }
+        viewModel.fileData().dataURL("/res/"+datatojs.ImageName);
+        for(var i in datatojs.Formula){
+            if (datatojs.Formula[i] == "+" || datatojs.Formula[i] == "-" || datatojs.Formula[i] == "*" || datatojs.Formula[i] == "/")
+                $('#formula-editor').ecLookupDD("addLookup",{id:datatojs.Formula[i], value: datatojs.Formula[i], koefisien:false});
+            else
+                $('#formula-editor').ecLookupDD("addLookup",{id:datatojs.Formula[i], value: datatojs.Formula[i], koefisien:true});
+        }
     // }
 };
 fp.saveFormulaEditor = function(){
@@ -78,12 +123,12 @@ fp.saveFormulaEditor = function(){
         resultFormulaArr.push(objFormula[i].value);
     }
     if (fp.selectColumn().indexcol == 1){
-        fp.dataFormula.Element()[fp.selectColumn().index].Formula(resultFormula);
+        fp.dataFormula.Element()[fp.selectColumn().index].Formula(resultFormulaArr);
     } else {
         // console.log(fp.selectColumn().index);
         // console.log(fp.selectColumn().indexcol-2);
         // console.log(fp.dataFormula.Element()[fp.selectColumn().index].ElementVersion()[(fp.selectColumn().indexcol-2)].Formula());
-        fp.dataFormula.Element()[fp.selectColumn().index].ElementVersion()[(fp.selectColumn().indexcol-2)].Formula(resultFormula);
+        fp.dataFormula.Element()[fp.selectColumn().index].ElementVersion()[(fp.selectColumn().indexcol-2)].Formula(resultFormulaArr);
     }
     $('#formula-editor').ecLookupDD("clear");
     fp.backFormulaEditor();
@@ -117,9 +162,9 @@ fp.refreshAll = function(){
     }
     if (fp.dataFormula.Element()[0].ElementVersion().length > 0){
         for (var i in fp.dataFormula.Element()[0].ElementVersion()){
+            var aa = (parseInt(i)+2);
+            objFormula = $('#version'+aa).ecLookupDD("get");
             if (objFormula.length > 0){
-                var aa = (parseInt(i)+2);
-                objFormula = $('#version'+aa).ecLookupDD("get");
                 postParam = {
                     _id : objFormula[0]._id,
                     statementid : objFormula[0].statementid,
@@ -180,7 +225,6 @@ fp.saveStatement = function(){
         for (var i in fp.dataFormula.Element()[0].ElementVersion()){
             elementVer = [];
             var aa = (parseInt(i)+2);
-            console.log('#version'+aa);
             objFormula = $('#version'+aa).ecLookupDD("get");
             mappingVer = ko.mapping.toJS(fp.dataFormula);
             for(var a in mappingVer.Element){

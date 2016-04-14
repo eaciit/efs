@@ -162,11 +162,32 @@
 		        	<div class="col-md-12">
 		        		<button class="btn btn-sm btn-warning" data-bind="click: fp.backFormulaEditor"><span class="glyphicon glyphicon-chevron-left"></span> Back</button>
 			    		<!-- <button class="btn btn-sm btn-success"><span class="glyphicon glyphicon-plus"></span> Add Parameter</button> -->
+
 		        	</div>
 		        </div>
         	</div>
         	<div class="col-md-3">
         		<!-- View Image -->
+        		<div class="well" data-bind="fileDrag: fileData">
+				    <div class="form-group row">
+				        <div class="row">
+				            <img style="height: 125px; width: 85%; margin-left:20px;" class="img-rounded  thumb" data-bind="attr: { src: fileData().dataURL }, visible: fileData().dataURL">
+				            <div data-bind="ifnot: fileData().dataURL">
+				                <label class="drag-label">Drag file here</label>
+				            </div>
+				        </div>
+				        <div class="row">
+				            <input type="file" data-bind="fileInput: fileData, customFileInput: {
+				              buttonClass: 'btn btn-success btn-sm imageefs',
+				              fileNameClass: 'disabled form-control input-sm',
+				              onClear: onClear,
+				            }" accept="image/*">
+				        </div>
+				    </div>
+				</div>
+				<div class="row">
+					<button class="btn btn-sm btn-primary" data-bind="click:fp.saveImage"><span class="glyphicon glyphicon-floppy-disk"></span>Save</button>
+				</div>
         	</div>
         </div>
         <div style="clear:both;"></div>
