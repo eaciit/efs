@@ -90,7 +90,7 @@ func TestCreateStatement(t *testing.T) {
 }
 
 func TestRunStatement(t *testing.T) {
-	t.Skip("Skip : Comment this line to do test")
+	// t.Skip("Skip : Comment this line to do test")
 	sid := "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j"
 	// sid = "qZ-SesL2s0Q7VODxyWj6-RVlqsa56ZMJ"
 
@@ -115,7 +115,9 @@ func TestRunStatement(t *testing.T) {
 	tsv.Element[2].ValueNum = 1000
 	tsv.Element[3].Formula = []string{"@1", "*", "10", "/", "100"}
 	tsv.Element[4].Formula = []string{"@1", "*", "5", "/", "100"}
-	tsv.Element[9].Formula = []string{"@1", "+", "fn:SUM(@3..@5)"}
+	// tsv.Element[9].Formula = []string{"fn:IF(@1>2,@3*3,@4)"}
+	tsv.Element[9].Formula = []string{"fn:IF(@4<@5,@4,@5)"}
+	// tsv.Element[9].Formula = []string{"@1", "+", "fn:SUM(@3..@5)"}
 	// ======================
 	ins := toolkit.M{}.Set("data", tsv)
 	sv, err := ds.Run(ins)
@@ -133,7 +135,7 @@ func TestRunStatement(t *testing.T) {
 }
 
 func TestSaveStatementVersion(t *testing.T) {
-	// t.Skip("Skip : Comment this line to do test")
+	t.Skip("Skip : Comment this line to do test")
 	sid := "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j"
 
 	ds := new(efs.Statements)
