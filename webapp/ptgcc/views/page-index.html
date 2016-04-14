@@ -41,7 +41,7 @@
 		<td data-bind="html:$index()+1"></td>
 		<td data-bind="html:StatementElement.Title1, style: {fontWeight: StatementElement.Bold == true ? 'bold':'normal'}"></td>
 		<td data-bind="html:StatementElement.Title2, style: {fontWeight: StatementElement.Bold == true ? 'bold':'normal'}"></td>
-		<!-- ko if: StatementElement.Type() == 50 || StatementElement.Type() == 1 -->
+		<!-- ko if: StatementElement.Type() == 50 -->
 		<td data-bind="html:ValueNum().toString(), style: {fontWeight: StatementElement.Bold == true ? 'bold':'normal', textAlign: 'Right'}, click: function(){fp.showFormula($index(),$data,1)}, attr:{'indexid':'1'}"></td>
 		<!-- /ko -->
 		<!-- ko if: StatementElement.Type() == 12 -->
@@ -59,6 +59,9 @@
 			<input data-bind="attr:{'id':'valueversion'+$index()}, kendoDateTimePicker:{value:ValueTxt, format: 'dd MMM yyyy'}"/>
 		</td>
 		<!-- /ko -->
+		<!-- ko if: StatementElement.Type() == 1 -->
+			<td data-bind="attr:{'indexid':($index()+2).toString()}"></td>
+			<!-- /ko -->
 		<!-- ko foreach: ElementVersion -->
 			<!-- ko if: StatementElement.Type() == 50 || StatementElement.Type() == 1 -->
 			<td data-bind="html:ValueNum().toString(), style: {fontWeight: StatementElement.Bold == true ? 'bold':'normal', textAlign: 'Right'}, attr:{'indexid':($index()+2).toString()}, click: function(){fp.showFormula($($element).index(),$data,($index()+2))}"></td>
@@ -77,6 +80,9 @@
 			<td data-bind="attr:{'indexid':($index()+2).toString()}">
 				<input data-bind="attr:{'id':'valueversion'+$index()}, kendoDateTimePicker:{value:ValueTxt, format: 'dd MMM yyyy'}"/>
 			</td>
+			<!-- /ko -->
+			<!-- ko if: StatementElement.Type() == 1 -->
+			<td data-bind="attr:{'indexid':($index()+2).toString()}"></td>
 			<!-- /ko -->
 		<!-- /ko -->
 	</tr>

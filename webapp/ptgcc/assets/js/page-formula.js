@@ -106,7 +106,7 @@ fp.showFormula = function(index,data, indexColoumn){
     console.log("index",index);
     console.log("index coloum",indexColoumn);
     console.log("data",ko.mapping.toJS(data));
-    // if (data.Type == 50){
+    if (data.StatementElement.Type == 50){
         viewModel.fileData().clear();
         fp.modeFormula("");
     	$("#formula-popup").modal("show");
@@ -119,7 +119,7 @@ fp.showFormula = function(index,data, indexColoumn){
             else
                 $('#formula-editor').ecLookupDD("addLookup",{id:datatojs.Formula[i], value: datatojs.Formula[i], koefisien:true});
         }
-    // }
+    }
 };
 fp.saveFormulaEditor = function(){
     var objFormula = $('#formula-editor').ecLookupDD("get"), resultFormula = "", resultFormulaArr = [];
