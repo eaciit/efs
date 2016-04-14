@@ -195,7 +195,6 @@ func (st *StatementController) GetStatementVersion(r *knot.WebContext) interface
 			return helper.CreateResult(false, "", err.Error())
 		}
 	} else if mode == "simulate" {
-		toolkit.Println("data payload : ", payload)
 		data := toolkit.M{}
 		data.Set("mode", payload.Get("mode"))
 		payload.Unset("mode")
@@ -203,9 +202,6 @@ func (st *StatementController) GetStatementVersion(r *knot.WebContext) interface
 			return helper.CreateResult(false, "", err.Error())
 		}
 		data.Set("data", sv)
-		/*for _, val := range sv.Element {
-			toolkit.Println("val\n", val)
-		}*/
 		sv = nil
 		sv, err = statement.Run(data)
 		if err != nil {
