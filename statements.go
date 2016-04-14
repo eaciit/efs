@@ -92,6 +92,8 @@ func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion, err error) {
 	return
 }
 
+//= will be split to  helper ==
+
 func extractdatainput(inputsv *StatementVersion) (tkm, aformula toolkit.M, err error) {
 	// toolkit.Println("ID of Statement version : ", inputsv.ID)
 	tkm, aformula = toolkit.M{}, toolkit.M{}
@@ -162,14 +164,6 @@ func extractdatainput(inputsv *StatementVersion) (tkm, aformula toolkit.M, err e
 	return
 }
 
-// func sumdata(formula string, inst toolkit.M) (snum float64) {
-// 	return
-// }
-
-// func ifcond(formula string, inst toolkit.M) (sif interface{}) {
-// 	return
-// }
-
 func isnum(str string) bool {
 
 	matchFloat, matchNumber := false, false
@@ -188,30 +182,38 @@ func isnum(str string) bool {
 func hasdependencyarr(arrstr []string, tkm toolkit.M) (cond bool) {
 	cond = false
 	for _, v := range arrstr {
-		if strings.Contains(v, "@") && tkm.Has(v) && toolkit.TypeName(tkm[v]) == "[]string" {
+		switch {
+		case strings.Contains(v, "fn:"):
+			endsign := signs + ","
+			arrtstr := extractstr2var(v, "@", endsign)
+			cond = hasdependencyarr(arrtstr, tkm)
+			return
+		case strings.Contains(v, "@") && tkm.Has(v) && toolkit.TypeName(tkm[v]) == "[]string":
 			cond = true
 			return
 		}
 	}
-
 	return
 }
 
-func hasdependencystr(str string, tkm toolkit.M) (cond bool) {
-	cond = false
-
+func extractstr2var(str, startsign, endsign string) (arrstr []string) {
+	arrstr = make([]string, 0, 0)
 	tvar := ""
 	for i := 0; i < len(str); i++ {
 		c := string(str[i])
 		switch {
-		case c == "@":
+		case c == startsign:
 			tvar += c
-		case strings.Contains(signs, c):
+		case strings.Contains(endsign, c):
 			if strings.Contains(tvar, "..") {
-				//for sum or other that use .. or comma
-			} else if len(tvar) > 0 && strings.Contains(toolkit.ToString(tkm.Get(tvar, "")), "@") {
-				cond = true
-				return
+				dotcval := strings.Split(tvar, "..")
+				n1 := toolkit.ToInt(dotcval[0][1:], toolkit.RoundingAuto)
+				n2 := toolkit.ToInt(dotcval[1][1:], toolkit.RoundingAuto)
+				for n := n1; n <= n2; n++ {
+					arrstr = append(arrstr, toolkit.Sprintf("@%v", n))
+				}
+			} else if len(tvar) > 0 {
+				arrstr = append(arrstr, tvar)
 			}
 			tvar = ""
 		default:
@@ -219,6 +221,9 @@ func hasdependencystr(str string, tkm toolkit.M) (cond bool) {
 				tvar += c
 			}
 		}
+	}
+	if len(tvar) > 0 {
+		arrstr = append(arrstr, tvar)
 	}
 	return
 }
@@ -240,10 +245,7 @@ func executefunction(key string, arrstr []string, tkm toolkit.M) (err error) {
 			}
 			cname += c
 		}
-
-		// toolkit.Printf("DEBUG 242 : %v - %v - %v \n\n", len(efsfunc), cname, efsfunc.Has(cname))
 		arrstr[i] = toolkit.ToString(efsfunc[cname](tkm, cval))
-		// tkm.Set(key, efsfunc[cname](tkm, cval))
 	}
 	return
 }
