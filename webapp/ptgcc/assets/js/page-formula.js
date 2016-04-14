@@ -600,10 +600,11 @@ fp.addColumn = function(){
         if (!res.data) {
             res.data = [];
         }
+        var datayo = ko.mapping.toJS(fp.dataFormula);
         for(var i in res.data.Element){
             res.data.Element[i] = $.extend({}, fp.templateFormula, res.data.Element[i] || {});
         }
-        var dataStatement = $.extend(true, {}, ko.mapping.toJS(res.data)), elemVer = {};
+        var dataStatement = $.extend(true, {}, datayo), elemVer = {};
         for (var i in dataStatement.Element){
             elemVer = $.extend(true, {}, res.data.Element[i]);
             delete elemVer["ElementVersion"];
