@@ -650,6 +650,7 @@ fp.refreshHeightTable = function(){
 }
 
 $(function (){
+    kendo.culture("de-DE");
     fp.getDataStatement();
     $("#kostanta").bind("keyup", function(e) {
         if (e.keyCode == 13){
