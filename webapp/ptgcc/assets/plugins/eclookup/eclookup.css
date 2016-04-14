@@ -4,6 +4,9 @@ div.eclookup-container {
   border: 1px solid #e6e6e6;
   text-align: right; }
 
+div.eclookup-selected {
+  border-color: #54D4FF; }
+
 ul.eclookup-list {
   overflow: hidden;
   height: auto !important;
@@ -76,7 +79,7 @@ div.eclookup-dropdown {
   display: none;
   z-index: 10003;
   border: 1px solid #CFCFCF;
-  width: 94%; }
+  width: 307px; }
 
 ul.eclookup-listsearch {
   list-style-type: none;
