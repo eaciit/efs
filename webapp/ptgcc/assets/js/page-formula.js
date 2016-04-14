@@ -194,33 +194,8 @@ fp.refreshAll = function(){
         }
     }
 }
-fp.refreshByIndex = function(index,data){
+fp.refreshSimulateByIndex = function(index,data){
     if (index == 1){
-        // var objFormula = [], postParam = {
-        //     _id : "",
-        //     statementid : "V7v6vdVLkDYavp7InulgLLJfY7cL9NcS",
-        // };
-        // objFormula = $('#version1').ecLookupDD("get");
-        // if (objFormula.length > 0){
-        //     postParam = {
-        //         _id : objFormula[0]._id,
-        //         statementid : objFormula[0].statementid,
-        //         mode: "find"
-        //     };
-        //     app.ajaxPost("/statement/getstatementversion", postParam, function(res){
-        //         if(!app.isFine(res)){
-        //             return;
-        //         }
-        //         if (!res.data) {
-        //             res.data = [];
-        //         }
-        //         var dataStatement = $.extend(true, {}, fp.templatestatement,ko.mapping.toJS(fp.dataFormula)), elemVer = {};
-        //         for(var i in res.data.Element){
-        //             dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], res.data.Element[i] || {});
-        //         }
-        //         ko.mapping.fromJS(dataStatement, fp.dataFormula);
-        //     });
-        // }
         var dataStatement = $.extend(true, {}, fp.templatestatement,ko.mapping.toJS(fp.dataFormula)), elemVer = {};
         for(var i in data.Element){
             dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], data.Element[i] || {});
@@ -230,36 +205,13 @@ fp.refreshByIndex = function(index,data){
         if (fp.dataFormula.Element()[0].ElementVersion().length > 0){
             var aa = (parseInt(index)-2);
             objFormula = $('#version'+aa).ecLookupDD("get");
-            // if (objFormula.length > 0){
-            //     postParam = {
-            //         _id : objFormula[0]._id,
-            //         statementid : objFormula[0].statementid,
-            //         mode: "find"
-            //     };
-            //     app.ajaxPost("/statement/getstatementversion", postParam, function(res){
-            //         if(!app.isFine(res)){
-            //             return;
-            //         }
-            //         if (!res.data) {
-            //             res.data = [];
-            //         }
-            //         var dataStatement = $.extend(true, {}, ko.mapping.toJS(fp.dataFormula)), elemVer = {}, indexVer = i+2, indexyo = 0;
-            //         for (var i in dataStatement.Element){
-            //             dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], ko.mapping.toJS(fp.dataFormula.Element()[i]) || {});
-            //             indexyo = parseInt(indexVer) - 2;
-            //             dataStatement.Element[i].ElementVersion[indexyo] = res.data.Element[i];
-            //         }
-            //         ko.mapping.fromJS(dataStatement, fp.dataFormula);
-            //     });
-            // } else {
-                var dataStatement = $.extend(true, {}, ko.mapping.toJS(fp.dataFormula)), elemVer = {}, indexVer = i+2, indexyo = 0;
-                for (var i in dataStatement.Element){
-                    dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], ko.mapping.toJS(fp.dataFormula.Element()[i]) || {});
-                    indexyo = parseInt(indexVer) - 2;
-                    dataStatement.Element[i].ElementVersion[indexyo] = data.Element[i];
-                }
-                ko.mapping.fromJS(dataStatement, fp.dataFormula);
-            // }
+            var dataStatement = $.extend(true, {}, ko.mapping.toJS(fp.dataFormula)), elemVer = {}, indexVer = i+2, indexyo = 0;
+            for (var i in dataStatement.Element){
+                dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], ko.mapping.toJS(fp.dataFormula.Element()[i]) || {});
+                indexyo = parseInt(indexVer) - 2;
+                dataStatement.Element[i].ElementVersion[indexyo] = data.Element[i];
+            }
+            ko.mapping.fromJS(dataStatement, fp.dataFormula);
         }
     }
 }
@@ -592,7 +544,7 @@ fp.selectSimulate = function(index){
             if (!res.data) {
                 res.data = [];
             }
-            fp.refreshByIndex(index);
+            fp.refreshSimulateByIndex(index,res.data);
         });
     } else {
         if (fp.dataFormula.Element()[0].ElementVersion().length > 0){
@@ -627,7 +579,7 @@ fp.selectSimulate = function(index){
                 if (!res.data) {
                     res.data = [];
                 }
-                fp.refreshByIndex(index);
+                fp.refreshSimulateByIndex(index,res.data);
             });
         }
     }
