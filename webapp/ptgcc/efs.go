@@ -7,6 +7,7 @@ import (
 	"github.com/eaciit/knot/knot.v1"
 	"github.com/eaciit/toolkit"
 	"net/http"
+	// "os"
 	"path/filepath"
 	"runtime"
 )
@@ -51,7 +52,11 @@ func main() {
 
 func prepareconnection() (conn dbox.IConnection, err error) {
 	conn, err = dbox.NewConnection("mongo",
-		&dbox.ConnectionInfo{"localhost:27017", "efspttgcc", "", "", toolkit.M{}.Set("timeout", 3)})
+		&dbox.ConnectionInfo{"192.168.0.200:27017", "efspttgcc", "", "", toolkit.M{}.Set("timeout", 3)})
+	// wd, _ := os.Getwd()
+	// db := filepath.Join(wd, "assets", "db")
+	// conn, err = dbox.NewConnection("jsons",
+	// 	&dbox.ConnectionInfo{db, "", "", "", toolkit.M{}.Set("newfile", true)})
 	if err != nil {
 		return
 	}

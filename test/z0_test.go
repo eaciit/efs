@@ -14,10 +14,10 @@ import (
 var wd, _ = os.Getwd()
 
 func prepareconnection() (conn dbox.IConnection, err error) {
-	// conn, err = dbox.NewConnection("mongo",
-	// 	&dbox.ConnectionInfo{"192.168.0.200:27017", "efspttgcc", "", "", toolkit.M{}.Set("timeout", 3)})
 	conn, err = dbox.NewConnection("mongo",
-		&dbox.ConnectionInfo{"localhost:27017", "efs", "", "", toolkit.M{}.Set("timeout", 3)})
+		&dbox.ConnectionInfo{"192.168.0.200:27017", "efspttgcc", "", "", toolkit.M{}.Set("timeout", 3)})
+	// conn, err = dbox.NewConnection("mongo",
+	// 	&dbox.ConnectionInfo{"localhost:27017", "efs", "", "", toolkit.M{}.Set("timeout", 3)})
 	// conn, err = dbox.NewConnection("jsons",
 	// 	&dbox.ConnectionInfo{wd, "", "", "", toolkit.M{}.Set("newfile", true)})
 	if err != nil {
@@ -90,7 +90,7 @@ func TestCreateStatement(t *testing.T) {
 }
 
 func TestRunStatement(t *testing.T) {
-	// t.Skip("Skip : Comment this line to do test")
+	t.Skip("Skip : Comment this line to do test")
 	sid := "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j"
 	// sid = "qZ-SesL2s0Q7VODxyWj6-RVlqsa56ZMJ"
 
@@ -133,7 +133,7 @@ func TestRunStatement(t *testing.T) {
 }
 
 func TestSaveStatementVersion(t *testing.T) {
-	t.Skip("Skip : Comment this line to do test")
+	// t.Skip("Skip : Comment this line to do test")
 	sid := "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j"
 
 	ds := new(efs.Statements)
@@ -143,8 +143,10 @@ func TestSaveStatementVersion(t *testing.T) {
 		return
 	}
 
-	ins := toolkit.M{}.Set("title", "base-v1")
-	sv, _ := ds.Run(ins)
+	// ins := toolkit.M{}.Set("title", "base-v1")
+	sv, _ := ds.Run(nil)
+	sv.ID = toolkit.RandomString(32)
+	sv.Title = "base.v1"
 
 	filter := dbox.And(dbox.Eq("statementid", sv.StatementID), dbox.Eq("title", sv.Title))
 	tsv := new(efs.StatementVersion)

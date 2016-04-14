@@ -172,13 +172,21 @@ func (st *StatementController) GetStatementVersion(r *knot.WebContext) interface
 		return helper.CreateResult(false, "", err.Error())
 	}
 	statement := new(efs.Statements)
-	if err := efs.Get(statement, toolkit.ToString(payload.Get("statementid", ""))); err != nil {
+	statementid := toolkit.ToString(payload.Get("statementid", ""))
+	if statementid == "" {
+		statementid = "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j"
+	}
+
+	if err := efs.Get(statement, statementid); err != nil {
 		return helper.CreateResult(false, "", toolkit.Sprintf("Error to get statement by id, found : %s \n", err.Error()))
 	}
 	sv := new(efs.StatementVersion)
 	var err error
 
 	mode := toolkit.ToString(payload.Get("mode", ""))
+	if mode == "" {
+		mode = "new"
+	}
 	if mode == "new" {
 		sv, err = statement.Run(nil)
 		if err != nil {

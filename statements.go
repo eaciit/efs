@@ -79,6 +79,7 @@ func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion, err error) {
 				tve.ValueTxt = str
 			}
 
+			tve.Formula = make([]string, 0, 0)
 			if aformula.Has(toolkit.Sprintf("@%v", v.Index)) {
 				tve.Formula = aformula[toolkit.Sprintf("@%v", v.Index)].([]string)
 			}
