@@ -10,10 +10,10 @@ import (
 
 type Statements struct {
 	orm.ModelBase `bson:"-",json:"-"`
-	ID            string `json:"_id",bson:"_id"`
-	Title         string
-	Enable        bool
-	Elements      []*StatementElement
+	ID            string              `json:"_id",bson:"_id"`
+	Title         string              `json:"title",bson:"title"`
+	Enable        bool                `json:"enable",bson:"enable"`
+	Elements      []*StatementElement `json:"elements",bson:"elements"`
 }
 
 func (e *Statements) RecordID() interface{} {
@@ -56,6 +56,9 @@ func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion, err error) {
 
 		tve.IsTxt = false
 		switch {
+		case v.Type == ElementNone:
+			tve.IsTxt = true
+			tve.ValueTxt = strings.Join(v.DataValue, " ")
 		case v.Type == ElementParmString || v.Type == ElementParmDate:
 			tve.IsTxt = true
 			tve.ValueTxt = toolkit.ToString(inst.Get(toolkit.Sprintf("@%v", v.Index), ""))

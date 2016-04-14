@@ -9,8 +9,8 @@ import (
 type StatementVersion struct {
 	orm.ModelBase `bson:"-",json:"-"`
 	ID            string `json:"_id",bson:"_id"`
-	Title         string
-	StatementID   string
+	Title         string `json:"title",bson:"title"`
+	StatementID   string `json:"statementid",bson:"statementid"`
 
 	Element []*VersionElement
 }

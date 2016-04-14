@@ -14,12 +14,12 @@ import (
 var wd, _ = os.Getwd()
 
 func prepareconnection() (conn dbox.IConnection, err error) {
-	conn, err = dbox.NewConnection("mongo",
-		&dbox.ConnectionInfo{"192.168.0.200:27017", "efspttgcc", "", "", toolkit.M{}.Set("timeout", 3)})
+	// conn, err = dbox.NewConnection("mongo",
+	// 	&dbox.ConnectionInfo{"192.168.0.200:27017", "efspttgcc", "", "", toolkit.M{}.Set("timeout", 3)})
 	// conn, err = dbox.NewConnection("mongo",
 	// 	&dbox.ConnectionInfo{"localhost:27017", "efs", "", "", toolkit.M{}.Set("timeout", 3)})
-	// conn, err = dbox.NewConnection("jsons",
-	// 	&dbox.ConnectionInfo{wd, "", "", "", toolkit.M{}.Set("newfile", true)})
+	conn, err = dbox.NewConnection("jsons",
+		&dbox.ConnectionInfo{wd, "", "", "", toolkit.M{}.Set("newfile", true)})
 	if err != nil {
 		return
 	}
@@ -66,7 +66,7 @@ func loaddatasample() (arrtkm []*efs.StatementElement, err error) {
 }
 
 func TestCreateStatement(t *testing.T) {
-	t.Skip("Skip : Comment this line to do test")
+	// t.Skip("Skip : Comment this line to do test")
 	arrdata, err := loaddatasample()
 	if err != nil {
 		t.Errorf("Error to load data sample: %s \n", err.Error())
@@ -152,11 +152,13 @@ func TestSaveStatementVersion(t *testing.T) {
 	tsv := new(efs.StatementVersion)
 
 	c, err := efs.Find(tsv, filter, nil)
-	_ = c.Fetch(&tsv, 1, false)
+	if err == nil && c != nil {
+		_ = c.Fetch(&tsv, 1, false)
 
-	toolkit.Printf("%#v\n", tsv.ID)
-	if tsv.ID != "" {
-		sv.ID = tsv.ID
+		toolkit.Printf("%#v\n", tsv.ID)
+		if tsv.ID != "" {
+			sv.ID = tsv.ID
+		}
 	}
 
 	err = efs.Save(sv)
