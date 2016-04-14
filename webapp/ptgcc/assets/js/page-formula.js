@@ -89,10 +89,129 @@ fp.saveFormulaEditor = function(){
     fp.backFormulaEditor();
     $("#formula-popup").modal("hide");
 };
+fp.refreshAll = function(){
+    var objFormula = [], postParam = {
+        _id : "Cq50y5qX-A6G1MLHsqwdbB0St5qUq-Ij",
+        statementid : "",
+    };
+    objFormula = $('#version1').ecLookupDD("get");
+    if (objFormula.length > 0){
+        postParam = {
+            _id : objFormula[0]._id,
+            statementid : objFormula[0].statementid,
+            mode: "find"
+        };
+        app.ajaxPost("/statement/getstatementversion", postParam, function(res){
+            if(!app.isFine(res)){
+                return;
+            }
+            if (!res.data) {
+                res.data = [];
+            }
+            var dataStatement = $.extend(true, {}, fp.templatestatement,ko.mapping.toJS(fp.dataFormula)), elemVer = {};
+            for(var i in res.data.Element){
+                dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], res.data.Element[i] || {});
+            }
+            ko.mapping.fromJS(dataStatement, fp.dataFormula);
+        });
+    }
+    if (fp.dataFormula.Element()[0].ElementVersion().length > 0){
+        for (var i in fp.dataFormula.Element()[0].ElementVersion()){
+            if (objFormula.length > 0){
+                var aa = (parseInt(i)+2);
+                objFormula = $('#version'+aa).ecLookupDD("get");
+                postParam = {
+                    _id : objFormula[0]._id,
+                    statementid : objFormula[0].statementid,
+                    mode: "find"
+                };
+                app.ajaxPost("/statement/getstatementversion", postParam, function(res){
+                    if(!app.isFine(res)){
+                        return;
+                    }
+                    if (!res.data) {
+                        res.data = [];
+                    }
+                    var dataStatement = $.extend(true, {}, ko.mapping.toJS(fp.dataFormula)), elemVer = {}, indexVer = i+2, indexyo = 0;
+                    for (var i in dataStatement.Element){
+                        dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], ko.mapping.toJS(fp.dataFormula.Element()[i]) || {});
+                        indexyo = parseInt(indexVer) - 2;
+                        dataStatement.Element[i].ElementVersion[indexyo] = res.data.Element[i];
+                    }
+                    ko.mapping.fromJS(dataStatement, fp.dataFormula);
+                });
+            }
+        }
+    }
+}
 fp.saveStatement = function(){
-    app.ajaxPost("/statement/savestatementversion", {}, function(){
-        
+    var objFormula = [], postParam = {
+        _id : "Cq50y5qX-A6G1MLHsqwdbB0St5qUq-Ij",
+        title : "",
+        statementid : "",
+        element : []
+    }, elementVer = [], mappingVer = {};
+    objFormula = $('#version1').ecLookupDD("get");
+    if (objFormula.length > 0){
+        postParam = {
+            _id : "Cq50y5qX-A6G1MLHsqwdbB0St5qUq-Ij",
+            title : objFormula[0].title,
+            statementid : objFormula[0].statementid,
+            element : ko.mapping.toJS(fp.dataFormula.Element())
+        };
+    } else {
+        postParam = {
+            _id : "Cq50y5qX-A6G1MLHsqwdbB0St5qUq-Ij",
+            title : $("#tableFormula>thead td[indexid="+1+"]").find(".eclookup-txt>input").val(),
+            statementid : "",
+            element : ko.mapping.toJS(fp.dataFormula.Element())
+        };
+    }
+    app.ajaxPost("/statement/savestatementversion", postParam, function(res){
+        if(!app.isFine(res)){
+            return;
+        }
+        if (!res.data) {
+            res.data = [];
+        }
+        fp.refreshAll();
     });
+    if (fp.dataFormula.Element()[0].ElementVersion().length > 0){
+        for (var i in fp.dataFormula.Element()[0].ElementVersion()){
+            elementVer = [];
+            var aa = (parseInt(i)+2);
+            console.log('#version'+aa);
+            objFormula = $('#version'+aa).ecLookupDD("get");
+            mappingVer = ko.mapping.toJS(fp.dataFormula);
+            for(var a in mappingVer.Element){
+                elementVer.push(mappingVer.Element[a].ElementVersion[i]);
+            };
+            if (objFormula.length > 0){
+                postParam = {
+                    _id : "Cq50y5qX-A6G1MLHsqwdbB0St5qUq-Ij",
+                    title : objFormula[0].title,
+                    statementid : objFormula[0].statementid,
+                    element: elementVer
+                };
+            } else {
+                postParam = {
+                    _id : "Cq50y5qX-A6G1MLHsqwdbB0St5qUq-Ij",
+                    title : $("#tableFormula>thead td[indexid="+(i+2)+"]").find(".eclookup-txt>input").val(),
+                    statementid : "",
+                    element: elementVer
+                };
+            }
+            app.ajaxPost("/statement/savestatementversion", postParam, function(res){
+                if(!app.isFine(res)){
+                    return;
+                }
+                if (!res.data) {
+                    res.data = [];
+                }
+                fp.refreshAll();
+            });
+        }
+    }
 }
 fp.selectKoefisien = function(event){
     fp.modeFormula("");
@@ -226,9 +345,6 @@ fp.getListSugest = function(){
             idText: "title", 
             displayFields: "title", 
             inputSearch: "title",
-            selectData: function(res){
-                console.log(res.data);
-            }
         });
     });
 }
