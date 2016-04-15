@@ -32,7 +32,7 @@ func prepareconnection() (conn dbox.IConnection, err error) {
 }
 
 func TestInitialSetDatabase(t *testing.T) {
-	t.Skip("Skip : Comment this line to do test")
+	// t.Skip("Skip : Comment this line to do test")
 	conn, err := prepareconnection()
 
 	if err != nil {
@@ -48,7 +48,7 @@ func TestInitialSetDatabase(t *testing.T) {
 func loaddatasample() (arrtkm []*efs.StatementElement, err error) {
 
 	conn, err := dbox.NewConnection("json",
-		&dbox.ConnectionInfo{toolkit.Sprintf("%v/sample.json", wd), "", "", "", nil})
+		&dbox.ConnectionInfo{toolkit.Sprintf("%v/samplefinal.json", wd), "", "", "", nil})
 	if err != nil {
 		return
 	}
@@ -93,6 +93,30 @@ func TestCreateStatement(t *testing.T) {
 	}
 }
 
+func TestLogic(t *testing.T) {
+	t.Skip("Skip : Comment this line to do test")
+	sid := "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j"
+
+	ds := new(efs.Statements)
+	err := efs.Get(ds, sid)
+	if err != nil {
+		t.Errorf("Error to get statement by id, found : %s \n", err.Error())
+		return
+	}
+	tsv, _ := ds.Run(nil)
+	tsv.ID = toolkit.RandomString(32)
+	tsv.Title = "v.2015"
+
+	tsv.Element[0].ValueNum = 10000
+	tsv.Element[2].ValueNum = 28
+	tsv.Element[3].ValueNum = 32
+	tsv.Element[4].ValueNum = 42
+	tsv.Element[9].Formula = []string{"fn:IF((AND(@3>=20, @4>=30, @5>=40)), 100, 0)"}
+
+	ins := toolkit.M{}.Set("data", tsv)
+	ds.Run(ins)
+}
+
 func TestRunStatement(t *testing.T) {
 	t.Skip("Skip : Comment this line to do test")
 	sid := "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j"
@@ -119,8 +143,11 @@ func TestRunStatement(t *testing.T) {
 	tsv.Element[2].ValueNum = 1000
 	tsv.Element[3].Formula = []string{"@1", "*", "10", "/", "100"}
 	tsv.Element[4].Formula = []string{"@1", "*", "5", "/", "100"}
+	tsv.Element[3].ValueNum = 1000
+	tsv.Element[4].ValueNum = 500
 	// tsv.Element[9].Formula = []string{"fn:IF(@1>2,@3*3,@4)"}
-	tsv.Element[9].Formula = []string{"fn:IF(@4<@5,@4,@5)"}
+	tsv.Element[9].Formula = []string{"fn:IF(@4+500*2<@5+500*2,@4,@5)"}
+	// tsv.Element[9].Formula = []string{"fn:IF(1+2*2<2+2*2,5,6)"}
 	// tsv.Element[9].Formula = []string{"@1", "+", "fn:SUM(@3..@5)"}
 	// ======================
 	ins := toolkit.M{}.Set("data", tsv)
@@ -133,13 +160,13 @@ func TestRunStatement(t *testing.T) {
 	}
 
 	toolkit.Printf("Statements Version :%#v - %v \n", sv.ID, sv.Title)
-	for _, val := range sv.Element {
+	/*for _, val := range sv.Element {
 		toolkit.Printf("%v. %v:%v [%v - %v - %#v] \n", val.StatementElement.Index, val.StatementElement.Title1, val.StatementElement.Title2, val.Formula, val.ValueTxt, val.ValueNum)
-	}
+	}*/
 }
 
 func TestSaveStatementVersion(t *testing.T) {
-	t.Skip("Skip : Comment this line to do test")
+	// t.Skip("Skip : Comment this line to do test")
 	sid := "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j"
 
 	ds := new(efs.Statements)
@@ -169,10 +196,11 @@ func TestSaveStatementVersion(t *testing.T) {
 
 	err = efs.Save(sv)
 	toolkit.Printf("%#v\n", sv.ID)
-	toolkit.Printf("%#v\n", err)
+	toolkit.Printf("%#v\n", sv.Element[0])
 }
 
 func TestFormula(t *testing.T) {
+	t.Skip("Skip : Comment this line to do test")
 	f, e := efs.NewFormula("(@2+@3)*2")
 	if e != nil {
 		t.Fatalf("Error build formula. %s", e.Error())

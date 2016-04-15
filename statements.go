@@ -39,10 +39,10 @@ func (e *Statements) Save() error {
 
 func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion, err error) {
 	sv = new(StatementVersion)
-	inst, aformula := toolkit.M{}, toolkit.M{}
+	inst, aformula, arrsvid := toolkit.M{}, toolkit.M{}, make([]string, 0, 0)
 	if ins.Has("data") && strings.Contains(toolkit.TypeName(ins["data"]), "StatementVersion") {
 		sv = ins["data"].(*StatementVersion)
-		inst, aformula, err = extractdatainput(ins["data"].(*StatementVersion))
+		inst, aformula, arrsvid, err = extractdatainput(ins["data"].(*StatementVersion))
 	} else if ins.Has("data") && toolkit.TypeName(ins["data"]) != "*StatementVersion" {
 		err = errors.New("Data has wrong format.")
 		return
@@ -50,9 +50,17 @@ func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion, err error) {
 
 	sv.StatementID = e.ID
 	sv.Element = make([]*VersionElement, 0, 0)
-	for _, v := range e.Elements {
+	for i, v := range e.Elements {
 		tve := new(VersionElement)
 		tve.StatementElement = v
+
+		if len(arrsvid) > 0 {
+			tve.Svid = arrsvid[i]
+		}
+
+		if tve.Svid == "" {
+			tve.Svid = toolkit.RandomString(32)
+		}
 
 		tve.IsTxt = false
 		switch {
@@ -98,13 +106,14 @@ func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion, err error) {
 
 //= will be split to  helper ==
 
-func extractdatainput(inputsv *StatementVersion) (tkm, aformula toolkit.M, err error) {
+func extractdatainput(inputsv *StatementVersion) (tkm, aformula toolkit.M, arrsvid []string, err error) {
 	// toolkit.Println("ID of Statement version : ", inputsv.ID)
 	tkm, aformula = toolkit.M{}, toolkit.M{}
-	arrint := make([]int, 0, 0)
+	arrint, arrsvid := make([]int, 0, 0), make([]string, 0, 0)
 
 	for _, val := range inputsv.Element {
 		//spare for other case depend on type and mode from config
+		arrsvid = append(arrsvid, val.Svid)
 		switch {
 		case val.StatementElement.Type == ElementFormula:
 			//get formula

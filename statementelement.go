@@ -23,4 +23,5 @@ type StatementElement struct {
 	Bold          bool
 	NegateValue   bool
 	NegateDisplay bool
+	Column        int
 }
