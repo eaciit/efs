@@ -214,7 +214,7 @@ var methodsLookupDD = {
 		return dataGet;
 	},
 	gettext: function(){
-		return $(this).parent().find('.eclookup-container li.eclookup-txt>input[type=text]').val();
+		return $(this).parent().find('.eclookup-container li.eclookup-txt>input').val();
 	},
 	addLookup: function(data){
 		$(this).data('ecLookupDD').addDataLookup(data);

@@ -210,7 +210,7 @@
 	        	</div>
 	        	<div class="row" data-bind="visible: fp.modeFormula() == ''">
 		        	<div class="col-md-12 area-editor">
-		        		<span class="col-md-2 databrowser-label">Konstanta</span>
+		        		<span class="col-md-2 databrowser-label">Constant</span>
 			    		<div class="col-md-10">
 				    		<input id="kostanta" data-bind="kendoNumericTextBox:{value:fp.konstanta, placeholder: 'Konstanta'}"/>
 			    		</div>
@@ -222,7 +222,7 @@
 		        <div class="row" data-bind="visible: fp.modeFormula() == 'SUM' || fp.modeFormula() == 'AVG'">
 		        	<div class="col-md-12">
 			    		<button class="btn btn-sm btn-warning" data-bind="click: fp.backFormulaEditor"><span class="glyphicon glyphicon-chevron-left"></span> Back</button>
-			    		<!-- <button class="btn btn-sm btn-primary" data-bind="click: fp.addParameter"><span class="glyphicon glyphicon-plus"></span> Add Parameter</button> -->
+			    		<button class="btn btn-sm btn-primary" data-bind="click: fp.addParameter"><span class="glyphicon glyphicon-plus"></span> Add Parameter</button>
 			    		<button class="btn btn-sm btn-success" data-bind="click: fp.addKostantaFormula"><span class="glyphicon glyphicon-ok"> OK</button>
 		        	</div>
 		        	<div class="col-md-12">

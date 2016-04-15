@@ -323,6 +323,7 @@ fp.addParameter = function(){
         displayFields: "value", 
         showSearch: false,
         focusable: true,
+        typesearch: "number",
     });
     $('#koefisien2'+(fp.recordKoefisien().length-1)).ecLookupDD({
         dataSource:{
@@ -337,6 +338,7 @@ fp.addParameter = function(){
         displayFields: "value", 
         showSearch: false,
         focusable: true,
+        typesearch: "number",
     });
 };
 fp.addCondition = function(){
@@ -408,27 +410,43 @@ fp.addKostantaFormula = function(){
         resultFormula += "fn:IF";
 
     if (fp.modeFormula() != "IF"){
-        var objFormula1 = [], objFormula2 = [], index1 = 0, index2 = 0, boolyo = false;
+        var objFormula1 = [], objFormula2 = [], index1 = 0, index2 = 0, boolyo = false, separatorcond = ",", textval1 = "", textval2 = "";
+        resultFormula += "(";
         for (var i in fp.recordKoefisien()){
             objFormula1 = $('#koefisien1'+i).ecLookupDD("get");
             objFormula2 = $('#koefisien2'+i).ecLookupDD("get");
-            if (objFormula1.length > 0){
-                index1 = parseInt(objFormula1[0].value.substring(0,objFormula1.length));
-            } else {
-                alert("Value From can't be empty");
-            }
+            textval1 = $('#koefisien1'+i).ecLookupDD("gettext");
+            // textval2 = $('#koefisien2'+i).ecLookupDD("gettext");
             if (objFormula2.length > 0){
                 index2 = parseInt(objFormula2[0].value.substring(0,objFormula2.length));
-            } else {
-                alert("Value To can't be empty");
+                if (index1 > index2){
+                    alert("Value from must lower than to");
+                    boolsuccess = false;
+                    break;
+                }
             }
-            if (index1 > index2){
-                alert("Value from must lower than to");
+            if (objFormula1.length == 0 && textval1 == ""){
+                alert("Value from can't empty");
+                boolsuccess = false;
+                break;
             } else {
-                resultFormula += "("+objFormula1[0].value+".."+objFormula2[0].value+")";
+                if(i > 0)
+                    separatorcond = ",";
+                else
+                    separatorcond = "";
+                if (objFormula1.length > 0 && objFormula2.length>0){
+                    index1 = parseInt(objFormula1[0].value.substring(0,objFormula1.length));
+                    resultFormula += separatorcond+objFormula1[0].value+".."+objFormula2[0].value;
+                } else if (objFormula1.length>0 && objFormula2.length==0) 
+                    resultFormula += separatorcond+objFormula1[0].value;
+                else if (objFormula1.length == 0 && textval1 != ""){
+                    resultFormula += separatorcond+textval1;
+                }
+                // resultFormula += separatorcond+objFormula2[0].value;
                 boolsuccess = true;
             }
         }
+        resultFormula += ")";
     } else {
         var objFormula1 = [], objFormula2 = [], index1 = 0, index2 = 0, boolyo = true;
         boolsuccess = true;
