@@ -87,15 +87,15 @@ fp.saveImage = function(){
 };
 fp.selectListAkun = function(index, data){
     if (fp.modeFormula() == ""){
-    	$('#formula-editor').ecLookupDD("addLookup",{id:'@'+index, value: "@"+(index+1), koefisien:true});
+    	$('#formula-editor').ecLookupDD("addLookup",{id:moment().format("hhmmDDYYYYx"), value: "@"+(index+1), koefisien:true});
     } else if (fp.modeFormula() == "SUM" || fp.modeFormula() == "AVG") {
         var $areaselect = $("#tablekoefisien>tbody .eclookup-selected").parent().find(".areakoefisien"), idselect = $areaselect.attr("id");
         if($areaselect.length>0)
-            $('#'+idselect).ecLookupDD("addLookup",{id:'@'+index, value: "@"+(index+1), koefisien:true});
+            $('#'+idselect).ecLookupDD("addLookup",{id:moment().format("hhmmDDYYYYx"), value: "@"+(index+1), koefisien:true});
     } else if (fp.modeFormula() == "IF"){
         var $areaselect = $("#tableif>tbody .eclookup-selected").parent().find(".areakoefisien"), idselect = $areaselect.attr("id");
         if($areaselect.length>0)
-            $('#'+idselect).ecLookupDD("addLookup",{id:'@'+index, value: "@"+(index+1), koefisien:true});
+            $('#'+idselect).ecLookupDD("addLookup",{id:moment().format("hhmmDDYYYYx"), value: "@"+(index+1), koefisien:true});
     }
     fp.lastParamSelect();
 };
@@ -120,9 +120,9 @@ fp.showFormula = function(index,data, indexColoumn){
         viewModel.fileData().dataURL("/image/sv/"+datatojs.ImageName);
         for(var i in datatojs.Formula){
             if (datatojs.Formula[i] == "+" || datatojs.Formula[i] == "-" || datatojs.Formula[i] == "*" || datatojs.Formula[i] == "/")
-                $('#formula-editor').ecLookupDD("addLookup",{id:datatojs.Formula[i], value: datatojs.Formula[i], koefisien:false});
+                $('#formula-editor').ecLookupDD("addLookup",{id:moment().format("hhmmDDYYYYx"), value: datatojs.Formula[i], koefisien:false});
             else
-                $('#formula-editor').ecLookupDD("addLookup",{id:datatojs.Formula[i], value: datatojs.Formula[i], koefisien:true});
+                $('#formula-editor').ecLookupDD("addLookup",{id:moment().format("hhmmDDYYYYx"), value: datatojs.Formula[i], koefisien:true});
         }
     // }
 };
@@ -291,7 +291,7 @@ fp.saveStatement = function(){
 }
 fp.selectKoefisien = function(event){
     fp.modeFormula("");
-	$('#formula-editor').ecLookupDD("addLookup",{id:event, value: event, koefisien:false});
+	$('#formula-editor').ecLookupDD("addLookup",{id:moment().format("hhmmDDYYYYx"), value: event, koefisien:false});
     fp.lastParamSelect();
     $("#konstanta").focus();
 };
@@ -461,7 +461,7 @@ fp.addKostantaFormula = function(){
     }
     // $('#formula-editor').ecLookupDD("addLookup",{id:, value: , koefisien:true});
     if (boolsuccess){
-        $('#formula-editor').ecLookupDD("addLookup",{id:resultFormula, value:resultFormula , koefisien:true});
+        $('#formula-editor').ecLookupDD("addLookup",{id:moment().format("hhmmDDYYYYx"), value:resultFormula , koefisien:true});
         fp.backFormulaEditor();
     }
 }
@@ -524,6 +524,7 @@ fp.removeColumnFormula = function(index){
     ko.mapping.fromJS(dataStatement, fp.dataFormula);
     aa = parseInt(index)+1;
     $(".table-formula-data>thead>tr.searchsv td[indexid=2]").remove();
+    fp.refreshHeightTable();
 };
 fp.selectSimulate = function(index){
     if (index == 1){
@@ -661,7 +662,7 @@ $(function (){
     fp.getDataStatement();
     $("#kostanta").bind("keyup", function(e) {
         if (e.keyCode == 13){
-            $('#formula-editor').ecLookupDD("addLookup",{id: fp.konstanta().toString(), value: fp.konstanta().toString(), koefisien:true});
+            $('#formula-editor').ecLookupDD("addLookup",{id: moment().format("hhmmDDYYYYx"), value: fp.konstanta().toString(), koefisien:true});
             fp.konstanta(0);
         }
     })
