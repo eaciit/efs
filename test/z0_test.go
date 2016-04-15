@@ -90,7 +90,7 @@ func TestCreateStatement(t *testing.T) {
 }
 
 func TestRunStatement(t *testing.T) {
-	// t.Skip("Skip : Comment this line to do test")
+	t.Skip("Skip : Comment this line to do test")
 	sid := "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j"
 	// sid = "qZ-SesL2s0Q7VODxyWj6-RVlqsa56ZMJ"
 
@@ -135,7 +135,7 @@ func TestRunStatement(t *testing.T) {
 }
 
 func TestSaveStatementVersion(t *testing.T) {
-	t.Skip("Skip : Comment this line to do test")
+	// t.Skip("Skip : Comment this line to do test")
 	sid := "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j"
 
 	ds := new(efs.Statements)
