@@ -19,7 +19,7 @@
 		    	</div>
 		    	<div class="col-md-12 table-con-formula">
 		    		<div class="headcol">
-		    			<table class="table table-striped table-bordered table-formula-head">
+		    			<table class="table table-bordered table-formula-head">
 				            <thead>
 				            	<tr>
 					                <!-- <th width="20">No</th> -->
@@ -32,7 +32,7 @@
 				        </table>
 		    		</div>
 		    		<div class="right-formula">
-		    			<table class="table table-striped table-bordered table-formula-data">
+		    			<table class="table table-bordered table-formula-data">
 				            <thead>
 				            	<tr class="searchsv">
 				                	<td indexid="1"><div class="searchversion"><button class="btn btn-sm btn-success btn-simulate" onClick="fp.selectSimulate(1)">Simulate</button></div><div class="searchversion"><input class='searchversion' id="version1" indexcolumn="1" /></div></td>
@@ -62,7 +62,7 @@
 </div>
 
 <script id="formulahead" type="text/html">
-	<tr>
+	<tr class="rightfreeze" data-bind="event: {mouseover: fp.hoverHeadFormula, mouseout: fp.blurHeadFormula}">
         // <td data-bind="html:$index()+1"></td>
 		<td data-bind="html:StatementElement.Title1, style: {fontWeight: StatementElement.Bold() == true ? 'bold':'normal'}"></td>
 		<td data-bind="html:StatementElement.Title2, style: {fontWeight: StatementElement.Bold() == true ? 'bold':'normal'}"></td>
@@ -70,7 +70,7 @@
 </script>
 
 <script id="formuladata" type="text/html">
-	<tr>
+	<tr class="datafor" data-bind="event: {mouseover: fp.hoverDataFormula, mouseout: fp.blurDataFormula}">
         <!-- ko if: StatementElement.Type() == 50 -->
 		<td data-bind="html:kendo.toString(ValueNum(), 'n2'), style: {fontWeight: StatementElement.Bold() == true ? 'bold':'normal', textAlign: 'Right'}, click: function(){fp.showFormula($index(),$data,1)}, attr:{'indexid':'1'}"></td>
 		<!-- /ko -->
@@ -176,7 +176,7 @@
       
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Formula</h4>
+        <h4 class="modal-title" id="myModalLabel" data-bind="text:fp.titlePopUp"></h4>
       </div>
       <div class="modal-body">
         <div class="row form-formula">
@@ -184,7 +184,7 @@
         		<label class="col-md-12 title-command">Account List</label>
         		<div class="col-md-12" style="height:380px; overflow: auto;">
         			<ul class="nav" data-bind="foreach: fp.dataFormula.Element()">
-        				<li><a href="#" data-bind="click: function(){fp.selectListAkun($index(),$data)}, text: ($index()+1)+'. '+StatementElement.Title1()+' '+StatementElement.Title2()"></a></li>
+        				<li><a href="#" data-bind="click: function(){fp.selectListAkun($index(),$data)}, text: StatementElement.Title2() != '' ? ($index()+1)+'. '+StatementElement.Title2():($index()+1)+'. '+' '+StatementElement.Title1()"></a></li>
         			</ul>
         		</div>
         	</div>

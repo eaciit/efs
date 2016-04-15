@@ -716,6 +716,9 @@ body {
 .table-formula-data > thead tr {
   width: 150px; }
 
+.selected-tableformula {
+  background-color: #9EE7FF; }
+
 .table-formula-head {
   width: 40%;
   float: left; }
