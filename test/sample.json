@@ -265,6 +265,17 @@
    },
    {
       "index":25,
+      "title1":"",
+      "title2":"ส่วนเกิน",
+      "type":50,
+      "datavalue":[],
+      "show":false,
+      "bold":false,
+      "negatevalue":false,
+      "negatedisplay":true
+   },
+   {
+      "index":26,
       "title1":"EBT 2",
       "title2":"",
       "type":50,
@@ -275,7 +286,7 @@
       "negatedisplay":true
    },
    {
-      "index":26,
+      "index":27,
       "title1":"",
       "title2":"",
       "type":1,
@@ -286,7 +297,7 @@
       "negatedisplay":false
    },
    {
-      "index":27,
+      "index":28,
       "title1":"Step 3",
       "title2":"Expenses for education or sports",
       "type":50,
@@ -297,7 +308,7 @@
       "negatedisplay":false
    },
    {
-      "index":28,
+      "index":29,
       "title1":"",
       "title2":"Expenses for education or sports X1",
       "type":50,
@@ -308,7 +319,7 @@
       "negatedisplay":false
    },
    {
-      "index":29,
+      "index":30,
       "title1":"",
       "title2":"deductable",
       "type":50,
@@ -319,7 +330,18 @@
       "negatedisplay":true
    },
    {
-      "index":30,
+      "index":31,
+      "title1":"",
+      "title2":"ส่วนเกิน",
+      "type":50,
+      "datavalue":[],
+      "show":false,
+      "bold":false,
+      "negatevalue":false,
+      "negatedisplay":true
+   },
+   {
+      "index":32,
       "title1":"EBT 3",
       "title2":"",
       "type":50,
@@ -330,29 +352,29 @@
       "negatedisplay":true
    },
    {
-      "index":31,
-      "title1":"",
-      "title2":"",
-      "type":1,
-      "datavalue":[],
-      "show":true,
-      "bold":false,
-      "negatevalue":false,
-      "negatedisplay":false
-   },
-   {
-      "index":32,
-      "title1":"",
-      "title2":"",
-      "type":1,
-      "datavalue":[],
-      "show":true,
-      "bold":false,
-      "negatevalue":false,
-      "negatedisplay":false
-   },
-   {
       "index":33,
+      "title1":"",
+      "title2":"",
+      "type":1,
+      "datavalue":[],
+      "show":true,
+      "bold":false,
+      "negatevalue":false,
+      "negatedisplay":false
+   },
+   {
+      "index":34,
+      "title1":"",
+      "title2":"",
+      "type":1,
+      "datavalue":[],
+      "show":true,
+      "bold":false,
+      "negatevalue":false,
+      "negatedisplay":false
+   },
+   {
+      "index":35,
       "title1":"EBT Final",
       "title2":"",
       "type":50,

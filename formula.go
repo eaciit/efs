@@ -219,9 +219,6 @@ func (f *Formula) Run(in toolkit.M) float64 {
 		} else {
 			ret = f.Value
 		}
-		if f.Negate {
-			ret = -ret
-		}
 	} else {
 		isPower := false
 		lastvalue := float64(0)
@@ -248,6 +245,9 @@ func (f *Formula) Run(in toolkit.M) float64 {
 		}
 	}
 
+	if f.Negate {
+		ret = -ret
+	}
 	//fcopy := *f
 	//fcopy.SubFormulas = []*Formula{}
 	//Printf("Formula: %s Value: %.2f f:%s Trace:%s\n\n", f.Txt, ret, JsonString(fcopy), dbg)
