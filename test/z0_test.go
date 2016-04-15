@@ -32,7 +32,7 @@ func prepareconnection() (conn dbox.IConnection, err error) {
 }
 
 func TestInitialSetDatabase(t *testing.T) {
-	t.Skip("Skip : Comment this line to do test")
+	// t.Skip("Skip : Comment this line to do test")
 	conn, err := prepareconnection()
 
 	if err != nil {
@@ -48,7 +48,7 @@ func TestInitialSetDatabase(t *testing.T) {
 func loaddatasample() (arrtkm []*efs.StatementElement, err error) {
 
 	conn, err := dbox.NewConnection("json",
-		&dbox.ConnectionInfo{toolkit.Sprintf("%v/sample.json", wd), "", "", "", nil})
+		&dbox.ConnectionInfo{toolkit.Sprintf("%v/samplefinal.json", wd), "", "", "", nil})
 	if err != nil {
 		return
 	}
@@ -70,7 +70,7 @@ func loaddatasample() (arrtkm []*efs.StatementElement, err error) {
 }
 
 func TestCreateStatement(t *testing.T) {
-	t.Skip("Skip : Comment this line to do test")
+	// t.Skip("Skip : Comment this line to do test")
 	arrdata, err := loaddatasample()
 	if err != nil {
 		t.Errorf("Error to load data sample: %s \n", err.Error())
@@ -139,7 +139,7 @@ func TestRunStatement(t *testing.T) {
 }
 
 func TestSaveStatementVersion(t *testing.T) {
-	t.Skip("Skip : Comment this line to do test")
+	// t.Skip("Skip : Comment this line to do test")
 	sid := "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j"
 
 	ds := new(efs.Statements)
@@ -169,10 +169,11 @@ func TestSaveStatementVersion(t *testing.T) {
 
 	err = efs.Save(sv)
 	toolkit.Printf("%#v\n", sv.ID)
-	toolkit.Printf("%#v\n", err)
+	toolkit.Printf("%#v\n", sv.Element[0])
 }
 
 func TestFormula(t *testing.T) {
+	t.Skip("Skip : Comment this line to do test")
 	f, e := efs.NewFormula("(@2+@3)*2")
 	if e != nil {
 		t.Fatalf("Error build formula. %s", e.Error())

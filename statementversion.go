@@ -35,4 +35,5 @@ type VersionElement struct {
 	ValueTxt         string
 	ValueNum         float64
 	ImageName        string
+	Svid             string
 }
