@@ -72,43 +72,40 @@
 <script id="formuladata" type="text/html">
 	<tr class="datafor" data-bind="event: {mouseover: fp.hoverDataFormula, mouseout: fp.blurDataFormula}">
         <!-- ko if: StatementElement.Type() == 50 -->
-		<td data-bind="click: function(){fp.showFormula($index(),$data,1)}, attr:{'indexid':'1'}">
+		<td data-bind="click: function(){fp.showFormula($index(),$data,1)}, attr:{'indexid':'1'},style: {fontWeight: StatementElement.Bold() == true ? 'bold':'normal', textAlign: 'Right'}">
 			<div class="col-md-2 icon-container">
 				<div class="icon-efs icon-chat" data-bind="click:function(){fp.showComment($index(),1)}"><span class="badge">3</span></div>
 				<div class="icon-efs icon-formula"></div>
 			</div>
-			<div class="col-md-5"><span class="nominal-height" data-bind="html:kendo.toString(ValueNum(), 'n2'), style: {fontWeight: StatementElement.Bold() == true ? 'bold':'normal', textAlign: 'Right'}"></span></div>
-			<div class="col-md-5"><span class="nominal-height" data-bind="html:kendo.toString(ValueNum(), 'n2'), style: {fontWeight: StatementElement.Bold() == true ? 'bold':'normal', textAlign: 'Right'}"></span></div>
+			<div class="col-md-5"><span class="nominal-height" data-bind="visible: StatementElement.Column() == 1, html:kendo.toString(ValueNum(), 'n2')"></span></div>
+			<div class="col-md-5"><span class="nominal-height" data-bind="visible: StatementElement.Column() == 2, html:kendo.toString(ValueNum(), 'n2')"></span></div>
 		</td>
 		<!-- /ko -->
 		<!-- ko if: StatementElement.Type() == 12 -->
 		<td data-bind="attr:{'indexid':'1'}">
 			<div class="col-md-2 icon-container">
 				<div class="icon-efs icon-chat" data-bind="click:function(){fp.showComment($index(),1)}"><span class="badge">3</span></div>
-				<div class="icon-efs icon-formula"></div>
 			</div>
-			<div class="col-md-5"><input type="text" class="form-control input-sm" data-bind="value:ValueTxt"/></div>
-			<div class="col-md-5"><input type="text" class="form-control input-sm" data-bind="value:ValueTxt"/></div>
+			<div class="col-md-5"><div data-bind="visible: StatementElement.Column() == 1"><input type="text" class="form-control input-sm" data-bind="value:ValueTxt"/></div></div>
+			<div class="col-md-5"><div data-bind="visible: StatementElement.Column() == 2"><input type="text" class="form-control input-sm" data-bind="value:ValueTxt"/></div></div>
 		</td>
 		<!-- /ko -->
 		<!-- ko if: StatementElement.Type() == 10-->
 		<td data-bind="attr:{'indexid':'1'}, style: {textAlign: 'Right'}">
 			<div class="col-md-2 icon-container">
 				<div class="icon-efs icon-chat" data-bind="click:function(){fp.showComment($index(),1)}"><span class="badge">3</span></div>
-				<div class="icon-efs icon-formula"></div>
 			</div>
-			<div class="col-md-5"><input class="efs-number" data-bind="attr:{'id':'valueversion'+$index()}, kendoNumericTextBox:{value:ValueNum}"/></div>
-			<div class="col-md-5"><input class="efs-number" data-bind="attr:{'id':'valueversion'+$index()}, kendoNumericTextBox:{value:ValueNum}"/></div>
+			<div class="col-md-5"><div data-bind="visible: StatementElement.Column() == 1"><input class="efs-number" data-bind="attr:{'id':'valueversion'+$index()}, kendoNumericTextBox:{value:ValueNum}"/></div></div>
+			<div class="col-md-5"><div data-bind="visible: StatementElement.Column() == 2"><input class="efs-number" data-bind="attr:{'id':'valueversion'+$index()}, kendoNumericTextBox:{value:ValueNum}"/></div></div>
 		</td>
 		<!-- /ko -->
 		<!-- ko if: StatementElement.Type() == 11 -->
 		<td data-bind="attr:{'indexid':'1'}">
 			<div class="col-md-2 icon-container">
 				<div class="icon-efs icon-chat" data-bind="click:function(){fp.showComment($index(),1)}"><span class="badge">3</span></div>
-				<div class="icon-efs icon-formula"></div>
 			</div>
-			<div class="col-md-5"><input data-bind="attr:{'id':'valueversion'+$index()}, kendoDateTimePicker:{value:ValueTxt, format: 'dd MMM yyyy'}"/></div>
-			<div class="col-md-5"><input data-bind="attr:{'id':'valueversion'+$index()}, kendoDateTimePicker:{value:ValueTxt, format: 'dd MMM yyyy'}"/></div>
+			<div class="col-md-5"><div data-bind="visible: StatementElement.Column() == 1"><input data-bind="attr:{'id':'valueversion'+$index()}, kendoDateTimePicker:{value:ValueTxt, format: 'dd MMM yyyy'}"/></div></div>
+			<div class="col-md-5"><div data-bind="visible: StatementElement.Column() == 2"><input data-bind="attr:{'id':'valueversion'+$index()}, kendoDateTimePicker:{value:ValueTxt, format: 'dd MMM yyyy'}"/></div></div>
 		</td>
 		<!-- /ko -->
 		<!-- ko if: StatementElement.Type() == 1 -->
@@ -116,43 +113,40 @@
 			<!-- /ko -->
 		<!-- ko foreach: ElementVersion -->
 			<!-- ko if: StatementElement.Type() == 50 -->
-			<td data-bind="attr:{'indexid':($index()+2).toString()}, click: function(){fp.showFormula($($element).index(),$data,($index()+2))}">
+			<td data-bind="attr:{'indexid':($index()+2).toString()}, click: function(){fp.showFormula($($element).index(),$data,($index()+2))}, style: {fontWeight: StatementElement.Bold() == true ? 'bold':'normal', textAlign: 'Right'}">
 				<div class="col-md-2 icon-container">
 					<div class="icon-efs icon-chat" data-bind="click:function(){fp.showComment($index(),1)}"><span class="badge">3</span></div>
 					<div class="icon-efs icon-formula"></div>
 				</div>
-				<div class="col-md-5"><span class="nominal-height" data-bind="html:kendo.toString(ValueNum(), 'n2'), style: {fontWeight: StatementElement.Bold() == true ? 'bold':'normal', textAlign: 'Right'}"></span></div>
-				<div class="col-md-5"><span class="nominal-height" data-bind="html:kendo.toString(ValueNum(), 'n2'), style: {fontWeight: StatementElement.Bold() == true ? 'bold':'normal', textAlign: 'Right'}"></span></div>
+				<div class="col-md-5"><span class="nominal-height" data-bind="visible: StatementElement.Column() == 1, html:kendo.toString(ValueNum(), 'n2')"></span></div>
+				<div class="col-md-5"><span class="nominal-height" data-bind="visible: StatementElement.Column() == 2, html:kendo.toString(ValueNum(), 'n2')"></span></div>
 			</td>
 			<!-- /ko -->
 			<!-- ko if: StatementElement.Type() == 12 -->
 			<td data-bind="attr:{'indexid':($index()+2).toString()}">
 				<div class="col-md-2 icon-container">
 					<div class="icon-efs icon-chat" data-bind="click:function(){fp.showComment($index(),1)}"><span class="badge">3</span></div>
-					<div class="icon-efs icon-formula"></div>
 				</div>
-				<div class="col-md-5"><input type="text" class="form-control input-sm" data-bind="value:ValueTxt"/></div>
-				<div class="col-md-5"><input type="text" class="form-control input-sm" data-bind="value:ValueTxt"/></div>
+				<div class="col-md-5"><div data-bind="visible: StatementElement.Column() == 1"><input type="text" class="form-control input-sm" data-bind="value:ValueTxt"/></div></div>
+				<div class="col-md-5"><div data-bind="visible: StatementElement.Column() == 2"><input type="text" class="form-control input-sm" data-bind="value:ValueTxt"/></div></div>
 			</td>
 			<!-- /ko -->
 			<!-- ko if: StatementElement.Type() == 10 -->
 			<td data-bind="attr:{'indexid':($index()+2).toString()}, style: {textAlign: 'Right'}">
 				<div class="col-md-2 icon-container">
 					<div class="icon-efs icon-chat" data-bind="click:function(){fp.showComment($index(),1)}"><span class="badge">3</span></div>
-					<div class="icon-efs icon-formula"></div>
 				</div>
-				<div class="col-md-5"><input class="efs-number" data-bind="attr:{'id':'valueversion'+$index()}, kendoNumericTextBox:{value:ValueNum}"/></div>
-				<div class="col-md-5"><input class="efs-number" data-bind="attr:{'id':'valueversion'+$index()}, kendoNumericTextBox:{value:ValueNum}"/></div>
+				<div class="col-md-5"><div data-bind="visible: StatementElement.Column() == 1"><input class="efs-number" data-bind="attr:{'id':'valueversion'+$index()}, kendoNumericTextBox:{value:ValueNum}"/></div></div>
+				<div class="col-md-5"><div data-bind="visible: StatementElement.Column() == 2"><input class="efs-number" data-bind="attr:{'id':'valueversion'+$index()}, kendoNumericTextBox:{value:ValueNum}"/></div></div>
 			</td>
 			<!-- /ko -->
 			<!-- ko if: StatementElement.Type() == 11 -->
 			<td data-bind="attr:{'indexid':($index()+2).toString()}">
 				<div class="col-md-2 icon-container">
 					<div class="icon-efs icon-chat" data-bind="click:function(){fp.showComment($index(),1)}"><span class="badge">3</span></div>
-					<div class="icon-efs icon-formula"></div>
 				</div>
-				<div class="col-md-5"><input data-bind="attr:{'id':'valueversion'+$index()}, kendoDateTimePicker:{value:ValueTxt, format: 'dd MMM yyyy'}"/></div>
-				<div class="col-md-5"><input data-bind="attr:{'id':'valueversion'+$index()}, kendoDateTimePicker:{value:ValueTxt, format: 'dd MMM yyyy'}"/></div>
+				<div class="col-md-5"><div data-bind="visible: StatementElement.Column() == 1"><input data-bind="attr:{'id':'valueversion'+$index()}, kendoDateTimePicker:{value:ValueTxt, format: 'dd MMM yyyy'}"/></div></div>
+				<div class="col-md-5"><div data-bind="visible: StatementElement.Column() == 2"><input data-bind="attr:{'id':'valueversion'+$index()}, kendoDateTimePicker:{value:ValueTxt, format: 'dd MMM yyyy'}"/></div></div>
 			</td>
 			<!-- /ko -->
 			<!-- ko if: StatementElement.Type() == 1 -->
