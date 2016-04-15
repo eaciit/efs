@@ -60,7 +60,7 @@ func getFieldValue(tkm toolkit.M, formula string) string {
 
 func checkLogic(formula string, logic string) bool {
 	var result bool
-	trim := strings.Split(formula, "AND")
+	// trim := strings.Split(formula, "AND")
 
 	return result
 }
