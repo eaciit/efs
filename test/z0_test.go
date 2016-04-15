@@ -66,7 +66,7 @@ func loaddatasample() (arrtkm []*efs.StatementElement, err error) {
 }
 
 func TestCreateStatement(t *testing.T) {
-	// t.Skip("Skip : Comment this line to do test")
+	t.Skip("Skip : Comment this line to do test")
 	arrdata, err := loaddatasample()
 	if err != nil {
 		t.Errorf("Error to load data sample: %s \n", err.Error())
@@ -87,6 +87,30 @@ func TestCreateStatement(t *testing.T) {
 		t.Errorf("Error to save efs: %s \n", err.Error())
 		return
 	}
+}
+
+func TestLogic(t *testing.T) {
+	t.Skip("Skip : Comment this line to do test")
+	sid := "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j"
+
+	ds := new(efs.Statements)
+	err := efs.Get(ds, sid)
+	if err != nil {
+		t.Errorf("Error to get statement by id, found : %s \n", err.Error())
+		return
+	}
+	tsv, _ := ds.Run(nil)
+	tsv.ID = toolkit.RandomString(32)
+	tsv.Title = "v.2015"
+
+	tsv.Element[0].ValueNum = 10000
+	tsv.Element[2].ValueNum = 28
+	tsv.Element[3].ValueNum = 32
+	tsv.Element[4].ValueNum = 42
+	tsv.Element[9].Formula = []string{"fn:IF((AND(@3>=20, @4>=30, @5>=40)), 100, 0)"}
+
+	ins := toolkit.M{}.Set("data", tsv)
+	ds.Run(ins)
 }
 
 func TestRunStatement(t *testing.T) {
@@ -115,8 +139,11 @@ func TestRunStatement(t *testing.T) {
 	tsv.Element[2].ValueNum = 1000
 	tsv.Element[3].Formula = []string{"@1", "*", "10", "/", "100"}
 	tsv.Element[4].Formula = []string{"@1", "*", "5", "/", "100"}
+	tsv.Element[3].ValueNum = 1000
+	tsv.Element[4].ValueNum = 500
 	// tsv.Element[9].Formula = []string{"fn:IF(@1>2,@3*3,@4)"}
-	tsv.Element[9].Formula = []string{"fn:IF(@4<@5,@4,@5)"}
+	tsv.Element[9].Formula = []string{"fn:IF(@4+500*2<@5+500*2,@4,@5)"}
+	// tsv.Element[9].Formula = []string{"fn:IF(1+2*2<2+2*2,5,6)"}
 	// tsv.Element[9].Formula = []string{"@1", "+", "fn:SUM(@3..@5)"}
 	// ======================
 	ins := toolkit.M{}.Set("data", tsv)
@@ -129,9 +156,9 @@ func TestRunStatement(t *testing.T) {
 	}
 
 	toolkit.Printf("Statements Version :%#v - %v \n", sv.ID, sv.Title)
-	for _, val := range sv.Element {
+	/*for _, val := range sv.Element {
 		toolkit.Printf("%v. %v:%v [%v - %v - %#v] \n", val.StatementElement.Index, val.StatementElement.Title1, val.StatementElement.Title2, val.Formula, val.ValueTxt, val.ValueNum)
-	}
+	}*/
 }
 
 func TestSaveStatementVersion(t *testing.T) {
