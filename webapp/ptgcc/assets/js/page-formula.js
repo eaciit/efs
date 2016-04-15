@@ -46,6 +46,7 @@ fp.recordSugest = ko.observableArray([]);
 fp.imageName = ko.observable("");
 fp.boolHeightTable = ko.observable(0);
 fp.titlePopUp = ko.observable("");
+fp.tempStatementId = ko.observable("");
 
 fp.saveImage = function(){
     var idstatement = "";
@@ -136,9 +137,10 @@ fp.saveFormulaEditor = function(){
     $("#formula-popup").modal("hide");
 };
 fp.refreshAll = function(){
+    // harus diganti
     var objFormula = [], postParam = {
         _id : "",
-        statementid : "V7v6vdVLkDYavp7InulgLLJfY7cL9NcS",
+        statementid : fp.tempStatementId(),
     };
     objFormula = $('#version1').ecLookupDD("get");
     if (objFormula.length > 0){
@@ -214,10 +216,11 @@ fp.refreshSimulateByIndex = function(index,data){
     fp.refreshHeightTable();
 }
 fp.saveStatement = function(){
+    // harus di cek atau diganti
     var objFormula = [], postParam = {
         _id : "",
         title : "",
-        statementid : "V7v6vdVLkDYavp7InulgLLJfY7cL9NcS",
+        statementid : fp.tempStatementId(),
         element : []
     }, elementVer = [], mappingVer = {};
     objFormula = $('#version1').ecLookupDD("get");
@@ -232,7 +235,7 @@ fp.saveStatement = function(){
         postParam = {
             _id : "",
             title : $(".table-formula-data>thead td[indexid="+1+"]").find(".eclookup-txt>input").val(),
-            statementid : "V7v6vdVLkDYavp7InulgLLJfY7cL9NcS",
+            statementid : fp.tempStatementId(),
             element : ko.mapping.toJS(fp.dataFormula.Element())
         };
     }
@@ -266,7 +269,7 @@ fp.saveStatement = function(){
                 postParam = {
                     _id : "",
                     title : $(".table-formula-data>thead td[indexid="+(i+2)+"]").find(".eclookup-txt>input").val(),
-                    statementid : "V7v6vdVLkDYavp7InulgLLJfY7cL9NcS",
+                    statementid : fp.tempStatementId(),
                     element: elementVer
                 };
             }
@@ -493,6 +496,7 @@ fp.getDataStatement = function(){
         for(var i in res.data.Element){
             res.data.Element[i] = $.extend({}, fp.templateFormula, res.data.Element[i] || {});
         }
+        fp.tempStatementId(res.data.statementid);
         ko.mapping.fromJS(res.data, fp.dataFormula);
         fp.getListSugest();
         fp.refreshHeightTable();
@@ -503,7 +507,7 @@ fp.getDataStatement = function(){
     // ko.mapping.fromJS(dataexample, fp.dataFormula);
 };
 fp.getListSugest = function(){
-    app.ajaxPost("/statement/getsvbysid", {statementid: "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j"}, function(res){
+    app.ajaxPost("/statement/getsvbysid", {statementid: fp.tempStatementId()}, function(res){
         if(!app.isFine(res)){
             return;
         }
@@ -534,7 +538,7 @@ fp.removeColumnFormula = function(index){
     }
     ko.mapping.fromJS(dataStatement, fp.dataFormula);
     aa = parseInt(index)+1;
-    $(".table-formula-data>thead>tr.searchsv td[indexid=2]").remove();
+    $(".table-formula-data>thead>tr.searchsv td[indexid="+aa+"]").remove();
     fp.refreshHeightTable();
 };
 fp.selectSimulate = function(index){
@@ -543,7 +547,7 @@ fp.selectSimulate = function(index){
             mode: "simulate",
             _id : "",
             title : "",
-            statementid : "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j",
+            statementid : fp.tempStatementId(),
             element : []
         }, elementVer = [], mappingVer = {};
         objFormula = $('#version1').ecLookupDD("get");
@@ -560,7 +564,7 @@ fp.selectSimulate = function(index){
                 mode: "simulate",
                 _id : "",
                 title : $(".table-formula-data>thead td[indexid="+1+"]").find(".eclookup-txt>input").val(),
-                statementid : "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j",
+                statementid : fp.tempStatementId(),
                 element : ko.mapping.toJS(fp.dataFormula.Element())
             };
         }
@@ -595,7 +599,7 @@ fp.selectSimulate = function(index){
                     mode: "simulate",
                     _id : "",
                     title : $(".table-formula-data>thead td[indexid="+index+"]").find(".eclookup-txt>input").val(),
-                    statementid : "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j",
+                    statementid : fp.tempStatementId(),
                     element: elementVer
                 };
             }
@@ -612,7 +616,7 @@ fp.selectSimulate = function(index){
     }
 };
 fp.addColumn = function(){
-     app.ajaxPost("/statement/getstatementversion", {statementid: "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j", mode: "new"}, function(res){
+     app.ajaxPost("/statement/getstatementversion", {statementid: fp.tempStatementId(), mode: "new"}, function(res){
         if(!app.isFine(res)){
             return;
         }
@@ -630,7 +634,8 @@ fp.addColumn = function(){
             dataStatement.Element[i].ElementVersion.push(elemVer);
         }
         ko.mapping.fromJS(dataStatement, fp.dataFormula);
-        var index = $(".table-formula-data>thead>tr.searchsv input.searchversion").length + 1;
+        var index = parseInt($(".table-formula-data>thead>tr.searchsv input.searchversion:last").attr("indexcolumn")) + 1;
+        console.log(index);
         $(".table-formula-data>thead>tr.searchsv").append("<td indexid='"+index+"'><div class='searchversion'><button class=\"btn btn-sm btn-success btn-simulate\" onClick=\"fp.selectSimulate("+index+")\">Simulate</button></div><div class='searchversion'><input class='searchversion' id='version"+index+"' indexcolumn='"+index+"' /></div><div class='row-remove'><span class='glyphicon glyphicon-remove' onClick='fp.removeColumnFormula("+index+")'></span></td>");
         $('#version'+index).ecLookupDD({
             dataSource:{
@@ -651,8 +656,9 @@ fp.refreshHeightTable = function(){
     var height1 = 0, height2 = 0, heightSelect = 0, plusheight = 15;
     if (fp.boolHeightTable() == 1)
         plusheight = 0;
-    if (fp.dataFormula.Element()[0].ElementVersion().length>0){}
-        $(".table-formula-data").css("width",(fp.dataFormula.Element()[0].ElementVersion().length+1)*300);
+    if (fp.dataFormula.Element()[0].ElementVersion().length>0)
+        plusheight = 0;
+    $(".table-formula-data").css("width",(fp.dataFormula.Element()[0].ElementVersion().length+1)*380);
     for(var i in fp.dataFormula.Element()){
         height1 = $(".table-formula-head tr").eq(i).height();
         height2 = $(".table-formula-data tr").eq(i).height();
@@ -660,6 +666,10 @@ fp.refreshHeightTable = function(){
             heightSelect = height1;
         else
             heightSelect = height2;
+        if (i == 0 && plusheight != 0)
+            plusheight = 15;
+        else
+            plusheight = 0;
         $(".table-formula-head tr").eq(i).css('height',heightSelect+plusheight);
         $(".table-formula-data tr").eq(i).css('height',heightSelect+plusheight);
     }
