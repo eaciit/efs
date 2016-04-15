@@ -13,6 +13,9 @@ import (
 
 var wd, _ = os.Getwd()
 
+var tkmdt = toolkit.M{}.Set("@1", 1).Set("@2", 2).Set("@3", 3).Set("@4", 4).Set("@5", 5).
+	Set("@6", 6).Set("@7", 7).Set("@8", 8).Set("@9", 9).Set("@10", 10)
+
 func prepareconnection() (conn dbox.IConnection, err error) {
 	// conn, err = dbox.NewConnection("mongo",
 	// 	&dbox.ConnectionInfo{"192.168.0.200:27017", "efspttgcc", "", "", toolkit.M{}.Set("timeout", 3)})
@@ -29,6 +32,7 @@ func prepareconnection() (conn dbox.IConnection, err error) {
 }
 
 func TestInitialSetDatabase(t *testing.T) {
+	t.Skip("Skip : Comment this line to do test")
 	conn, err := prepareconnection()
 
 	if err != nil {
@@ -66,7 +70,7 @@ func loaddatasample() (arrtkm []*efs.StatementElement, err error) {
 }
 
 func TestCreateStatement(t *testing.T) {
-	// t.Skip("Skip : Comment this line to do test")
+	t.Skip("Skip : Comment this line to do test")
 	arrdata, err := loaddatasample()
 	if err != nil {
 		t.Errorf("Error to load data sample: %s \n", err.Error())
@@ -135,7 +139,7 @@ func TestRunStatement(t *testing.T) {
 }
 
 func TestSaveStatementVersion(t *testing.T) {
-	// t.Skip("Skip : Comment this line to do test")
+	t.Skip("Skip : Comment this line to do test")
 	sid := "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j"
 
 	ds := new(efs.Statements)
@@ -166,4 +170,33 @@ func TestSaveStatementVersion(t *testing.T) {
 	err = efs.Save(sv)
 	toolkit.Printf("%#v\n", sv.ID)
 	toolkit.Printf("%#v\n", err)
+}
+
+func TestFormula(t *testing.T) {
+	f, e := efs.NewFormula("(@2+@3)*2")
+	if e != nil {
+		t.Fatalf("Error build formula. %s", e.Error())
+	}
+
+	xgot := f.Run(tkmdt)
+	// toolkit.Printf("F1 : %s \n", toolkit.Jsonify(f))
+	toolkit.Printf("F1 : (@2+@3)*2 = %v \n", xgot)
+
+	f, e = efs.NewFormula("@10+(@2+@3)-(@1+@2+@3)")
+	if e != nil {
+		t.Fatalf("Error build formula. %s", e.Error())
+	}
+
+	xgot = f.Run(tkmdt)
+	// toolkit.Printf("F2 : %s \n", toolkit.Jsonify(f))
+	toolkit.Printf("F3 : @10+(@2+@3)-(@1+@2+@3) = %v \n", xgot)
+
+	f, e = efs.NewFormula("@10+@2+@3-@3-@1")
+	if e != nil {
+		t.Fatalf("Error build formula. %s", e.Error())
+	}
+
+	xgot = f.Run(tkmdt)
+	toolkit.Printf("F3 : %s \n", toolkit.Jsonify(f))
+	toolkit.Printf("F3 : @10+@2+@3-@3-@1 = %v \n", xgot)
 }
