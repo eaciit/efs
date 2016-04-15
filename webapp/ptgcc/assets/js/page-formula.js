@@ -516,7 +516,14 @@ fp.getListSugest = function(){
 }
 fp.removeColumnFormula = function(index){
     var aa = (parseInt(index)-2);
-
+    var dataStatement = $.extend(true, {}, ko.mapping.toJS(fp.dataFormula));
+    for (var i in dataStatement.Element){
+        dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], ko.mapping.toJS(fp.dataFormula.Element()[i]) || {});
+        dataStatement.Element[i].ElementVersion.splice(aa,1);
+    }
+    ko.mapping.fromJS(dataStatement, fp.dataFormula);
+    aa = parseInt(index)+1;
+    $(".table-formula-data>thead>tr.searchsv td[indexid=2]").remove();
 };
 fp.selectSimulate = function(index){
     if (index == 1){
