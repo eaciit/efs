@@ -55,11 +55,13 @@ func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion, err error) {
 		tve.StatementElement = v
 
 		if len(arrsvid) > 0 {
-			tve.Svid = arrsvid[i]
+			tve.Sveid = arrsvid[i]
 		}
 
-		if tve.Svid == "" {
-			tve.Svid = toolkit.RandomString(32)
+		if tve.Sveid == "" {
+			tve.Sveid = toolkit.RandomString(32)
+		} else {
+			tve.Countcomment = Countcomment(tve.Sveid)
 		}
 
 		tve.IsTxt = false
@@ -113,7 +115,7 @@ func extractdatainput(inputsv *StatementVersion) (tkm, aformula toolkit.M, arrsv
 
 	for _, val := range inputsv.Element {
 		//spare for other case depend on type and mode from config
-		arrsvid = append(arrsvid, val.Svid)
+		arrsvid = append(arrsvid, val.Sveid)
 		switch {
 		case val.StatementElement.Type == ElementFormula:
 			//get formula
