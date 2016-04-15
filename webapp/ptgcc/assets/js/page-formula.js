@@ -45,45 +45,33 @@ fp.recordCondition = ko.observableArray([]);
 fp.recordSugest = ko.observableArray([]);
 fp.imageName = ko.observable("");
 fp.boolHeightTable = ko.observable(0);
+fp.titlePopUp = ko.observable("");
 
 fp.saveImage = function(){
     var idstatement = "";
-    // if (fp.selectColumn().indexcol == 1){
-    //     objFormula = $('#version1').ecLookupDD("get");
-    //     if (objFormula.length > 0){
-    //         idstatement = objFormula[0]._id;
-    //     }
-    // } else {
-    //     objFormula = $('#version'+fp.selectColumn().indexcol).ecLookupDD("get");
-    //     if (objFormula.length > 0){
-    //         idstatement = objFormula[0]._id;
-    //     }
-    // }
-    // if (idstatement != ""){
-        var formData = new FormData();
-        formData.append("_id", idstatement);
-        formData.append("index", fp.selectColumn().index);
-        
-        var file = viewModel.fileData().dataURL();
-        if (file == "" && wl.scrapperMode() == "") {
-            sweetAlert("Oops...", 'Please choose file', "error");
-            return;
-        } else {
-            formData.append("userfile", viewModel.fileData().file());   
-        }
+    var formData = new FormData();
+    formData.append("_id", idstatement);
+    formData.append("index", fp.selectColumn().index);
+    
+    var file = viewModel.fileData().dataURL();
+    if (file == "" && wl.scrapperMode() == "") {
+        sweetAlert("Oops...", 'Please choose file', "error");
+        return;
+    } else {
+        formData.append("userfile", viewModel.fileData().file());   
+    }
 
-        app.ajaxPost("/statement/saveimagesv", formData, function (res) {
-            if (!app.isFine(res)) {
-                return;
-            }
-            swal({title: "Selector successfully upload", type: "success"});
-            fp.imageName(res.data);
-            if (fp.selectColumn().indexcol == 1)
-                fp.dataFormula.Element()[fp.selectColumn().index].ImageName(res.data);
-            else
-                fp.dataFormula.Element()[fp.selectColumn().index].ElementVersion()[(fp.selectColumn().indexcol - 1)].ImageName(res.data);
-        });
-    // }
+    app.ajaxPost("/statement/saveimagesv", formData, function (res) {
+        if (!app.isFine(res)) {
+            return;
+        }
+        swal({title: "Selector successfully upload", type: "success"});
+        fp.imageName(res.data);
+        if (fp.selectColumn().indexcol == 1)
+            fp.dataFormula.Element()[fp.selectColumn().index].ImageName(res.data);
+        else
+            fp.dataFormula.Element()[fp.selectColumn().index].ElementVersion()[(fp.selectColumn().indexcol - 1)].ImageName(res.data);
+    });
 };
 fp.selectListAkun = function(index, data){
     if (fp.modeFormula() == ""){
@@ -113,6 +101,12 @@ fp.showFormula = function(index,data, indexColoumn){
     // if (data.StatementElement.Type == 50){
         // viewModel.fileData().clear();
         fp.modeFormula("");
+        if(data.StatementElement.Title2() != "")
+            fp.titlePopUp(data.StatementElement.Title2());
+        else if (data.StatementElement.Title1() != "")
+            fp.titlePopUp(data.StatementElement.Title1());
+        else
+            fp.titlePopUp("Formula");
     	$("#formula-popup").modal("show");
         fp.selectColumn({index:index,indexcol:indexColoumn});
         var datatojs = ko.mapping.toJS(data);
@@ -477,7 +471,6 @@ fp.addKostantaFormula = function(){
             }
         }
     }
-    // $('#formula-editor').ecLookupDD("addLookup",{id:, value: , koefisien:true});
     if (boolsuccess){
         $('#formula-editor').ecLookupDD("addLookup",{id:moment().format("hhmmDDYYYYx"), value:resultFormula , koefisien:true});
         fp.backFormulaEditor();
@@ -637,8 +630,6 @@ fp.addColumn = function(){
             dataStatement.Element[i].ElementVersion.push(elemVer);
         }
         ko.mapping.fromJS(dataStatement, fp.dataFormula);
-        // var index = $("#tableFormula>thead>tr.searchsv input.searchversion").length + 1;
-        // $("#tableFormula>thead>tr.searchsv").append("<td indexid='"+index+"'><div class='searchversion'><button class=\"btn btn-sm btn-success btn-simulate\" onClick=\"fp.selectSimulate("+index+")\">Simulate</button></div><div class='searchversion'><input class='searchversion' id='version"+index+"' indexcolumn='"+index+"' /></div><div class='row-remove'><span class='glyphicon glyphicon-remove' onClick='fp.removeColumnFormula("+index+")'></span></td>");
         var index = $(".table-formula-data>thead>tr.searchsv input.searchversion").length + 1;
         $(".table-formula-data>thead>tr.searchsv").append("<td indexid='"+index+"'><div class='searchversion'><button class=\"btn btn-sm btn-success btn-simulate\" onClick=\"fp.selectSimulate("+index+")\">Simulate</button></div><div class='searchversion'><input class='searchversion' id='version"+index+"' indexcolumn='"+index+"' /></div><div class='row-remove'><span class='glyphicon glyphicon-remove' onClick='fp.removeColumnFormula("+index+")'></span></td>");
         $('#version'+index).ecLookupDD({
@@ -673,8 +664,27 @@ fp.refreshHeightTable = function(){
         $(".table-formula-data tr").eq(i).css('height',heightSelect+plusheight);
     }
     fp.boolHeightTable(1);
-}
-
+};
+fp.hoverHeadFormula = function(data, event){
+    var $el = $(event.target).closest("tr.rightfreeze");
+    $el.addClass("selected-tableformula");
+    $(".table-formula-data>tbody tr.datafor").eq($el.index()).addClass("selected-tableformula");
+};
+fp.blurHeadFormula = function(data, event){
+    var $el = $(event.target).closest("tr.rightfreeze");
+    $el.removeClass("selected-tableformula");
+    $(".table-formula-data>tbody tr.datafor").eq($el.index()).removeClass("selected-tableformula");
+};
+fp.hoverDataFormula = function(data, event){
+    var $el = $(event.target).closest("tr.datafor");
+    $el.addClass("selected-tableformula");
+    $(".table-formula-head>tbody tr.rightfreeze").eq($el.index()).addClass("selected-tableformula");
+};
+fp.blurDataFormula = function(data, event){
+    var $el = $(event.target).closest("tr.datafor");
+    $el.removeClass("selected-tableformula");
+    $(".table-formula-head>tbody tr.rightfreeze").eq($el.index()).removeClass("selected-tableformula");
+};
 $(function (){
     kendo.culture("de-DE");
     fp.getDataStatement();
