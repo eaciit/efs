@@ -187,25 +187,25 @@ func (st *StatementController) GetStatementVersion(r *knot.WebContext) interface
 	if mode == "new" {
 		sv, err = statement.Run(nil)
 		if err != nil {
-			return helper.CreateResult(false, "", err.Error())
+			return helper.CreateResult(false, sv, err.Error())
 		}
 	} else if mode == "find" {
 		sv.ID = toolkit.ToString(payload.Get("_id", ""))
 		if err := efs.Get(sv, sv.ID); err != nil {
-			return helper.CreateResult(false, "", err.Error())
+			return helper.CreateResult(false, sv, err.Error())
 		}
 	} else if mode == "simulate" {
 		data := toolkit.M{}
 		data.Set("mode", payload.Get("mode"))
 		payload.Unset("mode")
 		if err := toolkit.Serde(payload, sv, "json"); err != nil {
-			return helper.CreateResult(false, "", err.Error())
+			return helper.CreateResult(false, sv, err.Error())
 		}
 		data.Set("data", sv)
 		sv = nil
 		sv, err = statement.Run(data)
 		if err != nil {
-			return helper.CreateResult(false, "", err.Error())
+			return helper.CreateResult(false, sv, err.Error())
 		}
 	}
 
