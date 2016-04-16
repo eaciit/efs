@@ -247,11 +247,10 @@ func executefunction(key string, arrstr []string, tkm toolkit.M) (err error) {
 	for i, val := range arrstr {
 		cval := ""
 		if strings.Contains(val, "fn:") {
-			cval = string(val[3:])
+			cval = toolkit.ToString(val[3:])
 		} else {
 			continue
 		}
-
 		cname := ""
 		for i := 0; i < len(cval); i++ {
 			c := string(cval[i])
