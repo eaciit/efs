@@ -119,33 +119,43 @@ func compareValue(text string, operator string) bool {
 
 var fnIF Fn = func(tkm toolkit.M, formula string) interface{} {
 	var result interface{}
-	valuedFormula := getFieldValue(tkm, formula)
-	var isTrue bool
-	var ifValList []string
-	/*if strings.ContainsAny(valuedFormula, "ANDOR") {
-		if strings.Contains(valuedFormula, "AND") {
-			split := strings.Split(valuedFormula, "AND")
-			isTrue = checkLogic(valuedFormula, "AND")
-		} else {
-			isTrue = checkLogic(valuedFormula, "OR")
-		}
-	}*/
-
-	ifValList = strings.Split(string(valuedFormula[3:len(valuedFormula)-1]), ",")
-	operator := findOperator(ifValList[0])
-
-	for _, ifVal := range ifValList {
-		if strings.Contains(ifVal, operator) {
-			isTrue = compareValue(ifVal, operator)
+	var operatorList = []string{"<>", "<=", ">=", ">", "<", "="}
+	ifVal := strings.Split(string(formula[3:len(formula)-1]), ",")
+	var operator string
+	for _, op := range operatorList {
+		if strings.Contains(ifVal[0], op) {
+			operator = op
+			break
 		}
 	}
-
-	trueVal := toolkit.ToFloat64(ifValList[toolkit.SliceLen(ifValList)-2], 6, toolkit.RoundingAuto)
-	falseVal := toolkit.ToFloat64(ifValList[toolkit.SliceLen(ifValList)-1], 6, toolkit.RoundingAuto)
+	trueVal := ifVal[toolkit.SliceLen(ifVal)-2]
+	falseVal := ifVal[toolkit.SliceLen(ifVal)-1]
+	var isTrue bool
+	for _, _ifVal := range ifVal {
+		if strings.Contains(_ifVal, operator) {
+			opVal := strings.Split(_ifVal, operator)
+			val1 := toolkit.ToFloat64(tkm.Get(opVal[0]), 6, toolkit.RoundingAuto)
+			val2 := toolkit.ToFloat64(tkm.Get(opVal[1]), 6, toolkit.RoundingAuto)
+			switch {
+			case operator == "<>":
+				isTrue = val1 != val2
+			case operator == "<=":
+				isTrue = val1 <= val2
+			case operator == ">=":
+				isTrue = val1 >= val2
+			case operator == ">":
+				isTrue = val1 > val2
+			case operator == "<":
+				isTrue = val1 < val2
+			default:
+				isTrue = opVal[0] == opVal[1]
+			}
+		}
+	}
 	if isTrue {
-		result = trueVal
+		result = tkm.Get(trueVal)
 	} else {
-		result = falseVal
+		result = tkm.Get(falseVal)
 	}
 	return result
 }
