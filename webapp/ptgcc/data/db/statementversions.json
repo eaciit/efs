@@ -1,1 +1,807 @@
-[{"Element":[{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":true,"Column":2,"DataValue":["Amount"],"Index":1,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"","Title2":"","Type":1},"Svid":"cJtyJ3dMUn-MqfiacV4Ndw89RVNu65Fr","ValueNum":0,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":true,"Column":2,"DataValue":[],"Index":2,"NegateDisplay":true,"NegateValue":false,"Show":true,"Title1":"EBT (Accounting Base)","Title2":"","Type":10},"Svid":"QlPCV6mApiZjB4j90pixQJ_sEcD3AyNC","ValueNum":6.4e+06,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":3,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"AB","Title2":"","Type":1},"Svid":"smcIxzsmwaxYUIWCKay_TcT8DGmICBCj","ValueNum":0,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":4,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"Add:","Title2":"","Type":1},"Svid":"LH0Xr8XbJHVDVP_KRmP3BKkvzFwDd8ff","ValueNum":0,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":5,"NegateDisplay":true,"NegateValue":false,"Show":true,"Title1":"","Title2":"Depreciation","Type":10},"Svid":"BBgNjrHM-rjsUuTQqtucutfTODQExGIK","ValueNum":200000,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":6,"NegateDisplay":true,"NegateValue":false,"Show":true,"Title1":"","Title2":"Educational support","Type":10},"Svid":"xK_F2aQJYukhNPh_rdzfF3vd_n7tAbT5","ValueNum":400000,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":7,"NegateDisplay":true,"NegateValue":false,"Show":true,"Title1":"","Title2":"Contribution for public charities","Type":10},"Svid":"2lTBryPpK1465uwp8aKtUCFsKEBLXd91","ValueNum":250000,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":8,"NegateDisplay":true,"NegateValue":false,"Show":true,"Title1":"","Title2":"Expenses for education or sports","Type":10},"Svid":"K6gXBvM9aERB6jsCmmepBLyguspnEHGR","ValueNum":150000,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":true,"Column":2,"DataValue":[],"Index":9,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"LB","Title2":"","Type":1},"Svid":"_fmZZAFACz-PWTYajULth_Fz90W_8I9E","ValueNum":0,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":true,"Column":2,"DataValue":[],"Index":10,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"","Title2":"Less","Type":1},"Svid":"dmiSBdad9s71Gc-Ht7OyenRcOzUXPrFG","ValueNum":0,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":11,"NegateDisplay":true,"NegateValue":false,"Show":true,"Title1":"","Title2":"Dividend Paid","Type":10},"Svid":"07jBjvS-ruDX_KBDfhdP6dWUxMPgvIvM","ValueNum":500000,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":12,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"","Title2":"","Type":1},"Svid":"9RzmQcVrlXkvvbrnxKnnCrK7X1nweN_d","ValueNum":0,"ValueTxt":""},{"Formula":["@2","+","fn:SUM(@5..@8)","-","@11"],"ImageName":"","IsTxt":false,"StatementElement":{"Bold":true,"Column":2,"DataValue":[],"Index":13,"NegateDisplay":true,"NegateValue":false,"Show":true,"Title1":"EBT Tax Base","Title2":"","Type":50},"Svid":"9qw9vsE8WIP_AmyHDSs0a3Qat1bGD-wx","ValueNum":6.9e+06,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":14,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"","Title2":"","Type":1},"Svid":"ALC5uQTjft84VTVZM8zfpIdkPvvawPNA","ValueNum":0,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":true,"Column":2,"DataValue":[],"Index":15,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"Donation Calculation","Title2":"","Type":1},"Svid":"GvMrCw4bSwBhi3sDCwAHl_izqm2lKURz","ValueNum":0,"ValueTxt":""},{"Formula":["@13","*","10","/","110"],"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":1,"DataValue":[],"Index":16,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"Step 1","Title2":"10% of Net Profit after deduction","Type":50},"Svid":"91AWwlkCdQILq6SfjiUrQd1-b8lW1zV-","ValueNum":627272.727273,"ValueTxt":""},{"Formula":["@6","*","2"],"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":1,"DataValue":[],"Index":17,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"","Title2":"Contribution for Educational Support*2","Type":50},"Svid":"uiaWL4sdRWDXO_nWYjfLBzJtBplF0Y2y","ValueNum":800000,"ValueTxt":""},{"Formula":["fn:IF(@16\u003c@17,@16,@17)"],"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":18,"NegateDisplay":true,"NegateValue":false,"Show":true,"Title1":"","Title2":"Deduction equal to lower of the above","Type":50},"Svid":"scBmTxwi8A59mcC5A-9BV2gTx0XrX1_A","ValueNum":627272.7273,"ValueTxt":""},{"Formula":["@17","-","@16"],"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":1,"DataValue":[],"Index":19,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"","Title2":"Exceed 2X","Type":50},"Svid":"aExMbhHiLXGD7S-krHCEEmNdrgOM7fUm","ValueNum":172727.2727,"ValueTxt":""},{"Formula":["@19","/","2"],"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":1,"DataValue":[],"Index":20,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"","Title2":"Exceed 1X","Type":50},"Svid":"WUbxShz1FtiDIZuWqAqYeYkvL7Ony9RF","ValueNum":86363.63635,"ValueTxt":""},{"Formula":["@13","-","@18"],"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":21,"NegateDisplay":true,"NegateValue":false,"Show":true,"Title1":"EBT 1","Title2":"","Type":50},"Svid":"WJVIrx18m7hxyKU7QqkIStfRkhIZvYxl","ValueNum":6.2727272727e+06,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":22,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"","Title2":"","Type":1},"Svid":"1rjn7OqIAlW5Yi9EU6LeeMXfyO0JFf0s","ValueNum":0,"ValueTxt":""},{"Formula":["@21","*","2","/","104"],"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":1,"DataValue":[],"Index":23,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"Step 2","Title2":"2% of Net Profit after deduction","Type":50},"Svid":"rWcpnItv2v5O_uhmygyV9xq-qN7nnMi3","ValueNum":120629.370629,"ValueTxt":""},{"Formula":["@7","*","1"],"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":1,"DataValue":[],"Index":24,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"","Title2":"Contribution for public charities*1","Type":50},"Svid":"NtGv83JfnXcVemuDp2c3OYB7O3dCc5OL","ValueNum":250000,"ValueTxt":""},{"Formula":["fn:IF(@23\u003c@24,@23,@24)"],"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":25,"NegateDisplay":true,"NegateValue":false,"Show":true,"Title1":"","Title2":"Deduction equal to lower of the above","Type":50},"Svid":"_gzVQrvYsJp9ufxJZqMrWEgrOYNN6q5p","ValueNum":120629.3706,"ValueTxt":""},{"Formula":["@24","-","@23"],"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":1,"DataValue":[],"Index":26,"NegateDisplay":true,"NegateValue":false,"Show":false,"Title1":"","Title2":"ส่วนเกิน","Type":50},"Svid":"E-vSHakcrFun82L9U9TfxjmDwHVamuaW","ValueNum":129370.6294,"ValueTxt":""},{"Formula":["@21","-","@25"],"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":27,"NegateDisplay":true,"NegateValue":false,"Show":true,"Title1":"EBT 2","Title2":"","Type":50},"Svid":"0pUH5q8DgMJaYMDjyC_6gYKAW8KSUNu-","ValueNum":6.1520979021e+06,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":28,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"","Title2":"","Type":1},"Svid":"ObsjOTvXZp4treDDFqKHwhf59ltqTQlW","ValueNum":0,"ValueTxt":""},{"Formula":["@27","*","2","/","102"],"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":1,"DataValue":[],"Index":29,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"Step 3","Title2":"2% of Net Profit after deduction","Type":50},"Svid":"GXdzBD9sjP5ePuOGKtF74FWM6Gb5mBad","ValueNum":120629.370629,"ValueTxt":""},{"Formula":["@8","+","@20"],"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":1,"DataValue":[],"Index":30,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"","Title2":"Expenses for education or sports*1","Type":50},"Svid":"B01RAusVJxBFs5lZRdEqOdrkfXQPNS2F","ValueNum":236363.6364,"ValueTxt":""},{"Formula":["fn:IF(@29\u003c@30,@29,@30)"],"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":31,"NegateDisplay":true,"NegateValue":false,"Show":true,"Title1":"","Title2":"Deduction equal to lower of the above","Type":50},"Svid":"eQsmF70GBgF1w3Q40bGnd7OOuqnjkyWq","ValueNum":120629.3706,"ValueTxt":""},{"Formula":["@30","-","@29"],"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":1,"DataValue":[],"Index":32,"NegateDisplay":true,"NegateValue":false,"Show":true,"Title1":"","Title2":"ส่วนเกิน","Type":50},"Svid":"brqpML2IHDKHYhcwTE_ryVaAfNnpSYg4","ValueNum":115734.2658,"ValueTxt":""},{"Formula":["@27","-","@31"],"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":33,"NegateDisplay":true,"NegateValue":false,"Show":true,"Title1":"EBT 3","Title2":"","Type":50},"Svid":"Z16UTrGpzV76e5dlTzLjl1YJSjvhVFrC","ValueNum":6.0314685315e+06,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":1,"DataValue":[],"Index":34,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"","Title2":"","Type":1},"Svid":"DxfYjap7jZC6Oy3HjNEfPzXYNt-DFX_U","ValueNum":0,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":1,"DataValue":[],"Index":35,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"","Title2":"","Type":1},"Svid":"9fcNNevObDaHgCXICcctt5njLQrHY2K5","ValueNum":0,"ValueTxt":""},{"Formula":["@13","+","fn:SUM(@19,@26,@32)","-","fn:SUM(@17,@24,@30)"],"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":36,"NegateDisplay":true,"NegateValue":false,"Show":true,"Title1":"Final EBT for tax purposes","Title2":"","Type":50},"Svid":"QXhL9UAleichSHtPf2x2hgI4LH1BQsZ2","ValueNum":6.0314685315e+06,"ValueTxt":""}],"_id":"-S0g1eazSeRHNqhmYqG9yEhstnKD3f2S","statementid":"bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j","title":"base.v1"},{"Element":[{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":true,"Column":2,"DataValue":["Amount"],"Index":1,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"","Title2":"","Type":1},"Svid":"0qs2-ZRLOupNx0kkTB_kr2UG5qDZMXud","ValueNum":0,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":true,"Column":2,"DataValue":[],"Index":2,"NegateDisplay":true,"NegateValue":false,"Show":true,"Title1":"EBT (Accounting Base)","Title2":"","Type":10},"Svid":"WHdicv4OrQBhK8AcdqNgyLtjGXtOC3Dy","ValueNum":999990,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":3,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"AB","Title2":"","Type":1},"Svid":"1jtUMvEkTynK4xnZsNTwOCWF5PZ7SyJW","ValueNum":0,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":4,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"Add:","Title2":"","Type":1},"Svid":"OT9QTE3CzWe7FO39GTtZXgm_4uHSnCDw","ValueNum":0,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":5,"NegateDisplay":true,"NegateValue":false,"Show":true,"Title1":"","Title2":"Depreciation","Type":10},"Svid":"ht8WVBaDj_KC8k0x6JpacEjvF-L7Q8Uu","ValueNum":0,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":6,"NegateDisplay":true,"NegateValue":false,"Show":true,"Title1":"","Title2":"Educational support","Type":10},"Svid":"dwm9yxw8xUmbN8RV7Oa9QAQfdc7-_1dy","ValueNum":0,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":7,"NegateDisplay":true,"NegateValue":false,"Show":true,"Title1":"","Title2":"Contribution for public charities","Type":10},"Svid":"2KcHIcJ1TvU29wDvz5l4E1aCa7k7vfFn","ValueNum":0,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":8,"NegateDisplay":true,"NegateValue":false,"Show":true,"Title1":"","Title2":"Expenses for education or sports","Type":10},"Svid":"XFQ6Xl9ijuUFCbv3PVbk3MSS22S3V5CQ","ValueNum":0,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":true,"Column":2,"DataValue":[],"Index":9,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"LB","Title2":"","Type":1},"Svid":"ZeNJkEcVInNNBl-K95GLQ2MMFGMUVNM4","ValueNum":0,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":true,"Column":2,"DataValue":[],"Index":10,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"","Title2":"Less","Type":1},"Svid":"hD6LJ8tti4MYHnMmrsD_AQ-crunc_Qmq","ValueNum":0,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":11,"NegateDisplay":true,"NegateValue":false,"Show":true,"Title1":"","Title2":"Dividend Paid","Type":10},"Svid":"i5cI5VZd7iBEauiQbrsZWRyVWt1hZVdN","ValueNum":0,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":12,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"","Title2":"","Type":1},"Svid":"zqp6hvlkEBdF8QfhuRPPDhUffyMUSpkp","ValueNum":0,"ValueTxt":""},{"Formula":[],"ImageName":"","IsTxt":true,"StatementElement":{"Bold":true,"Column":2,"DataValue":[],"Index":13,"NegateDisplay":true,"NegateValue":false,"Show":true,"Title1":"EBT Tax Base","Title2":"","Type":50},"Svid":"fFYwmPTrE1BUyDgEJv979wdmOsBy56BE","ValueNum":0,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":14,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"","Title2":"","Type":1},"Svid":"NkK-mSVUX82c4ZYYhw5swyO7-643Akbm","ValueNum":0,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":true,"Column":2,"DataValue":[],"Index":15,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"Donation Calculation","Title2":"","Type":1},"Svid":"Def1RgOJ2gVubgY8BKkDLjqeriQEfW4E","ValueNum":0,"ValueTxt":""},{"Formula":[],"ImageName":"","IsTxt":true,"StatementElement":{"Bold":false,"Column":1,"DataValue":[],"Index":16,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"Step 1","Title2":"10% of Net Profit after deduction","Type":50},"Svid":"a4KAPMEXIPQpUl3fNTsLxU2uSmeqjIZE","ValueNum":0,"ValueTxt":""},{"Formula":[],"ImageName":"","IsTxt":true,"StatementElement":{"Bold":false,"Column":1,"DataValue":[],"Index":17,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"","Title2":"Contribution for Educational Support*2","Type":50},"Svid":"qEQjOyQnYg4GEYZIGWWrEI675PEvX7J-","ValueNum":0,"ValueTxt":""},{"Formula":[],"ImageName":"","IsTxt":true,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":18,"NegateDisplay":true,"NegateValue":false,"Show":true,"Title1":"","Title2":"Deduction equal to lower of the above","Type":50},"Svid":"1aNI_O6gpMasNjLchqj4uFwQ2BqQ5ghB","ValueNum":0,"ValueTxt":""},{"Formula":[],"ImageName":"","IsTxt":true,"StatementElement":{"Bold":false,"Column":1,"DataValue":[],"Index":19,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"","Title2":"Exceed 2X","Type":50},"Svid":"H-fKaZEDnhT4ChHQOwcCcfeUuDsOI3Cr","ValueNum":0,"ValueTxt":""},{"Formula":[],"ImageName":"","IsTxt":true,"StatementElement":{"Bold":false,"Column":1,"DataValue":[],"Index":20,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"","Title2":"Exceed 1X","Type":50},"Svid":"EQtp8wlKLHFxpJC7WwYc890qXPlzlz29","ValueNum":0,"ValueTxt":""},{"Formula":[],"ImageName":"","IsTxt":true,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":21,"NegateDisplay":true,"NegateValue":false,"Show":true,"Title1":"EBT 1","Title2":"","Type":50},"Svid":"-V91IF6K5rdeacPLc2wVEd6kK7OMV09h","ValueNum":0,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":22,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"","Title2":"","Type":1},"Svid":"xANV-Lc4i90Etrf2bsciAIgau7CUZN6y","ValueNum":0,"ValueTxt":""},{"Formula":[],"ImageName":"","IsTxt":true,"StatementElement":{"Bold":false,"Column":1,"DataValue":[],"Index":23,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"Step 2","Title2":"2% of Net Profit after deduction","Type":50},"Svid":"1qKV6x0MddBJOAsrE3DBgBfPCJ9F5mZF","ValueNum":0,"ValueTxt":""},{"Formula":[],"ImageName":"","IsTxt":true,"StatementElement":{"Bold":false,"Column":1,"DataValue":[],"Index":24,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"","Title2":"Contribution for public charities*1","Type":50},"Svid":"yGqFNwwVe9tW-nQ8XObxM8GTWdTrxxef","ValueNum":0,"ValueTxt":""},{"Formula":[],"ImageName":"","IsTxt":true,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":25,"NegateDisplay":true,"NegateValue":false,"Show":true,"Title1":"","Title2":"Deduction equal to lower of the above","Type":50},"Svid":"X0anFsZyLEM2wAmgbPNptqc3Pef3ErTY","ValueNum":0,"ValueTxt":""},{"Formula":[],"ImageName":"","IsTxt":true,"StatementElement":{"Bold":false,"Column":1,"DataValue":[],"Index":26,"NegateDisplay":true,"NegateValue":false,"Show":false,"Title1":"","Title2":"ส่วนเกิน","Type":50},"Svid":"crnpPXIZ1WRMmj_E3ldaJZZfnVRRUbVu","ValueNum":0,"ValueTxt":""},{"Formula":[],"ImageName":"","IsTxt":true,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":27,"NegateDisplay":true,"NegateValue":false,"Show":true,"Title1":"EBT 2","Title2":"","Type":50},"Svid":"t5tFq1zdHWR1-zg5hrjhe2_EFCkx7P6q","ValueNum":0,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":28,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"","Title2":"","Type":1},"Svid":"2lCLQCAxGDY17EMJvVjHnSE_ZglkH8Mv","ValueNum":0,"ValueTxt":""},{"Formula":[],"ImageName":"","IsTxt":true,"StatementElement":{"Bold":false,"Column":1,"DataValue":[],"Index":29,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"Step 3","Title2":"2% of Net Profit after deduction","Type":50},"Svid":"HZGqjz_tuuz_i5kszAUGPFsxCrQd5LR7","ValueNum":0,"ValueTxt":""},{"Formula":[],"ImageName":"","IsTxt":true,"StatementElement":{"Bold":false,"Column":1,"DataValue":[],"Index":30,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"","Title2":"Expenses for education or sports*1","Type":50},"Svid":"OCK_zpGARWJxEDYkUkkswxq8xhqijVAa","ValueNum":0,"ValueTxt":""},{"Formula":[],"ImageName":"","IsTxt":true,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":31,"NegateDisplay":true,"NegateValue":false,"Show":true,"Title1":"","Title2":"Deduction equal to lower of the above","Type":50},"Svid":"sOwGZx1tkUJJuC3zLQCYCXamIy5b57xV","ValueNum":0,"ValueTxt":""},{"Formula":[],"ImageName":"","IsTxt":true,"StatementElement":{"Bold":false,"Column":1,"DataValue":[],"Index":32,"NegateDisplay":true,"NegateValue":false,"Show":true,"Title1":"","Title2":"ส่วนเกิน","Type":50},"Svid":"5nx_Z01vQLl4Tlzs94Nz8_eGKq5wc01n","ValueNum":0,"ValueTxt":""},{"Formula":[],"ImageName":"","IsTxt":true,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":33,"NegateDisplay":true,"NegateValue":false,"Show":true,"Title1":"EBT 3","Title2":"","Type":50},"Svid":"qtMNMtZlZYFXNTTJXazViexY1OEVmWw_","ValueNum":0,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":1,"DataValue":[],"Index":34,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"","Title2":"","Type":1},"Svid":"IFOpSD6chtXDglwcrK26UCB6EOl6sryX","ValueNum":0,"ValueTxt":""},{"Formula":null,"ImageName":"","IsTxt":false,"StatementElement":{"Bold":false,"Column":1,"DataValue":[],"Index":35,"NegateDisplay":false,"NegateValue":false,"Show":true,"Title1":"","Title2":"","Type":1},"Svid":"IMv2yX5s2DGuCXFsKhOphptNOxJ0HWCV","ValueNum":0,"ValueTxt":""},{"Formula":[],"ImageName":"","IsTxt":true,"StatementElement":{"Bold":false,"Column":2,"DataValue":[],"Index":36,"NegateDisplay":true,"NegateValue":false,"Show":true,"Title1":"Final EBT for tax purposes","Title2":"","Type":50},"Svid":"I5X7e5mXvGQxSfgMKYZQdVIDLT567PBK","ValueNum":0,"ValueTxt":""}],"_id":"vHpjet92M0V9Sbk2g1d95eM24fG2gNG-","statementid":"bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j","title":"jnjnj"}]
+[
+    {
+        "Element": [
+            {
+                "Formula": null,
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": true,
+                    "Column": 2,
+                    "DataValue": [
+                        "Amount"
+                    ],
+                    "Index": 1,
+                    "NegateDisplay": false,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "",
+                    "Title2": "",
+                    "Type": 1
+                },
+                "Sveid": "cJtyJ3dMUn-MqfiacV4Ndw89RVNu65Fr",
+                "ValueNum": 0,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": null,
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": true,
+                    "Column": 2,
+                    "DataValue": [],
+                    "Index": 2,
+                    "NegateDisplay": true,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "EBT (Accounting Base)",
+                    "Title2": "",
+                    "Type": 10
+                },
+                "Sveid": "QlPCV6mApiZjB4j90pixQJ_sEcD3AyNC",
+                "ValueNum": 6400000,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": null,
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": false,
+                    "Column": 2,
+                    "DataValue": [],
+                    "Index": 3,
+                    "NegateDisplay": false,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "AB",
+                    "Title2": "",
+                    "Type": 1
+                },
+                "Sveid": "smcIxzsmwaxYUIWCKay_TcT8DGmICBCj",
+                "ValueNum": 0,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": null,
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": false,
+                    "Column": 2,
+                    "DataValue": [],
+                    "Index": 4,
+                    "NegateDisplay": false,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "Add:",
+                    "Title2": "",
+                    "Type": 1
+                },
+                "Sveid": "LH0Xr8XbJHVDVP_KRmP3BKkvzFwDd8ff",
+                "ValueNum": 0,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": null,
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": false,
+                    "Column": 2,
+                    "DataValue": [],
+                    "Index": 5,
+                    "NegateDisplay": true,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "",
+                    "Title2": "Depreciation",
+                    "Type": 10
+                },
+                "Sveid": "BBgNjrHM-rjsUuTQqtucutfTODQExGIK",
+                "ValueNum": 200000,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": null,
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": false,
+                    "Column": 2,
+                    "DataValue": [],
+                    "Index": 6,
+                    "NegateDisplay": true,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "",
+                    "Title2": "Educational support",
+                    "Type": 10
+                },
+                "Sveid": "xK_F2aQJYukhNPh_rdzfF3vd_n7tAbT5",
+                "ValueNum": 400000,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": null,
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": false,
+                    "Column": 2,
+                    "DataValue": [],
+                    "Index": 7,
+                    "NegateDisplay": true,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "",
+                    "Title2": "Contribution for public charities",
+                    "Type": 10
+                },
+                "Sveid": "2lTBryPpK1465uwp8aKtUCFsKEBLXd91",
+                "ValueNum": 250000,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": null,
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": false,
+                    "Column": 2,
+                    "DataValue": [],
+                    "Index": 8,
+                    "NegateDisplay": true,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "",
+                    "Title2": "Expenses for education or sports",
+                    "Type": 10
+                },
+                "Sveid": "K6gXBvM9aERB6jsCmmepBLyguspnEHGR",
+                "ValueNum": 150000,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": null,
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": true,
+                    "Column": 2,
+                    "DataValue": [],
+                    "Index": 9,
+                    "NegateDisplay": false,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "LB",
+                    "Title2": "",
+                    "Type": 1
+                },
+                "Sveid": "_fmZZAFACz-PWTYajULth_Fz90W_8I9E",
+                "ValueNum": 0,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": null,
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": true,
+                    "Column": 2,
+                    "DataValue": [],
+                    "Index": 10,
+                    "NegateDisplay": false,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "",
+                    "Title2": "Less",
+                    "Type": 1
+                },
+                "Sveid": "dmiSBdad9s71Gc-Ht7OyenRcOzUXPrFG",
+                "ValueNum": 0,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": null,
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": false,
+                    "Column": 2,
+                    "DataValue": [],
+                    "Index": 11,
+                    "NegateDisplay": true,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "",
+                    "Title2": "Dividend Paid",
+                    "Type": 10
+                },
+                "Sveid": "07jBjvS-ruDX_KBDfhdP6dWUxMPgvIvM",
+                "ValueNum": 500000,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": null,
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": false,
+                    "Column": 2,
+                    "DataValue": [],
+                    "Index": 12,
+                    "NegateDisplay": false,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "",
+                    "Title2": "",
+                    "Type": 1
+                },
+                "Sveid": "9RzmQcVrlXkvvbrnxKnnCrK7X1nweN_d",
+                "ValueNum": 0,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": [
+                    "@2",
+                    "+",
+                    "fn:SUM(@5..@8)",
+                    "-",
+                    "@11"
+                ],
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": true,
+                    "Column": 2,
+                    "DataValue": [],
+                    "Index": 13,
+                    "NegateDisplay": true,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "EBT Tax Base",
+                    "Title2": "",
+                    "Type": 50
+                },
+                "Sveid": "9qw9vsE8WIP_AmyHDSs0a3Qat1bGD-wx",
+                "ValueNum": 6900000,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": null,
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": false,
+                    "Column": 2,
+                    "DataValue": [],
+                    "Index": 14,
+                    "NegateDisplay": false,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "",
+                    "Title2": "",
+                    "Type": 1
+                },
+                "Sveid": "ALC5uQTjft84VTVZM8zfpIdkPvvawPNA",
+                "ValueNum": 0,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": null,
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": true,
+                    "Column": 2,
+                    "DataValue": [],
+                    "Index": 15,
+                    "NegateDisplay": false,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "Donation Calculation",
+                    "Title2": "",
+                    "Type": 1
+                },
+                "Sveid": "GvMrCw4bSwBhi3sDCwAHl_izqm2lKURz",
+                "ValueNum": 0,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": [
+                    "@13",
+                    "*",
+                    "10",
+                    "/",
+                    "110"
+                ],
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": false,
+                    "Column": 1,
+                    "DataValue": [],
+                    "Index": 16,
+                    "NegateDisplay": false,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "Step 1",
+                    "Title2": "10% of Net Profit after deduction",
+                    "Type": 50
+                },
+                "Sveid": "91AWwlkCdQILq6SfjiUrQd1-b8lW1zV-",
+                "ValueNum": 627272.727273,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": [
+                    "@6",
+                    "*",
+                    "2"
+                ],
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": false,
+                    "Column": 1,
+                    "DataValue": [],
+                    "Index": 17,
+                    "NegateDisplay": false,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "",
+                    "Title2": "Contribution for Educational Support*2",
+                    "Type": 50
+                },
+                "Sveid": "uiaWL4sdRWDXO_nWYjfLBzJtBplF0Y2y",
+                "ValueNum": 800000,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": [
+                    "fn:IF(@16<@17,@16,@17)"
+                ],
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": false,
+                    "Column": 2,
+                    "DataValue": [],
+                    "Index": 18,
+                    "NegateDisplay": true,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "",
+                    "Title2": "Deduction equal to lower of the above",
+                    "Type": 50
+                },
+                "Sveid": "scBmTxwi8A59mcC5A-9BV2gTx0XrX1_A",
+                "ValueNum": 627272.7273,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": [
+                    "@17",
+                    "-",
+                    "@16"
+                ],
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": false,
+                    "Column": 1,
+                    "DataValue": [],
+                    "Index": 19,
+                    "NegateDisplay": false,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "",
+                    "Title2": "Exceed 2X",
+                    "Type": 50
+                },
+                "Sveid": "aExMbhHiLXGD7S-krHCEEmNdrgOM7fUm",
+                "ValueNum": 172727.2727,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": [
+                    "@19",
+                    "/",
+                    "2"
+                ],
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": false,
+                    "Column": 1,
+                    "DataValue": [],
+                    "Index": 20,
+                    "NegateDisplay": false,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "",
+                    "Title2": "Exceed 1X",
+                    "Type": 50
+                },
+                "Sveid": "WUbxShz1FtiDIZuWqAqYeYkvL7Ony9RF",
+                "ValueNum": 86363.63635,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": [
+                    "@13",
+                    "-",
+                    "@18"
+                ],
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": false,
+                    "Column": 2,
+                    "DataValue": [],
+                    "Index": 21,
+                    "NegateDisplay": true,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "EBT 1",
+                    "Title2": "",
+                    "Type": 50
+                },
+                "Sveid": "WJVIrx18m7hxyKU7QqkIStfRkhIZvYxl",
+                "ValueNum": 6272727.2727,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": null,
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": false,
+                    "Column": 2,
+                    "DataValue": [],
+                    "Index": 22,
+                    "NegateDisplay": false,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "",
+                    "Title2": "",
+                    "Type": 1
+                },
+                "Sveid": "1rjn7OqIAlW5Yi9EU6LeeMXfyO0JFf0s",
+                "ValueNum": 0,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": [
+                    "@21",
+                    "*",
+                    "2",
+                    "/",
+                    "104"
+                ],
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": false,
+                    "Column": 1,
+                    "DataValue": [],
+                    "Index": 23,
+                    "NegateDisplay": false,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "Step 2",
+                    "Title2": "2% of Net Profit after deduction",
+                    "Type": 50
+                },
+                "Sveid": "rWcpnItv2v5O_uhmygyV9xq-qN7nnMi3",
+                "ValueNum": 120629.370629,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": [
+                    "@7",
+                    "*",
+                    "1"
+                ],
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": false,
+                    "Column": 1,
+                    "DataValue": [],
+                    "Index": 24,
+                    "NegateDisplay": false,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "",
+                    "Title2": "Contribution for public charities*1",
+                    "Type": 50
+                },
+                "Sveid": "NtGv83JfnXcVemuDp2c3OYB7O3dCc5OL",
+                "ValueNum": 250000,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": [
+                    "fn:IF(@23<@24,@23,@24)"
+                ],
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": false,
+                    "Column": 2,
+                    "DataValue": [],
+                    "Index": 25,
+                    "NegateDisplay": true,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "",
+                    "Title2": "Deduction equal to lower of the above",
+                    "Type": 50
+                },
+                "Sveid": "_gzVQrvYsJp9ufxJZqMrWEgrOYNN6q5p",
+                "ValueNum": 120629.3706,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": [
+                    "@24",
+                    "-",
+                    "@23"
+                ],
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": false,
+                    "Column": 1,
+                    "DataValue": [],
+                    "Index": 26,
+                    "NegateDisplay": true,
+                    "NegateValue": false,
+                    "Show": false,
+                    "Title1": "",
+                    "Title2": "ส่วนเกิน",
+                    "Type": 50
+                },
+                "Sveid": "E-vSHakcrFun82L9U9TfxjmDwHVamuaW",
+                "ValueNum": 129370.6294,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": [
+                    "@21",
+                    "-",
+                    "@25"
+                ],
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": false,
+                    "Column": 2,
+                    "DataValue": [],
+                    "Index": 27,
+                    "NegateDisplay": true,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "EBT 2",
+                    "Title2": "",
+                    "Type": 50
+                },
+                "Sveid": "0pUH5q8DgMJaYMDjyC_6gYKAW8KSUNu-",
+                "ValueNum": 6152097.9021,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": null,
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": false,
+                    "Column": 2,
+                    "DataValue": [],
+                    "Index": 28,
+                    "NegateDisplay": false,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "",
+                    "Title2": "",
+                    "Type": 1
+                },
+                "Sveid": "ObsjOTvXZp4treDDFqKHwhf59ltqTQlW",
+                "ValueNum": 0,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": [
+                    "@27",
+                    "*",
+                    "2",
+                    "/",
+                    "102"
+                ],
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": false,
+                    "Column": 1,
+                    "DataValue": [],
+                    "Index": 29,
+                    "NegateDisplay": false,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "Step 3",
+                    "Title2": "2% of Net Profit after deduction",
+                    "Type": 50
+                },
+                "Sveid": "GXdzBD9sjP5ePuOGKtF74FWM6Gb5mBad",
+                "ValueNum": 120629.370629,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": [
+                    "@8",
+                    "+",
+                    "@20"
+                ],
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": false,
+                    "Column": 1,
+                    "DataValue": [],
+                    "Index": 30,
+                    "NegateDisplay": false,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "",
+                    "Title2": "Expenses for education or sports*1",
+                    "Type": 50
+                },
+                "Sveid": "B01RAusVJxBFs5lZRdEqOdrkfXQPNS2F",
+                "ValueNum": 236363.6364,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": [
+                    "fn:IF(@29<@30,@29,@30)"
+                ],
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": false,
+                    "Column": 2,
+                    "DataValue": [],
+                    "Index": 31,
+                    "NegateDisplay": true,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "",
+                    "Title2": "Deduction equal to lower of the above",
+                    "Type": 50
+                },
+                "Sveid": "eQsmF70GBgF1w3Q40bGnd7OOuqnjkyWq",
+                "ValueNum": 120629.3706,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": [
+                    "@30",
+                    "-",
+                    "@29"
+                ],
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": false,
+                    "Column": 1,
+                    "DataValue": [],
+                    "Index": 32,
+                    "NegateDisplay": true,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "",
+                    "Title2": "ส่วนเกิน",
+                    "Type": 50
+                },
+                "Sveid": "brqpML2IHDKHYhcwTE_ryVaAfNnpSYg4",
+                "ValueNum": 115734.2658,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": [
+                    "@27",
+                    "-",
+                    "@31"
+                ],
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": false,
+                    "Column": 2,
+                    "DataValue": [],
+                    "Index": 33,
+                    "NegateDisplay": true,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "EBT 3",
+                    "Title2": "",
+                    "Type": 50
+                },
+                "Sveid": "Z16UTrGpzV76e5dlTzLjl1YJSjvhVFrC",
+                "ValueNum": 6031468.5315,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": null,
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": false,
+                    "Column": 1,
+                    "DataValue": [],
+                    "Index": 34,
+                    "NegateDisplay": false,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "",
+                    "Title2": "",
+                    "Type": 1
+                },
+                "Sveid": "DxfYjap7jZC6Oy3HjNEfPzXYNt-DFX_U",
+                "ValueNum": 0,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": null,
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": false,
+                    "Column": 1,
+                    "DataValue": [],
+                    "Index": 35,
+                    "NegateDisplay": false,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "",
+                    "Title2": "",
+                    "Type": 1
+                },
+                "Sveid": "9fcNNevObDaHgCXICcctt5njLQrHY2K5",
+                "ValueNum": 0,
+                "ValueTxt": ""
+            },
+            {
+                "Formula": [
+                    "@13",
+                    "+",
+                    "fn:SUM(@19,@26,@32)",
+                    "-",
+                    "fn:SUM(@17,@24,@30)"
+                ],
+                "ImageName": "",
+                "IsTxt": false,
+                "StatementElement": {
+                    "Bold": false,
+                    "Column": 2,
+                    "DataValue": [],
+                    "Index": 36,
+                    "NegateDisplay": true,
+                    "NegateValue": false,
+                    "Show": true,
+                    "Title1": "Final EBT for tax purposes",
+                    "Title2": "",
+                    "Type": 50
+                },
+                "Sveid": "QXhL9UAleichSHtPf2x2hgI4LH1BQsZ2",
+                "ValueNum": 6031468.5315,
+                "ValueTxt": ""
+            }
+        ],
+        "_id": "-S0g1eazSeRHNqhmYqG9yEhstnKD3f2S",
+        "statementid": "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j",
+        "title": "base.v1"
+    }
+]

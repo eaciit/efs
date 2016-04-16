@@ -42,6 +42,36 @@ func (st *StatementController) Get(search toolkit.M) ([]efs.StatementVersion, er
 	return data, nil
 }
 
+func (st *StatementController) GetComment(r *knot.WebContext) interface{} {
+	r.Config.OutputType = knot.OutputJson
+
+	payload := toolkit.M{}
+	if err := r.GetPayload(&payload); err != nil {
+		return helper.CreateResult(false, nil, err.Error())
+	}
+	data := efs.Getcomment(toolkit.ToString(payload.Get("sveid", "")))
+	return helper.CreateResult(true, data, "")
+}
+
+func (st *StatementController) SaveComment(r *knot.WebContext) interface{} {
+	r.Config.OutputType = knot.OutputJson
+
+	payload := new(efs.Comments)
+	if err := r.GetPayload(&payload); err != nil {
+		return helper.CreateResult(false, nil, err.Error())
+	}
+
+	if payload.ID == "" {
+		payload.ID = toolkit.RandomString(32)
+	}
+
+	if err := efs.Save(payload); err != nil {
+		return helper.CreateResult(false, nil, err.Error())
+	}
+
+	return helper.CreateResult(true, nil, "")
+}
+
 func (st *StatementController) SaveStatement(r *knot.WebContext) interface{} {
 	r.Config.OutputType = knot.OutputJson
 
@@ -58,7 +88,7 @@ func (st *StatementController) SaveStatement(r *knot.WebContext) interface{} {
 		return helper.CreateResult(false, nil, err.Error())
 	}
 
-	return helper.CreateResult(true, payload, "")
+	return helper.CreateResult(true, nil, "")
 }
 
 func (st *StatementController) SaveStatementVersion(r *knot.WebContext) interface{} {
@@ -81,6 +111,7 @@ func (st *StatementController) SaveStatementVersion(r *knot.WebContext) interfac
 	if payload.ID == "" {
 		payload.ID = toolkit.RandomString(32)
 	}
+
 	if err := efs.Save(payload); err != nil {
 		return helper.CreateResult(false, "", err.Error())
 	}
