@@ -724,7 +724,7 @@ fp.addColumn = function(){
         }
         ko.mapping.fromJS(dataStatement, fp.dataFormula);
         var index = parseInt($(".table-formula-data>thead>tr.searchsv input.searchversion:last").attr("indexcolumn")) + 1;
-        $(".table-formula-data>thead>tr.searchsv").append("<td indexid='"+index+"'><div class='searchversion'><ul class='icon-tableheader'><li onClick='fp.selectSimulate("+index+")'><span class='glyphicon glyphicon-refresh'></span></li><li onClick='fp.saveStatementNew("+index+")'><span class='glyphicon glyphicon-floppy-disk'></span></li><li><span class='glyphicon glyphicon-cloud-download'></span></li><li onClick='fp.removeColumnFormula("+index+")'><span class='glyphicon glyphicon-remove'></span></li></ul></div><div class='searchversion'><input class='searchversion' id='version"+index+"' indexcolumn='"+index+"' /></div></td>");
+        $(".table-formula-data>thead>tr.searchsv").append("<td indexid='"+index+"'><div class='searchversion'><input class='searchversion' id='version"+index+"' indexcolumn='"+index+"' /></div><div class='searchversion'><ul class='icon-tableheader'><li onClick='fp.selectSimulate("+index+")'><span class='glyphicon glyphicon-refresh'></span></li><li onClick='fp.saveStatementNew("+index+")'><span class='glyphicon glyphicon-floppy-disk'></span></li> <li><span class='fa fa-file-excel-o'></span></li> <li><span class='fa fa-file-pdf-o'></span></li> <li onClick='fp.removeColumnFormula("+index+")'><span class='glyphicon glyphicon-remove'></span></li></ul></div></td>");
         $('#version'+index).ecLookupDD({
             dataSource:{
                 data:fp.recordSugest(),
@@ -741,7 +741,7 @@ fp.addColumn = function(){
     });
 };
 fp.refreshHeightTable = function(){
-    var height1 = 0, height2 = 0, heightSelect = 0, plusheight = 15;
+    var height1 = 0, height2 = 0, heightSelect = 0, plusheight = 6;
     if (fp.boolHeightTable() == 1)
         plusheight = 0;
     if (fp.dataFormula.Element()[0].ElementVersion().length>0)
@@ -755,7 +755,7 @@ fp.refreshHeightTable = function(){
         else
             heightSelect = height2;
         if (i == 0 && plusheight != 0)
-            plusheight = 15;
+            plusheight = 6;
         else
             plusheight = 0;
         $(".table-formula-head tr").eq(i).css('height',heightSelect+plusheight);
@@ -802,7 +802,7 @@ fp.saveComment = function(){
         })
         ko.mapping.fromJS(fp.templateComment,fp.configComment);
     });
-}
+};
 fp.hoverHeadFormula = function(data, event){
     var $el = $(event.target).closest("tr.rightfreeze");
     $el.addClass("selected-tableformula");
@@ -848,7 +848,7 @@ $(function (){
     fp.getDataStatement();
     $("#kostanta").bind("keyup", function(e) {
         if (e.keyCode == 13){
-            $('#formula-editor').ecLookupDD("addLookup",{id: moment().format("hhmmDDYYYYx"), value: fp.konstanta().toString(), koefisien:true});
+            $('#formula-editor').ecLookupDD("addLookup",{id: moment().format("hhmmDDYYYYx"), value: fp.konstanta().toString(), title: fp.konstanta().toString(), koefisien:true});
             fp.konstanta(0);
         }
     })
