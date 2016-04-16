@@ -792,7 +792,7 @@ ul.icon-tableheader {
       background-color: #EBEBEB; }
 
 .comment-txt {
-  height: 70px;
+  height: 50px;
   width: 100%;
   resize: none;
   -webkit-border-radius: 5px;
@@ -806,6 +806,20 @@ ul.icon-tableheader {
   padding: 5px 15px 5px 15px;
   margin-right: 15px;
   margin-bottom: 10px; }
+
+.title-headercomment {
+  font-size: 15px;
+  font-weight: bold; }
+
+.formula-headercomment {
+  font-size: 17px;
+  font-weight: bold; }
+
+.area-commentsave {
+  border-top: 1px solid #C9C9C9;
+  padding-top: 10px; }
+  .area-commentsave .comment-user {
+    margin-bottom: 10px; }
 
 .dropdown-menu .icon-submenu {
   position: absolute;

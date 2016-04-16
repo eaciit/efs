@@ -44,6 +44,7 @@ fp.lastParam = ko.observable(true);
 fp.recordKoefisien = ko.observableArray([]);
 fp.recordCondition = ko.observableArray([]);
 fp.recordSugest = ko.observableArray([]);
+fp.recordComment = ko.observableArray([]);
 fp.imageName = ko.observable("");
 fp.boolHeightTable = ko.observable(0);
 fp.titlePopUp = ko.observable("");
@@ -755,8 +756,25 @@ fp.refreshHeightTable = function(){
     }
     fp.boolHeightTable(1);
 };
-fp.showComment = function(index,indexColumn){
+fp.showComment = function(index,sveid,formulatxt,title1,title2){
+    fp.formulaTitle(formulatxt);
+    fp.modeFormula("");
+    if(title2 != "")
+        fp.titlePopUp(title2);
+    else if (title1 != "")
+        fp.titlePopUp(title1);
+    else
+        fp.titlePopUp("Comment");
     $("#comment-popup").modal("show");
+    app.ajaxPost("/statement/getcomment", {sveid: sveid}, function(res){
+        if(!app.isFine(res)){
+            return;
+        }
+        if (!res.data) {
+            res.data = [];
+        }
+        fp.recordComment(res.data);
+    });
 };
 fp.hoverHeadFormula = function(data, event){
     var $el = $(event.target).closest("tr.rightfreeze");
