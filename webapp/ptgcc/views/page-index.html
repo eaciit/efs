@@ -35,7 +35,17 @@
 		    			<table class="table table-bordered table-formula-data">
 				            <thead>
 				            	<tr class="searchsv">
-				                	<td indexid="1"><div class="searchversion"><button class="btn btn-sm btn-success btn-simulate" onClick="fp.selectSimulate(1)">Simulate</button></div><div class="searchversion"><input class='searchversion' id="version1" indexcolumn="1" /></div></td>
+				                	<td indexid="1">
+				                		<div class="searchversion">
+				                			<!-- <button class="btn btn-sm btn-success btn-simulate" onClick="fp.selectSimulate(1)">Simulate</button> -->
+				                			<ul class="icon-tableheader">
+				                				<li onClick="fp.selectSimulate(1)"><span class="glyphicon glyphicon-refresh"></span></li>
+				                				<li onClick="fp.saveStatementNew(1)"><span class="glyphicon glyphicon-floppy-disk"></span></li>
+				                				<li><span class="glyphicon glyphicon-cloud-download"></span></li>
+				                				<!-- <li><span class="glyphicon glyphicon-remove"></span></li> -->
+				                			</ul>
+				                		</div>
+				                		<div class="searchversion"><input class='searchversion' id="version1" indexcolumn="1" /></div></td>
 				                </tr>
 				            </thead>
 				            <tbody data-bind="template:{name:'formuladata', foreach:fp.dataFormula.Element()}">
@@ -72,7 +82,7 @@
 <script id="formuladata" type="text/html">
 	<tr class="datafor" data-bind="event: {mouseover: fp.hoverDataFormula, mouseout: fp.blurDataFormula}">
         <!-- ko if: StatementElement.Type() == 50 -->
-		<td data-bind="click: function(){fp.showFormula($index(),$data,1)}, attr:{'indexid':'1'},style: {fontWeight: StatementElement.Bold() == true ? 'bold':'normal', textAlign: 'Right'}">
+		<td data-bind="click: function(){fp.showFormula($index(),$data,1)}, attr:{'indexid':'1'},style: {fontWeight: StatementElement.Bold() == true ? 'bold':'normal', textAlign: 'Right'}, tooltip: {title:FormulaText().join(''), placement:'top'}">
 			<div class="col-md-2 icon-container">
 				<div class="icon-efs icon-chat" data-bind="click:function(){fp.showComment($index(),1)}"><span class="badge">3</span></div>
 				<div class="icon-efs icon-formula"></div>
@@ -113,7 +123,7 @@
 			<!-- /ko -->
 		<!-- ko foreach: ElementVersion -->
 			<!-- ko if: StatementElement.Type() == 50 -->
-			<td data-bind="attr:{'indexid':($index()+2).toString()}, click: function(){fp.showFormula($($element).index(),$data,($index()+2))}, style: {fontWeight: StatementElement.Bold() == true ? 'bold':'normal', textAlign: 'Right'}">
+			<td data-bind="attr:{'indexid':($index()+2).toString()}, click: function(){fp.showFormula($($element).index(),$data,($index()+2))}, style: {fontWeight: StatementElement.Bold() == true ? 'bold':'normal', textAlign: 'Right'}, tooltip: {title:FormulaText().join(''), placement:'top'}">
 				<div class="col-md-2 icon-container">
 					<div class="icon-efs icon-chat" data-bind="click:function(){fp.showComment($index(),1)}"><span class="badge">3</span></div>
 					<div class="icon-efs icon-formula"></div>
@@ -156,6 +166,36 @@
     </tr>
 </script>
 
+<!-- Pop up Comment -->
+<div class="modal fade" id="comment-popup" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel" data-bind="text:'Comment '+fp.titlePopUp()"></h4>
+      </div>
+      <div class="modal-body">
+      	<div class="col-md-12 area-comment">
+      		<ul>
+      			<li><div></div></li>
+      		</ul>
+      	</div>
+      	<div class="col-md-12 area-commentsave">
+
+      	</div>
+        <div style="clear:both;"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-bind="click:fp.saveFormulaEditor, visible: fp.modeFormula() == ''">OK</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Popup Formula -->
 <div class="modal fade" id="formula-popup" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
   <div class="modal-dialog">
     <div class="modal-content">
