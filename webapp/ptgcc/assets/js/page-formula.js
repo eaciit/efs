@@ -786,7 +786,7 @@ fp.showComment = function(index,sveid,formulatxt,title1,title2){
 };
 fp.saveComment = function(){
     var dataPost = ko.mapping.toJS(fp.configComment);
-    app.ajaxPost("/statement/savecomment", {dataPost}, function(res){
+    app.ajaxPost("/statement/savecomment", dataPost, function(res){
         if(!app.isFine(res)){
             return;
         }
