@@ -75,8 +75,8 @@
                     "NegateDisplay": false,
                     "NegateValue": false,
                     "Show": true,
-                    "Title1": "Add:",
-                    "Title2": "",
+                    "Title1": "",
+                    "Title2": "Add :",
                     "Type": 1
                 },
                 "Sveid": "LH0Xr8XbJHVDVP_KRmP3BKkvzFwDd8ff",
@@ -188,7 +188,7 @@
                 "ImageName": "",
                 "IsTxt": false,
                 "StatementElement": {
-                    "Bold": true,
+                    "Bold": false,
                     "Column": 2,
                     "DataValue": [],
                     "Index": 10,
@@ -196,7 +196,7 @@
                     "NegateValue": false,
                     "Show": true,
                     "Title1": "",
-                    "Title2": "Less",
+                    "Title2": "Less :",
                     "Type": 1
                 },
                 "Sveid": "dmiSBdad9s71Gc-Ht7OyenRcOzUXPrFG",
