@@ -443,7 +443,7 @@ $.ecDataSourceDDLookup = function(element,options){
 							            else
 							            	formulaindex = "";
 							            if(formulaindex!=""){
-							            	formulaindex = parseInt(formulaindex);
+							            	formulaindex = parseInt(formulaindex)-1;
 							            	if (dataStatement.Element[formulaindex].StatementElement.Title2 != "")
 							            		formulatext = dataStatement.Element[formulaindex].StatementElement.Title2;
 							            	else if(dataStatement.Element[formulaindex].StatementElement.Title2 == "" && dataStatement.Element[formulaindex].StatementElement.Title1 != "")
@@ -469,7 +469,7 @@ $.ecDataSourceDDLookup = function(element,options){
 							            else
 							            	formulaindex = "";
 							            if(formulaindex!=""){
-							            	formulaindex = parseInt(formulaindex);
+							            	formulaindex = parseInt(formulaindex)-1;
 							            	if (dataStatement.Element[formulaindex].ElementVersion[indexyo].StatementElement.Title2 != "")
 							            		formulatext = dataStatement.Element[formulaindex].ElementVersion[indexyo].StatementElement.Title2;
 							            	else if(dataStatement.Element[formulaindex].ElementVersion[indexyo].StatementElement.Title2 == "" && dataStatement.Element[formulaindex].ElementVersion[indexyo].StatementElement.Title1 != "")
