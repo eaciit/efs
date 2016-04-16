@@ -3,6 +3,7 @@ package efs
 import (
 	"github.com/eaciit/dbox"
 	"github.com/eaciit/orm/v1"
+	"github.com/eaciit/toolkit"
 )
 
 type Comments struct {
@@ -45,7 +46,11 @@ func Getcomment(sveid string) (arrstr []string) {
 		return
 	}
 
-	err = cur.Fetch(&arrstr, 0, false)
+	artkm := make([]toolkit.M, 0, 0)
+	err = cur.Fetch(&artkm, 0, false)
+	for _, val := range artkm {
+		arrstr = append(arrstr, toolkit.ToString(val.Get("text", "")))
+	}
 
 	return
 }
