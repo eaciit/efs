@@ -10,7 +10,9 @@ type Comments struct {
 	orm.ModelBase `bson:"-",json:"-"`
 	ID            string `json:"_id",bson:"_id"`
 	Sveid         string `json:"sveid",bson:"sveid"`
+	Name          string `json:"name",bson:"name"`
 	Text          string `json:"text",bson:"text"`
+	Time          string `json:"time",bson:"time"`
 }
 
 func (e *Comments) RecordID() interface{} {
