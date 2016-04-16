@@ -562,7 +562,7 @@
                     "NegateValue": false,
                     "Show": false,
                     "Title1": "",
-                    "Title2": "ส่วนเกิน",
+                    "Title2": "surplus",
                     "Type": 50
                 },
                 "Sveid": "E-vSHakcrFun82L9U9TfxjmDwHVamuaW",
@@ -702,7 +702,7 @@
                     "NegateValue": false,
                     "Show": true,
                     "Title1": "",
-                    "Title2": "ส่วนเกิน",
+                    "Title2": "surplus",
                     "Type": 50
                 },
                 "Sveid": "brqpML2IHDKHYhcwTE_ryVaAfNnpSYg4",
