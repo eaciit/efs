@@ -8,6 +8,7 @@ import (
 	"github.com/eaciit/toolkit"
 	// "os"
 	"path/filepath"
+	"time"
 )
 
 type StatementController struct {
@@ -60,10 +61,10 @@ func (st *StatementController) SaveComment(r *knot.WebContext) interface{} {
 	if err := r.GetPayload(&payload); err != nil {
 		return helper.CreateResult(false, nil, err.Error())
 	}
-
 	if payload.ID == "" {
 		payload.ID = toolkit.RandomString(32)
 	}
+	payload.Time = time.Now().UTC()
 
 	if err := efs.Save(payload); err != nil {
 		return helper.CreateResult(false, nil, err.Error())
@@ -113,6 +114,20 @@ func (st *StatementController) SaveStatementVersion(r *knot.WebContext) interfac
 	}
 
 	if err := efs.Save(payload); err != nil {
+		return helper.CreateResult(false, "", err.Error())
+	}
+
+	return helper.CreateResult(true, nil, "")
+}
+
+func (st *StatementController) RemoveComment(r *knot.WebContext) interface{} {
+	r.Config.OutputType = knot.OutputJson
+
+	payload := new(efs.Comments)
+	if err := r.GetPayload(&payload); err != nil {
+		return helper.CreateResult(false, "", err.Error())
+	}
+	if err := efs.Delete(payload); err != nil {
 		return helper.CreateResult(false, "", err.Error())
 	}
 

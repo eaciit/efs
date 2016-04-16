@@ -37,8 +37,8 @@
    },
    {
       "index":4,
-      "title1":"Add:",
-      "title2":"",
+      "title1":"",
+      "title2":"Add :",
       "type":1,
       "datavalue":[],
       "show":true,
@@ -110,11 +110,11 @@
    {
       "index":10,
       "title1":"",
-      "title2":"Less",
+      "title2":"Less :",
       "type":1,
       "datavalue":[],
       "show":true,
-      "bold":true,
+      "bold":false,
       "negatevalue":false,
       "negatedisplay":false,
       "column":2
@@ -302,7 +302,7 @@
    {
       "index":26,
       "title1":"",
-      "title2":"ส่วนเกิน",
+      "title2":"surplus",
       "type":50,
       "datavalue":[],
       "show":false,
@@ -374,7 +374,7 @@
    {
       "index":32,
       "title1":"",
-      "title2":"ส่วนเกิน",
+      "title2":"surplus",
       "type":50,
       "datavalue":[],
       "show":true,

@@ -3,14 +3,17 @@ package efs
 import (
 	"github.com/eaciit/dbox"
 	"github.com/eaciit/orm/v1"
+	"time"
 	// "github.com/eaciit/toolkit"
 )
 
 type Comments struct {
 	orm.ModelBase `bson:"-",json:"-"`
-	ID            string `json:"_id",bson:"_id"`
-	Sveid         string `json:"sveid",bson:"sveid"`
-	Text          string `json:"text",bson:"text"`
+	ID            string    `json:"_id",bson:"_id"`
+	Sveid         string    `json:"sveid",bson:"sveid"`
+	Name          string    `json:"name",bson:"name"`
+	Text          string    `json:"text",bson:"text"`
+	Time          time.Time `json:"time",bson:"time"`
 }
 
 func (e *Comments) RecordID() interface{} {
