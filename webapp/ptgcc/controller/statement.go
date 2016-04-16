@@ -120,6 +120,20 @@ func (st *StatementController) SaveStatementVersion(r *knot.WebContext) interfac
 	return helper.CreateResult(true, nil, "")
 }
 
+func (st *StatementController) RemoveComment(r *knot.WebContext) interface{} {
+	r.Config.OutputType = knot.OutputJson
+
+	payload := new(efs.Comments)
+	if err := r.GetPayload(&payload); err != nil {
+		return helper.CreateResult(false, "", err.Error())
+	}
+	if err := efs.Delete(payload); err != nil {
+		return helper.CreateResult(false, "", err.Error())
+	}
+
+	return helper.CreateResult(true, nil, "")
+}
+
 func (st *StatementController) RemoveStatementVersion(r *knot.WebContext) interface{} {
 	r.Config.OutputType = knot.OutputJson
 
