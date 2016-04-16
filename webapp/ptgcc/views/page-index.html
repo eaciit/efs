@@ -176,19 +176,22 @@
         <h4 class="modal-title" id="myModalLabel" data-bind="text:'Comment '+fp.titlePopUp()"></h4>
       </div>
       <div class="modal-body">
-      	<div class="col-md-12 area-comment">
+      	<div class="row area-comment">
       		<ul>
-      			<li><div></div></li>
+      			<li class="list-comment">asdsadsad</li>
+      			<li class="list-comment">asdsadsadasd</li>
       		</ul>
       	</div>
-      	<div class="col-md-12 area-commentsave">
-
+      	<div class="row area-commentsave">
+      		<div class="col-md-12">
+      			<textarea class="comment-txt"></textarea>
+      		</div>
       	</div>
         <div style="clear:both;"></div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" data-bind="click:fp.saveFormulaEditor, visible: fp.modeFormula() == ''">OK</button>
+        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary btn-sm" data-bind="click:fp.saveComment">Comment</button>
       </div>
 
     </div>

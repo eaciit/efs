@@ -755,6 +755,9 @@ fp.refreshHeightTable = function(){
     }
     fp.boolHeightTable(1);
 };
+fp.showComment = function(index,indexColumn){
+    $("#comment-popup").modal("show");
+};
 fp.hoverHeadFormula = function(data, event){
     var $el = $(event.target).closest("tr.rightfreeze");
     $el.addClass("selected-tableformula");
