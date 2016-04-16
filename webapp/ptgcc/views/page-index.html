@@ -113,7 +113,15 @@
 		</td>
 		<!-- /ko -->
 		<!-- ko if: StatementElement.Type() == 1 -->
-			<td data-bind="attr:{'indexid':($index()+2).toString()}"></td>
+			<td data-bind="attr:{'indexid':($index()+2).toString()}">
+				<div class="col-md-2">&nbsp;</div>
+				<div class="col-md-5">
+					<div data-bind="visible: StatementElement.Column() == 1, text: StatementElement.DataValue().join('')"></div>
+				</div>
+				<div class="col-md-5">
+					<div data-bind="visible: StatementElement.Column() == 2, text: StatementElement.DataValue().join('')"></div>
+				</div>
+			</td>
 			<!-- /ko -->
 		<!-- ko foreach: ElementVersion -->
 			<!-- ko if: StatementElement.Type() == 50 -->
@@ -154,7 +162,15 @@
 			</td>
 			<!-- /ko -->
 			<!-- ko if: StatementElement.Type() == 1 -->
-			<td data-bind="attr:{'indexid':($index()+2).toString()}"></td>
+			<td data-bind="attr:{'indexid':($index()+2).toString()}">
+				<div class="col-md-2">&nbsp;</div>
+				<div class="col-md-5">
+					<div data-bind="visible: StatementElement.Column() == 1, text: StatementElement.DataValue().join('')"></div>
+				</div>
+				<div class="col-md-5">
+					<div data-bind="visible: StatementElement.Column() == 2, text: StatementElement.DataValue().join('')"></div>
+				</div>
+			</td>
 			<!-- /ko -->
 		<!-- /ko -->
     </tr>
