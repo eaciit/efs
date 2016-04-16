@@ -34,7 +34,14 @@ fp.templateFormula = {
     FormulaText: [],
     ElementVersion: [],
 };
+fp.templateComment = {
+    _id: "", 
+    name: "", 
+    sveid: "", 
+    text: "",
+}
 fp.configFormula = ko.mapping.fromJS(fp.templateFormula);
+fp.configComment = ko.mapping.fromJS(fp.templateComment);
 fp.konstanta = ko.observable(0);
 fp.dataFormula = ko.mapping.fromJS(fp.templatestatement);
 fp.selectColumn = ko.observable({});
@@ -44,6 +51,7 @@ fp.lastParam = ko.observable(true);
 fp.recordKoefisien = ko.observableArray([]);
 fp.recordCondition = ko.observableArray([]);
 fp.recordSugest = ko.observableArray([]);
+fp.recordComment = ko.observableArray([]);
 fp.imageName = ko.observable("");
 fp.boolHeightTable = ko.observable(0);
 fp.titlePopUp = ko.observable("");
@@ -716,7 +724,7 @@ fp.addColumn = function(){
         }
         ko.mapping.fromJS(dataStatement, fp.dataFormula);
         var index = parseInt($(".table-formula-data>thead>tr.searchsv input.searchversion:last").attr("indexcolumn")) + 1;
-        $(".table-formula-data>thead>tr.searchsv").append("<td indexid='"+index+"'><div class='searchversion'><ul class='icon-tableheader'><li onClick='fp.selectSimulate("+index+")'yyyy7yyyy7yy777y7yy7777y7yy7yyyyyyy777777y7yyyyy><span class='glyphicon glyphicon-refresh'></span></li><li onClick='fp.saveStatementNew("+index+")'><span class='glyphicon glyphicon-floppy-disk'></span></li><li><span class='glyphicon glyphicon-cloud-download'></span></li><li onClick='fp.removeColumnFormula("+index+")'><span class='glyphicon glyphicon-remove'></span></li></ul></div><div class='searchversion'><input class='searchversion' id='version"+index+"' indexcolumn='"+index+"' /></div></td>");
+        $(".table-formula-data>thead>tr.searchsv").append("<td indexid='"+index+"'><div class='searchversion'><ul class='icon-tableheader'><li onClick='fp.selectSimulate("+index+")'><span class='glyphicon glyphicon-refresh'></span></li><li onClick='fp.saveStatementNew("+index+")'><span class='glyphicon glyphicon-floppy-disk'></span></li><li><span class='glyphicon glyphicon-cloud-download'></span></li><li onClick='fp.removeColumnFormula("+index+")'><span class='glyphicon glyphicon-remove'></span></li></ul></div><div class='searchversion'><input class='searchversion' id='version"+index+"' indexcolumn='"+index+"' /></div></td>");
         $('#version'+index).ecLookupDD({
             dataSource:{
                 data:fp.recordSugest(),
@@ -755,6 +763,46 @@ fp.refreshHeightTable = function(){
     }
     fp.boolHeightTable(1);
 };
+fp.showComment = function(index,sveid,formulatxt,title1,title2){
+    fp.formulaTitle(formulatxt);
+    fp.modeFormula("");
+    if(title2 != "")
+        fp.titlePopUp(title2);
+    else if (title1 != "")
+        fp.titlePopUp(title1);
+    else
+        fp.titlePopUp("Comment");
+    $("#comment-popup").modal("show");
+    app.ajaxPost("/statement/getcomment", {sveid: sveid}, function(res){
+        if(!app.isFine(res)){
+            return;
+        }
+        if (!res.data) {
+            res.data = [];
+        }
+        fp.recordComment(res.data);
+        fp.configComment.sveid(sveid);
+    });
+};
+fp.saveComment = function(){
+    var dataPost = ko.mapping.toJS(fp.configComment);
+    app.ajaxPost("/statement/savecomment", {dataPost}, function(res){
+        if(!app.isFine(res)){
+            return;
+        }
+        if (!res.data) {
+            res.data = [];
+        }
+        fp.recordComment.push({
+            _id: dataPost._id,
+            name: dataPost.name,
+            sveid: dataPost.sveid,
+            text: dataPost.text,
+            time: "",
+        })
+        ko.mapping.fromJS(fp.templateComment,fp.configComment);
+    });
+}
 fp.hoverHeadFormula = function(data, event){
     var $el = $(event.target).closest("tr.rightfreeze");
     $el.addClass("selected-tableformula");
