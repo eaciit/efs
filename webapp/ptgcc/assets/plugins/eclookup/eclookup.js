@@ -252,8 +252,23 @@ $.ecDataSourceDDLookup = function(element,options){
 
 			$liLookup.insertBefore($searchtxt);
 
+			var changeElemSearch = $(elementLookup).data('ecLookupDDSettings').displayTemplate();
 			$titleLookup = $('<p></p>');
-			$titleLookup.html(dataAdd.value);
+			// $titleLookup.html();
+			if (changeElemSearch == ''){
+				$titleLookup.html(dataAdd[$(elementLookup).data('ecLookupDDSettings').idText]);
+			} else{
+				var splitElement = changeElemSearch.split('#'), elementCreate = '';
+				for (var i in splitElement){
+					var res = splitElement[i].substring(0,1);
+					if (res == '*'){
+						elementCreate += dataAdd[splitElement[i].substring(1,splitElement[i].length)];
+					} else {
+						elementCreate += splitElement[i];
+					}
+				}
+				$titleLookup.html(elementCreate);
+			}
 			$titleLookup.appendTo($liLookup);
 
 			var $searchtext = $(elementLookup).parent().find('li.eclookup-txt>input');
@@ -419,9 +434,26 @@ $.ecDataSourceDDLookup = function(element,options){
 					            res.data = [];
 					        }
 							if($(elementLookup).attr("id") == "version1"){
-								var dataStatement = $.extend(true, {}, fp.templatestatement,ko.mapping.toJS(fp.dataFormula)), elemVer = {};
+								var dataStatement = $.extend(true, {}, fp.templatestatement,ko.mapping.toJS(fp.dataFormula)), elemVer = {}, formulaindex = "", formulatext = "";
 						        for(var i in res.data.Element){
 						            dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], res.data.Element[i] || {});
+						            for(var d in dataStatement.Element[i].Formula){
+						            	if (dataStatement.Element[i].Formula[d].substring(0,1) == "@")
+							            	formulaindex = dataStatement.Element[i].Formula[d].substring(1,2);
+							            else
+							            	formulaindex = "";
+							            if(formulaindex!=""){
+							            	formulaindex = parseInt(formulaindex);
+							            	if (dataStatement.Element[formulaindex].StatementElement.Title2 != "")
+							            		formulatext = dataStatement.Element[formulaindex].StatementElement.Title2;
+							            	else if(dataStatement.Element[formulaindex].StatementElement.Title2 == "" && dataStatement.Element[formulaindex].StatementElement.Title1 != "")
+							            		formulatext = dataStatement.Element[formulaindex].StatementElement.Title1;
+							            	else
+							            		formulatext = dataStatement.Element[i].Formula[d];
+								            dataStatement.Element[i].FormulaText.push(formulatext+" ");
+								        } else
+							            	dataStatement.Element[i].FormulaText.push(dataStatement.Element[i].Formula[d]+" ");
+						            }
 						        }
 						        ko.mapping.fromJS(dataStatement, fp.dataFormula);
 							} else {
@@ -429,7 +461,25 @@ $.ecDataSourceDDLookup = function(element,options){
 							    for (var i in dataStatement.Element){
 							    	dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], ko.mapping.toJS(fp.dataFormula.Element()[i]) || {});
 							        indexyo = parseInt(indexVer) - 2;
+							        res.data.Element[i]["FormulaText"] = [];
 							        dataStatement.Element[i].ElementVersion[indexyo] = res.data.Element[i];
+							        for(var d in dataStatement.Element[i].ElementVersion[indexyo].Formula){
+						            	if (dataStatement.Element[i].ElementVersion[indexyo].Formula[d].substring(0,1) == "@")
+							            	formulaindex = dataStatement.Element[i].ElementVersion[indexyo].Formula[d].substring(1,2);
+							            else
+							            	formulaindex = "";
+							            if(formulaindex!=""){
+							            	formulaindex = parseInt(formulaindex);
+							            	if (dataStatement.Element[formulaindex].ElementVersion[indexyo].StatementElement.Title2 != "")
+							            		formulatext = dataStatement.Element[formulaindex].ElementVersion[indexyo].StatementElement.Title2;
+							            	else if(dataStatement.Element[formulaindex].ElementVersion[indexyo].StatementElement.Title2 == "" && dataStatement.Element[formulaindex].ElementVersion[indexyo].StatementElement.Title1 != "")
+							            		formulatext = dataStatement.Element[formulaindex].ElementVersion[indexyo].StatementElement.Title1;
+							            	else
+							            		formulatext = dataStatement.Element[i].ElementVersion[indexyo].Formula[d];
+								            dataStatement.Element[i].ElementVersion[indexyo].FormulaText.push(formulatext+" ");
+								        } else
+							            	dataStatement.Element[i].ElementVersion[indexyo].FormulaText.push(dataStatement.Element[i].ElementVersion[indexyo].Formula[d]+" ");
+						            }
 							    }
 							    ko.mapping.fromJS(dataStatement, fp.dataFormula);
 							}
