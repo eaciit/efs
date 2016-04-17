@@ -10,7 +10,7 @@
       "bold":true,
       "negatevalue":false,
       "negatedisplay":false,
-      "column":2
+      "column":0
    },
    {
       "index":2,
@@ -461,7 +461,7 @@
       "type":50,
       "datavalue":[],
       "show":true,
-      "showformula":false,
+      "showformula":true,
       "bold":false,
       "negatevalue":false,
       "negatedisplay":true,
