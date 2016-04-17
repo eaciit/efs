@@ -20,6 +20,7 @@ type StatementElement struct {
 	Type          ElementTypeEnum
 	DataValue     []string
 	Show          bool
+	Showformula   bool
 	Bold          bool
 	NegateValue   bool
 	NegateDisplay bool
