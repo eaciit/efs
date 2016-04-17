@@ -881,6 +881,7 @@ ko.bindingHandlers.tooltip = {
     },
     options: {
         placement: "right",
+        container: 'body'
     }
 };
 
