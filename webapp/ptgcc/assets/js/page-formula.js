@@ -667,8 +667,7 @@ fp.removeColumnFormula = function(index){
         dataStatement.Element[i].ElementVersion.splice(aa,1);
     }
     ko.mapping.fromJS(dataStatement, fp.dataFormula);
-    aa = parseInt(index)+1;
-    $(".table-formula-data>thead>tr.searchsv td[indexid="+aa+"]").remove();
+    $(".table-formula-data>thead>tr.searchsv td[indexid="+index+"]").remove();
     fp.refreshHeightTable();
 };
 fp.selectSimulate = function(index){
