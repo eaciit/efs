@@ -546,10 +546,37 @@ body
 		border-bottom: none
 
 	#header
+
+		.avatar
+		border: 1px solid rgba(255,255,255,0.35)
+		display: block
+		border-radius: 500px
+		white-space: nowrap
+
+		img
+			border-radius: 500px
+
+		.thumb-sm img
+			height: 40px
+			width: 40px
+			vertical-align: middle
+
 		.navbar-brand
 			font-family: "Open Sans"
 			font-weight: bold
 			color: $black
+
+		.nav
+			margin: 0px
+
+			.dropdown-toggle
+				height: 55px
+
+			.avatar
+				width: 40px
+				height: 50px
+				margin-top: -5px
+				margin-right: 5px
 
 	#nav
 		background-color: $blue

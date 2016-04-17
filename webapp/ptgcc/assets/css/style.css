@@ -524,10 +524,30 @@ body {
     background-color: white;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.05), 0 1px 0 rgba(0, 0, 0, 0.05);
     border-bottom: none; }
-  body #header .navbar-brand {
-    font-family: "Open Sans";
-    font-weight: bold;
-    color: #5F5F5F; }
+  body #header {
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    display: block;
+    border-radius: 500px;
+    white-space: nowrap; }
+    body #header img {
+      border-radius: 500px; }
+    body #header .thumb-sm img {
+      height: 40px;
+      width: 40px;
+      vertical-align: middle; }
+    body #header .navbar-brand {
+      font-family: "Open Sans";
+      font-weight: bold;
+      color: #5F5F5F; }
+    body #header .nav {
+      margin: 0px; }
+      body #header .nav .dropdown-toggle {
+        height: 55px; }
+      body #header .nav .avatar {
+        width: 40px;
+        height: 50px;
+        margin-top: -5px;
+        margin-right: 5px; }
   body #nav {
     background-color: #3A8BDF; }
     body #nav .nav.navbar-nav > li > a {
