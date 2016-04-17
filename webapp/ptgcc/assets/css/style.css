@@ -729,6 +729,9 @@ body {
   width: 380px;
   float: left; }
 
+.table-formula-data .searchsv td {
+  width: 400px; }
+
 .icon-efs {
   display: block;
   width: 20px;
@@ -788,9 +791,8 @@ body {
 .normalFontEfs {
   font-weight: normal; }
 
-.table-formula-data > thead tr {
-  width: 150px; }
-
+/**.table-formula-data>thead tr */
+/**	width: 150px */
 .selected-tableformula {
   background-color: #9EE7FF; }
 
