@@ -461,7 +461,7 @@
       "type":50,
       "datavalue":[],
       "show":true,
-      "showformula":false,
+      "showformula":true,
       "bold":false,
       "negatevalue":false,
       "negatedisplay":true,
