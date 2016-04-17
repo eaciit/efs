@@ -754,7 +754,8 @@ body {
   margin-left: 10px;
   width: 12px;
   margin-top: 5px;
-  background-repeat: no-repeat; }
+  background-repeat: no-repeat;
+  cursor: pointer; }
 
 .icon-container {
   padding: 0px; }

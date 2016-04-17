@@ -9,7 +9,7 @@
 <!-- main area -->
 <div class="col-xs-12 col-sm-12" id="content" data-bind="with: FormulaPage">
 	<div class="col-md-12" data-bind="visible: (app.section() == 'formula')">
-		<h1>To edit formula, click on <div class="icon-efs icon-formula"></div></h1>
+		<h1>To edit formula, click on <img src="/res/images/formula-icon2.png" width="22" height="22"/></h1>
 		<div class="panel" data-bind="visible: (app.mode() == '')">
 		    <div class="panel-body table-formula">
 		    	<div class="col-md-12">
@@ -74,13 +74,13 @@
 <script id="formuladata" type="text/html">
 	<tr class="datafor" data-bind="event: {mouseover: fp.hoverDataFormula, mouseout: fp.blurDataFormula}">
         <!-- ko if: StatementElement.Type() == 50 -->
-		<td data-bind="attr:{'indexid':'1'},style: {textAlign: 'Right'}, tooltip: {title:FormulaText().join(''), placement:'top'}">
+		<td data-bind="attr:{'indexid':'1'},style: {textAlign: 'Right'}, tooltip: {title: StatementElement.Showformula() == true ? FormulaText().join(''):'', placement:'top'}">
 			<div class="col-md-2 icon-container">
 				<div class="icon-efs icon-chat" data-bind="click:function(){fp.showComment($index(),Sveid(), FormulaText().join(''), StatementElement.Title1(), StatementElement.Title2())},attr:{'sveid':Sveid()}"><span class="badge" data-bind="text:Countcomment()"></span></div>
-				<div class="icon-efs icon-formula"></div>
+				<div class="icon-efs icon-formula" data-bind="click: function(){fp.showFormula($index(),$data,1)}"></div>
 			</div>
-			<div class="col-md-5" data-bind="click: function(){fp.showFormula($index(),$data,1)}"><span class="nominal-height" data-bind="visible: StatementElement.Column() == 1, html:kendo.toString(ValueNum(), 'n2')"></span></div>
-			<div class="col-md-5" data-bind="click: function(){fp.showFormula($index(),$data,1)}"><span class="nominal-height" data-bind="visible: StatementElement.Column() == 2, html:kendo.toString(ValueNum(), 'n2')"></span></div>
+			<div class="col-md-5"><span class="nominal-height" data-bind="visible: StatementElement.Column() == 1, html:kendo.toString(ValueNum(), 'n2')"></span></div>
+			<div class="col-md-5"><span class="nominal-height" data-bind="visible: StatementElement.Column() == 2, html:kendo.toString(ValueNum(), 'n2')"></span></div>
 		</td>
 		<!-- /ko -->
 		<!-- ko if: StatementElement.Type() == 12 -->
@@ -123,13 +123,13 @@
 			<!-- /ko -->
 		<!-- ko foreach: ElementVersion -->
 			<!-- ko if: StatementElement.Type() == 50 -->
-			<td data-bind="attr:{'indexid':($index()+2).toString()}, style: {textAlign: 'Right'}, tooltip: {title:FormulaText().join(''), placement:'top'}">
+			<td data-bind="attr:{'indexid':($index()+2).toString()}, style: {textAlign: 'Right'}, tooltip: {title:StatementElement.Showformula() == true ? FormulaText().join(''):'', placement:'top'}">
 				<div class="col-md-2 icon-container">
 					<div class="icon-efs icon-chat" data-bind="click:function(){fp.showComment($($element).index(),Sveid(), FormulaText().join(''), StatementElement.Title1(), StatementElement.Title2())},attr:{'sveid':Sveid()}"><span class="badge" data-bind="text:Countcomment()"></span></div>
-					<div class="icon-efs icon-formula"></div>
+					<div class="icon-efs icon-formula" data-bind="click: function(){fp.showFormula($($element).index(),$data,($index()+2))}"></div>
 				</div>
-				<div class="col-md-5" data-bind="click: function(){fp.showFormula($($element).index(),$data,($index()+2))}"><span class="nominal-height" data-bind="visible: StatementElement.Column() == 1, html:kendo.toString(ValueNum(), 'n2')"></span></div>
-				<div class="col-md-5" data-bind="click: function(){fp.showFormula($($element).index(),$data,($index()+2))}"><span class="nominal-height" data-bind="visible: StatementElement.Column() == 2, html:kendo.toString(ValueNum(), 'n2')"></span></div>
+				<div class="col-md-5"><span class="nominal-height" data-bind="visible: StatementElement.Column() == 1, html:kendo.toString(ValueNum(), 'n2')"></span></div>
+				<div class="col-md-5"><span class="nominal-height" data-bind="visible: StatementElement.Column() == 2, html:kendo.toString(ValueNum(), 'n2')"></span></div>
 			</td>
 			<!-- /ko -->
 			<!-- ko if: StatementElement.Type() == 12 -->

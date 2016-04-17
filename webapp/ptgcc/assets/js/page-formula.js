@@ -219,12 +219,12 @@ fp.refreshSimulateByIndex = function(index,data){
     } else {
         if (fp.dataFormula.Element()[0].ElementVersion().length > 0){
             var aa = (parseInt(index)-2);
-            objFormula = $('#version'+aa).ecLookupDD("get");
+            objFormula = $('#version'+index).ecLookupDD("get");
             var dataStatement = $.extend(true, {}, ko.mapping.toJS(fp.dataFormula)), elemVer = {}, indexVer = i+2, indexyo = 0;
             for (var i in dataStatement.Element){
                 dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], ko.mapping.toJS(fp.dataFormula.Element()[i]) || {});
-                indexyo = parseInt(indexVer) - 2;
-                dataStatement.Element[i].ElementVersion[indexyo] = data.Element[i];
+                indexyo = parseInt(index) - 2;
+                dataStatement.Element[i].ElementVersion[indexyo] = $.extend({}, dataStatement.Element[i].ElementVersion[indexyo], data.Element[i] || {});
             }
             ko.mapping.fromJS(dataStatement, fp.dataFormula);
         }
@@ -667,6 +667,7 @@ fp.selectSimulate = function(index){
             fp.refreshSimulateByIndex(index,res.data);
         });
     } else {
+            console.log(index);
         if (fp.dataFormula.Element()[0].ElementVersion().length > 0){
             elementVer = [];
             var aa = (parseInt(index)-2);

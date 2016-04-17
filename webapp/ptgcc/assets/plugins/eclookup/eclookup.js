@@ -465,7 +465,7 @@ $.ecDataSourceDDLookup = function(element,options){
 							        dataStatement.Element[i].ElementVersion[indexyo] = res.data.Element[i];
 							        for(var d in dataStatement.Element[i].ElementVersion[indexyo].Formula){
 						            	if (dataStatement.Element[i].ElementVersion[indexyo].Formula[d].substring(0,1) == "@")
-							            	formulaindex = dataStatement.Element[i].ElementVersion[indexyo].Formula[d].substring(1,dataStatement.Element[i].Formula[d].length);
+							            	formulaindex = dataStatement.Element[i].ElementVersion[indexyo].Formula[d].substring(1,dataStatement.Element[i].ElementVersion[indexyo].Formula[d].length);
 							            else
 							            	formulaindex = "";
 							            if(formulaindex!=""){
@@ -480,6 +480,7 @@ $.ecDataSourceDDLookup = function(element,options){
 								        } else
 							            	dataStatement.Element[i].ElementVersion[indexyo].FormulaText.push(dataStatement.Element[i].ElementVersion[indexyo].Formula[d]+" ");
 						            }
+
 							    }
 							    ko.mapping.fromJS(dataStatement, fp.dataFormula);
 							}
