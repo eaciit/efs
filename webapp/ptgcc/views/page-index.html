@@ -9,7 +9,7 @@
 <!-- main area -->
 <div class="col-xs-12 col-sm-12" id="content" data-bind="with: FormulaPage">
 	<div class="col-md-12" data-bind="visible: (app.section() == 'formula')">
-		<h1>Formula Editor</h1>
+		<h1>To edit formula, click on <div class="icon-efs icon-formula"></div></h1>
 		<div class="panel" data-bind="visible: (app.mode() == '')">
 		    <div class="panel-body table-formula">
 		    	<div class="col-md-12">
@@ -23,8 +23,8 @@
 				            <thead>
 				            	<tr>
 					                <!-- <th width="20">No</th> -->
-					                <th width="100">Title 1</th>
-					                <th width="100">Title 2</th>
+					                <th width="100">Column 1</th>
+					                <th width="100">Column 2</th>
 					            </tr>
 				            </thead>
 				            <tbody data-bind="template:{name:'formulahead', foreach:fp.dataFormula.Element()}">
@@ -43,11 +43,9 @@
 				                				<li onClick="fp.saveStatementNew(1)"><span class="glyphicon glyphicon-floppy-disk"></span></li>
 				                				<li>
 				                					<span class="fa fa-file-excel-o"></span>
-				                					<!-- <img class="icon-excel" src="/res/images/icon-excel.png"> -->
 				                				</li>
 				                				<li>
 				                					<span class="fa fa-file-pdf-o"></span>
-				                					<!-- <img class="icon-pdf" src="/res/images/icon-pdf.png"> -->
 				                				</li>
 				                			</ul>
 				                		</div>
@@ -76,7 +74,7 @@
 <script id="formuladata" type="text/html">
 	<tr class="datafor" data-bind="event: {mouseover: fp.hoverDataFormula, mouseout: fp.blurDataFormula}">
         <!-- ko if: StatementElement.Type() == 50 -->
-		<td data-bind="attr:{'indexid':'1'},style: {fontWeight: StatementElement.Bold() == true ? 'bold':'normal', textAlign: 'Right'}, tooltip: {title:FormulaText().join(''), placement:'top'}">
+		<td data-bind="attr:{'indexid':'1'},style: {textAlign: 'Right'}, tooltip: {title:FormulaText().join(''), placement:'top'}">
 			<div class="col-md-2 icon-container">
 				<div class="icon-efs icon-chat" data-bind="click:function(){fp.showComment($index(),Sveid(), FormulaText().join(''), StatementElement.Title1(), StatementElement.Title2())},attr:{'sveid':Sveid()}"><span class="badge" data-bind="text:Countcomment()"></span></div>
 				<div class="icon-efs icon-formula"></div>
@@ -125,7 +123,7 @@
 			<!-- /ko -->
 		<!-- ko foreach: ElementVersion -->
 			<!-- ko if: StatementElement.Type() == 50 -->
-			<td data-bind="attr:{'indexid':($index()+2).toString()}, style: {fontWeight: StatementElement.Bold() == true ? 'bold':'normal', textAlign: 'Right'}, tooltip: {title:FormulaText().join(''), placement:'top'}">
+			<td data-bind="attr:{'indexid':($index()+2).toString()}, style: {textAlign: 'Right'}, tooltip: {title:FormulaText().join(''), placement:'top'}">
 				<div class="col-md-2 icon-container">
 					<div class="icon-efs icon-chat" data-bind="click:function(){fp.showComment($($element).index(),Sveid(), FormulaText().join(''), StatementElement.Title1(), StatementElement.Title2())},attr:{'sveid':Sveid()}"><span class="badge" data-bind="text:Countcomment()"></span></div>
 					<div class="icon-efs icon-formula"></div>
