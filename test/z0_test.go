@@ -70,7 +70,7 @@ func loaddatasample() (arrtkm []*efs.StatementElement, err error) {
 }
 
 func TestCreateStatement(t *testing.T) {
-	t.Skip("Skip : Comment this line to do test")
+	// t.Skip("Skip : Comment this line to do test")
 	arrdata, err := loaddatasample()
 	if err != nil {
 		t.Errorf("Error to load data sample: %s \n", err.Error())

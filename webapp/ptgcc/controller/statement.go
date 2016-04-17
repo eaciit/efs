@@ -240,6 +240,12 @@ func (st *StatementController) GetStatementVersion(r *knot.WebContext) interface
 		if err := efs.Get(sv, sv.ID); err != nil {
 			return helper.CreateResult(false, sv, err.Error())
 		}
+
+		//Just for count comment before show, next must be handle in model
+		for ix, _ := range sv.Element {
+			sv.Element[ix].Countcomment = efs.Countcomment(sv.Element[ix].Sveid)
+		}
+
 	} else if mode == "simulate" {
 		data := toolkit.M{}
 		data.Set("mode", payload.Get("mode"))
