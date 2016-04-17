@@ -114,10 +114,10 @@
 			<td data-bind="attr:{'indexid':($index()+2).toString()}">
 				<div class="col-md-2">&nbsp;</div>
 				<div class="col-md-5">
-					<div data-bind="visible: StatementElement.Column() == 1, text: StatementElement.DataValue().join('')"></div>
+					<div data-bind="visible: StatementElement.Column() == 1 || StatementElement.Column() == 0, text: StatementElement.DataValue().join(''),style: {textAlign: 'Right'}"></div>
 				</div>
 				<div class="col-md-5">
-					<div data-bind="visible: StatementElement.Column() == 2, text: StatementElement.DataValue().join('')"></div>
+					<div data-bind="visible: StatementElement.Column() == 2 || StatementElement.Column() == 0, text: StatementElement.DataValue().join(''),style: {textAlign: 'Right'}"></div>
 				</div>
 			</td>
 			<!-- /ko -->
@@ -126,7 +126,7 @@
 			<td data-bind="attr:{'indexid':($index()+2).toString()}, style: {textAlign: 'Right'}, tooltip: {title:StatementElement.Showformula() == true ? FormulaText().join(''):'', placement:'top'}">
 				<div class="col-md-2 icon-container">
 					<div class="icon-efs icon-chat" data-bind="click:function(){fp.showComment($($element).index(),Sveid(), FormulaText().join(''), StatementElement.Title1(), StatementElement.Title2())},attr:{'sveid':Sveid()}"><span class="badge" data-bind="text:Countcomment()"></span></div>
-					<div class="icon-efs icon-formula" data-bind="click: function(){fp.showFormula($($element).index(),$data,($index()+2))}"></div>
+					<div class="icon-efs icon-formula" data-bind="click: function(){fp.showFormula($($element).closest('tr').index(),$data,($index()+2))}"></div>
 				</div>
 				<div class="col-md-5"><span class="nominal-height" data-bind="visible: StatementElement.Column() == 1, html:kendo.toString(ValueNum(), 'n2')"></span></div>
 				<div class="col-md-5"><span class="nominal-height" data-bind="visible: StatementElement.Column() == 2, html:kendo.toString(ValueNum(), 'n2')"></span></div>
@@ -163,10 +163,10 @@
 			<td data-bind="attr:{'indexid':($index()+2).toString()}">
 				<div class="col-md-2">&nbsp;</div>
 				<div class="col-md-5">
-					<div data-bind="visible: StatementElement.Column() == 1, text: StatementElement.DataValue().join('')"></div>
+					<div data-bind="visible: StatementElement.Column() == 1 || StatementElement.Column() == 0, text: StatementElement.DataValue().join(''),style: {textAlign: 'Right'}"></div>
 				</div>
 				<div class="col-md-5">
-					<div data-bind="visible: StatementElement.Column() == 2, text: StatementElement.DataValue().join('')"></div>
+					<div data-bind="visible: StatementElement.Column() == 2 || StatementElement.Column() == 0, text: StatementElement.DataValue().join(''),style: {textAlign: 'Right'}"></div>
 				</div>
 			</td>
 			<!-- /ko -->

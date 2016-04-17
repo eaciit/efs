@@ -140,9 +140,16 @@ fp.showFormula = function(index,data, indexColoumn){
 };
 fp.saveFormulaEditor = function(){
     var objFormula = $('#formula-editor').ecLookupDD("get"), resultFormula = "", resultFormulaArr = [];
+    if (fp.selectColumn().indexcol == 1)
+        fp.dataFormula.Element()[fp.selectColumn().index].FormulaText([]);
+    else
+        fp.dataFormula.Element()[fp.selectColumn().index].ElementVersion()[(fp.selectColumn().indexcol-2)].FormulaText([]);
     for (var i in objFormula){
-        resultFormula += objFormula[i].value;
         resultFormulaArr.push(objFormula[i].value);
+        if (fp.selectColumn().indexcol == 1)
+            fp.dataFormula.Element()[fp.selectColumn().index].FormulaText.push(objFormula[i].title);
+        else
+            fp.dataFormula.Element()[fp.selectColumn().index].ElementVersion()[(fp.selectColumn().indexcol-2)].FormulaText.push(objFormula[i].title);
     }
     if (fp.selectColumn().indexcol == 1){
         fp.dataFormula.Element()[fp.selectColumn().index].Formula(resultFormulaArr);
@@ -214,6 +221,23 @@ fp.refreshSimulateByIndex = function(index,data){
         var dataStatement = $.extend(true, {}, fp.templatestatement,ko.mapping.toJS(fp.dataFormula)), elemVer = {};
         for(var i in data.Element){
             dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], data.Element[i] || {});
+            for(var d in dataStatement.Element[i].Formula){
+                if (dataStatement.Element[i].Formula[d].substring(0,1) == "@")
+                    formulaindex = dataStatement.Element[i].Formula[d].substring(1,dataStatement.Element[i].Formula[d].length);
+                else
+                    formulaindex = "";
+                if(formulaindex!=""){
+                    formulaindex = parseInt(formulaindex)-1;
+                    if (dataStatement.Element[formulaindex].StatementElement.Title2 != "")
+                        formulatext = dataStatement.Element[formulaindex].StatementElement.Title2;
+                    else if(dataStatement.Element[formulaindex].StatementElement.Title2 == "" && dataStatement.Element[formulaindex].StatementElement.Title1 != "")
+                        formulatext = dataStatement.Element[formulaindex].StatementElement.Title1;
+                    else
+                        formulatext = dataStatement.Element[i].Formula[d];
+                    dataStatement.Element[i].FormulaText.push(formulatext+" ");
+                } else
+                    dataStatement.Element[i].FormulaText.push(dataStatement.Element[i].Formula[d]+" ");
+            }
         }
         ko.mapping.fromJS(dataStatement, fp.dataFormula);
     } else {
@@ -225,6 +249,23 @@ fp.refreshSimulateByIndex = function(index,data){
                 dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], ko.mapping.toJS(fp.dataFormula.Element()[i]) || {});
                 indexyo = parseInt(index) - 2;
                 dataStatement.Element[i].ElementVersion[indexyo] = $.extend({}, dataStatement.Element[i].ElementVersion[indexyo], data.Element[i] || {});
+                for(var d in dataStatement.Element[i].ElementVersion[indexyo].Formula){
+                    if (dataStatement.Element[i].ElementVersion[indexyo].Formula[d].substring(0,1) == "@")
+                        formulaindex = dataStatement.Element[i].ElementVersion[indexyo].Formula[d].substring(1,dataStatement.Element[i].ElementVersion[indexyo].Formula[d].length);
+                    else
+                        formulaindex = "";
+                    if(formulaindex!=""){
+                        formulaindex = parseInt(formulaindex)-1;
+                        if (dataStatement.Element[formulaindex].ElementVersion[indexyo].StatementElement.Title2 != "")
+                            formulatext = dataStatement.Element[formulaindex].ElementVersion[indexyo].StatementElement.Title2;
+                        else if(dataStatement.Element[formulaindex].ElementVersion[indexyo].StatementElement.Title2 == "" && dataStatement.Element[formulaindex].ElementVersion[indexyo].StatementElement.Title1 != "")
+                            formulatext = dataStatement.Element[formulaindex].ElementVersion[indexyo].StatementElement.Title1;
+                        else
+                            formulatext = dataStatement.Element[i].ElementVersion[indexyo].Formula[d];
+                        dataStatement.Element[i].ElementVersion[indexyo].FormulaText.push(formulatext+" ");
+                    } else
+                        dataStatement.Element[i].ElementVersion[indexyo].FormulaText.push(dataStatement.Element[i].ElementVersion[indexyo].Formula[d]+" ");
+                }
             }
             ko.mapping.fromJS(dataStatement, fp.dataFormula);
         }
@@ -667,7 +708,6 @@ fp.selectSimulate = function(index){
             fp.refreshSimulateByIndex(index,res.data);
         });
     } else {
-            console.log(index);
         if (fp.dataFormula.Element()[0].ElementVersion().length > 0){
             elementVer = [];
             var aa = (parseInt(index)-2);
