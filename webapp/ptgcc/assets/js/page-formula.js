@@ -224,11 +224,13 @@ fp.refreshSimulateByIndex = function(index,data){
         var dataStatement = $.extend(true, {}, fp.templatestatement,ko.mapping.toJS(fp.dataFormula)), elemVer = {};
         for(var i in data.Element){
             dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], data.Element[i] || {});
+            dataStatement.Element[i].FormulaText = [];
             for(var d in dataStatement.Element[i].Formula){
                 if (dataStatement.Element[i].Formula[d].substring(0,1) == "@")
                     formulaindex = dataStatement.Element[i].Formula[d].substring(1,dataStatement.Element[i].Formula[d].length);
                 else
                     formulaindex = "";
+
                 if(formulaindex!=""){
                     formulaindex = parseInt(formulaindex)-1;
                     if (dataStatement.Element[formulaindex].StatementElement.Title2 != "")
@@ -252,11 +254,13 @@ fp.refreshSimulateByIndex = function(index,data){
                 dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], ko.mapping.toJS(fp.dataFormula.Element()[i]) || {});
                 indexyo = parseInt(index) - 2;
                 dataStatement.Element[i].ElementVersion[indexyo] = $.extend({}, dataStatement.Element[i].ElementVersion[indexyo], data.Element[i] || {});
+                dataStatement.Element[i].ElementVersion[indexyo].FormulaText = [];
                 for(var d in dataStatement.Element[i].ElementVersion[indexyo].Formula){
                     if (dataStatement.Element[i].ElementVersion[indexyo].Formula[d].substring(0,1) == "@")
                         formulaindex = dataStatement.Element[i].ElementVersion[indexyo].Formula[d].substring(1,dataStatement.Element[i].ElementVersion[indexyo].Formula[d].length);
                     else
                         formulaindex = "";
+
                     if(formulaindex!=""){
                         formulaindex = parseInt(formulaindex)-1;
                         if (dataStatement.Element[formulaindex].ElementVersion[indexyo].StatementElement.Title2 != "")
@@ -320,16 +324,20 @@ fp.saveStatementNew = function(index){
                 element : ko.mapping.toJS(fp.dataFormula.Element())
             };
         }
-        app.ajaxPost("/statement/savestatementversion", postParam, function(res){
-            if(!app.isFine(res)){
-                return;
-            }
-            if (!res.data) {
-                res.data = [];
-            }
-            swal({title: "Selector successfully save", type: "success"});
-            fp.refreshAll();
-        });
+        if (postParam.title != ''){
+            app.ajaxPost("/statement/savestatementversion", postParam, function(res){
+                if(!app.isFine(res)){
+                    return;
+                }
+                if (!res.data) {
+                    res.data = [];
+                }
+                swal({title: "Selector successfully save", type: "success"});
+                fp.refreshAll();
+            });
+        }else{
+            swal({title: "Field version can't empty", type: "warning"});
+        }
     } else if (index > 1 && fp.dataFormula.Element()[0].ElementVersion()[indexElem].ChangeValue()== false){
         elementVer = [];
         var aa = (parseInt(index)-2);
@@ -353,20 +361,24 @@ fp.saveStatementNew = function(index){
                 element: elementVer
             };
         }
-        app.ajaxPost("/statement/savestatementversion", postParam, function(res){
-            if(!app.isFine(res)){
-                return;
-            }
-            if (!res.data) {
-                res.data = [];
-            }
-            swal({title: "Selector successfully save", type: "success"});
-            fp.refreshAll();
-        });
+        if (postParam.title != ''){
+            app.ajaxPost("/statement/savestatementversion", postParam, function(res){
+                if(!app.isFine(res)){
+                    return;
+                }
+                if (!res.data) {
+                    res.data = [];
+                }
+                swal({title: "Selector successfully save", type: "success"});
+                fp.refreshAll();
+            });
+        } else {
+            swal({title: "Field version can't empty", type: "warning"});
+        }
     } else {
         swal({title: "You must simulate before save", type: "warning"});
     }
-}
+};
 fp.selectKoefisien = function(event){
     fp.modeFormula("");
 	$('#formula-editor').ecLookupDD("addLookup",{id:moment().format("hhmmDDYYYYx"), value: event, title: event, koefisien:false});
