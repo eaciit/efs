@@ -31,11 +31,23 @@ func main() {
 	server.RouteStatic("image", filepath.Join(controller.EFS_DATA_PATH, "image"))
 	server.Register(controller.CreateWebController(server), "")
 	server.Register(controller.CreateStatementController(server), "")
+	server.Register(controller.CreateLoginController(server), "")
 
 	server.Route("/", func(r *knot.WebContext) interface{} {
 		http.Redirect(r.Writer, r.Request, "/web/index", 301)
 		return true
 	})
+
+	// server.Route("/", func(r *knot.WebContext) interface{} {
+	// 	sessionid := r.Session("sessionid", "")
+	// 	if sessionid == "" {
+	// 		http.Redirect(r.Writer, r.Request, "/web/login", 301)
+	// 	} else {
+	// 		http.Redirect(r.Writer, r.Request, "/web/index", 301)
+	// 	}
+
+	// 	return true
+	// })
 
 	conn, err := prepareconnection()
 
