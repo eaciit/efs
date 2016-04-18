@@ -207,13 +207,13 @@
                     // rememberMe: false
                 }),
                 success : function(data) {
-                    // if(data.success){
-                    //     location.href = "web/index";
-                    //     model.Status("OK");
-                    // }else{
-                    //     model.Status("NOK");
-                    //     model.Message(data.message);
-                    // }
+                    if(data.data.status){
+                        location.href = "/web/index";
+                        model.Status("OK");
+                    }else{
+                        model.Status("NOK");
+                        model.Message(data.message);
+                    }
                     model.Mode("");
                 },
              });
