@@ -224,11 +224,13 @@ fp.refreshSimulateByIndex = function(index,data){
         var dataStatement = $.extend(true, {}, fp.templatestatement,ko.mapping.toJS(fp.dataFormula)), elemVer = {};
         for(var i in data.Element){
             dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], data.Element[i] || {});
+            dataStatement.Element[i].FormulaText = [];
             for(var d in dataStatement.Element[i].Formula){
                 if (dataStatement.Element[i].Formula[d].substring(0,1) == "@")
                     formulaindex = dataStatement.Element[i].Formula[d].substring(1,dataStatement.Element[i].Formula[d].length);
                 else
                     formulaindex = "";
+
                 if(formulaindex!=""){
                     formulaindex = parseInt(formulaindex)-1;
                     if (dataStatement.Element[formulaindex].StatementElement.Title2 != "")
@@ -252,11 +254,13 @@ fp.refreshSimulateByIndex = function(index,data){
                 dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], ko.mapping.toJS(fp.dataFormula.Element()[i]) || {});
                 indexyo = parseInt(index) - 2;
                 dataStatement.Element[i].ElementVersion[indexyo] = $.extend({}, dataStatement.Element[i].ElementVersion[indexyo], data.Element[i] || {});
+                dataStatement.Element[i].ElementVersion[indexyo].FormulaText = [];
                 for(var d in dataStatement.Element[i].ElementVersion[indexyo].Formula){
                     if (dataStatement.Element[i].ElementVersion[indexyo].Formula[d].substring(0,1) == "@")
                         formulaindex = dataStatement.Element[i].ElementVersion[indexyo].Formula[d].substring(1,dataStatement.Element[i].ElementVersion[indexyo].Formula[d].length);
                     else
                         formulaindex = "";
+
                     if(formulaindex!=""){
                         formulaindex = parseInt(formulaindex)-1;
                         if (dataStatement.Element[formulaindex].ElementVersion[indexyo].StatementElement.Title2 != "")
@@ -320,16 +324,20 @@ fp.saveStatementNew = function(index){
                 element : ko.mapping.toJS(fp.dataFormula.Element())
             };
         }
-        app.ajaxPost("/statement/savestatementversion", postParam, function(res){
-            if(!app.isFine(res)){
-                return;
-            }
-            if (!res.data) {
-                res.data = [];
-            }
-            swal({title: "Selector successfully save", type: "success"});
-            fp.refreshAll();
-        });
+        if (postParam.title != ''){
+            app.ajaxPost("/statement/savestatementversion", postParam, function(res){
+                if(!app.isFine(res)){
+                    return;
+                }
+                if (!res.data) {
+                    res.data = [];
+                }
+                swal({title: "Selector successfully save", type: "success"});
+                fp.refreshAll();
+            });
+        }else{
+            swal({title: "Field version can't empty", type: "warning"});
+        }
     } else if (index > 1 && fp.dataFormula.Element()[0].ElementVersion()[indexElem].ChangeValue()== false){
         elementVer = [];
         var aa = (parseInt(index)-2);
@@ -353,20 +361,24 @@ fp.saveStatementNew = function(index){
                 element: elementVer
             };
         }
-        app.ajaxPost("/statement/savestatementversion", postParam, function(res){
-            if(!app.isFine(res)){
-                return;
-            }
-            if (!res.data) {
-                res.data = [];
-            }
-            swal({title: "Selector successfully save", type: "success"});
-            fp.refreshAll();
-        });
+        if (postParam.title != ''){
+            app.ajaxPost("/statement/savestatementversion", postParam, function(res){
+                if(!app.isFine(res)){
+                    return;
+                }
+                if (!res.data) {
+                    res.data = [];
+                }
+                swal({title: "Selector successfully save", type: "success"});
+                fp.refreshAll();
+            });
+        } else {
+            swal({title: "Field version can't empty", type: "warning"});
+        }
     } else {
         swal({title: "You must simulate before save", type: "warning"});
     }
-}
+};
 fp.selectKoefisien = function(event){
     fp.modeFormula("");
 	$('#formula-editor').ecLookupDD("addLookup",{id:moment().format("hhmmDDYYYYx"), value: event, title: event, koefisien:false});
@@ -715,7 +727,8 @@ fp.addColumn = function(){
         }
         ko.mapping.fromJS(dataStatement, fp.dataFormula);
         var index = parseInt($(".table-formula-data>thead>tr.searchsv input.searchversion:last").attr("indexcolumn")) + 1;
-        $(".table-formula-data>thead>tr.searchsv").append("<td indexid='"+index+"'><div class='searchversion'><input class='searchversion' id='version"+index+"' indexcolumn='"+index+"' /></div><div class='searchversion'><ul class='icon-tableheader'><li onClick='fp.selectSimulate("+index+")'><span class='glyphicon glyphicon-refresh'></span></li><li onClick='fp.saveStatementNew("+index+")'><span class='glyphicon glyphicon-floppy-disk'></span></li> <li><span class='fa fa-file-excel-o'></span></li> <li><span class='fa fa-file-pdf-o'></span></li> <li onClick='fp.removeColumnFormula("+index+")'><span class='glyphicon glyphicon-remove'></span></li></ul></div></td>");
+        $(".table-formula-data>thead>tr.searchsv").append("<td indexid='"+index+"'><div class='searchversion'><input class='searchversion' id='version"+index+"' indexcolumn='"+index+"' /></div><div class='searchversion'><ul class='icon-tableheader'><li onClick='fp.selectSimulate("+index+")' data-toggle='tooltip' data-placement='top' title='Simulate'><span class='glyphicon glyphicon-refresh'></span></li><li onClick='fp.saveStatementNew("+index+")' data-toggle='tooltip' data-placement='top' title='Save'><span class='glyphicon glyphicon-floppy-disk'></span></li> <li data-toggle='tooltip' data-placement='top' title='Excel'><span class='fa fa-file-excel-o'></span></li> <li data-toggle='tooltip' data-placement='top' title='Pdf'><span class='fa fa-file-pdf-o'></span></li> <li onClick='fp.removeColumnFormula("+index+")' data-toggle='tooltip' data-placement='top' title='Remove'><span class='glyphicon glyphicon-remove'></span></li></ul></div></td>");
+        $('[data-toggle="tooltip"]').tooltip()
         $('#version'+index).ecLookupDD({
             dataSource:{
                 data:fp.recordSugest(),
