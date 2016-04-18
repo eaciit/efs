@@ -62,6 +62,7 @@ var Settings_EcLookup = {
 	typesearch: "string", // string or number
 	minChar: 0,
 	boolClickSearch: false,
+	hoverRemove: false,
 	displayTemplate: function(){
 		return "";
 	},
@@ -274,6 +275,8 @@ $.ecDataSourceDDLookup = function(element,options){
 			var $searchtext = $(elementLookup).parent().find('li.eclookup-txt>input');
 
 			$btnRemoveLookup = $('<span class="eclookup-remove"></span>');
+			if($(elementLookup).data('ecLookupDDSettings').hoverRemove == true)
+				$btnRemoveLookup.addClass("hover-remove");
 			$btnRemoveLookup.html('x');
 			$btnRemoveLookup.bind('click').click(function(){
 				$(elementLookup).parent().find('li.eclookup-txt').css('display','block');
@@ -396,6 +399,8 @@ $.ecDataSourceDDLookup = function(element,options){
 					var $searchtext = $(elementLookup).parent().find('li.eclookup-txt>input'), idField = $(this).attr('idfield');
 
 					$btnRemoveLookup = $('<span class="eclookup-remove"></span>');
+					if($(elementLookup).data('ecLookupDDSettings').hoverRemove == true)
+						$btnRemoveLookup.addClass("hover-remove");
 					$btnRemoveLookup.html('x');
 					$btnRemoveLookup.bind('click').click(function(){
 						$(elementLookup).parent().find('li.eclookup-txt').css('display','block');

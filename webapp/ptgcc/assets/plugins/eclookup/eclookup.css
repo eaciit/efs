@@ -45,6 +45,8 @@ li.eclookup-item.max {
 
 li.eclookup-item:hover {
   background-color: #63A2E3; }
+  li.eclookup-item:hover .hover-remove {
+    display: block; }
 
 li.eclookup-item > p {
   margin-bottom: 3px;
@@ -56,6 +58,12 @@ li.eclookup-item > span.eclookup-remove {
 
 li.eclookup-item.max > span.eclookup-remove {
   float: right; }
+
+li.eclookup-item.max > span.hover-remove {
+  display: none; }
+
+li.eclookup-item > span.hover-remove {
+  display: none; }
 
 li.eclookup-txt {
   background-color: transparent;
