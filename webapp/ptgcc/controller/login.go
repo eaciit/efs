@@ -33,14 +33,13 @@ func (s *LoginController) ProcessLogin(r *knot.WebContext) interface{} {
 		return helper.CreateResult(false, nil, "password cannot empty")
 	}
 
-	if toolkit.ToString(payload["username"]) == "eaciit" && toolkit.ToString(payload["username"]) == "Password.1" {
-		return helper.CreateResult(true, "", "Login failed")
+	if toolkit.ToString(payload["username"]) == "eaciit" && toolkit.ToString(payload["password"]) == "Password.1" {
+		sesid := toolkit.RandomString(32)
+		r.SetSession("sessionid", sesid)
+		return helper.CreateResult(true, toolkit.M{}.Set("status", true).Set("sessionid", sesid), "Login Success")
 	}
 
-	sesid := toolkit.RandomString(32)
-	r.SetSession("sessionid", sesid)
-	return helper.CreateResult(true, toolkit.M{}.Set("status", true).Set("sessionid", sesid), "Login Success")
-
+	return helper.CreateResult(true, "", "Login failed")
 }
 
 func (s *LoginController) Logout(r *knot.WebContext) interface{} {
