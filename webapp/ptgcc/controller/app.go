@@ -24,7 +24,7 @@ func init() {
 	fmt.Println("Base Path ===> ", AppBasePath)
 
 	if EFS_DATA_PATH != "" {
-		fmt.Println("EFS_CONFIG_PATH ===> ", EFS_DATA_PATH)
+		fmt.Println("EFS_DATA_PATH ===> ", EFS_DATA_PATH)
 		fmt.Println("EFS_CONFIG_PATH ===> ", EFS_CONFIG_PATH)
 	}
 }
