@@ -359,14 +359,14 @@ a {
   z-index: 99; }
 
 .login-logo {
-  background: url("/res/img/logoeaciittrans.png") no-repeat center top;
+  background: url("/res/images/logoeaciittrans.png") no-repeat center top;
   width: 99px;
   height: 90px;
   background-size: 99px 90px;
   margin-bottom: 30px; }
 
 .login-logo-reset {
-  background: url("/res/img/logoeaciittrans.png") no-repeat center top;
+  background: url("/res/images/logoeaciittrans.png") no-repeat center top;
   width: 99px;
   height: 90px;
   background-size: 99px 90px;
