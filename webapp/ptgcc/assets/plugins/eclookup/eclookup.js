@@ -462,6 +462,7 @@ $.ecDataSourceDDLookup = function(element,options){
 							    	dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], ko.mapping.toJS(fp.dataFormula.Element()[i]) || {});
 							        indexyo = parseInt(indexVer) - 2;
 							        res.data.Element[i]["FormulaText"] = [];
+							        res.data.Element[i]["ChangeValue"] = false;
 							        dataStatement.Element[i].ElementVersion[indexyo] = res.data.Element[i];
 							        for(var d in dataStatement.Element[i].ElementVersion[indexyo].Formula){
 						            	if (dataStatement.Element[i].ElementVersion[indexyo].Formula[d].substring(0,1) == "@")

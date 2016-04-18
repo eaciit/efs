@@ -32,6 +32,7 @@ fp.templateFormula = {
     ValueNum: 0,
     ImageName: "",
     FormulaText: [],
+    ChangeValue: false,
     ElementVersion: [],
 };
 fp.templateComment = {
@@ -180,11 +181,12 @@ fp.refreshAll = function(){
             if (!res.data) {
                 res.data = [];
             }
-            var dataStatement = $.extend(true, {}, fp.templatestatement,ko.mapping.toJS(fp.dataFormula)), elemVer = {};
-            for(var i in res.data.Element){
-                dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], res.data.Element[i] || {});
-            }
-            ko.mapping.fromJS(dataStatement, fp.dataFormula);
+            // var dataStatement = $.extend(true, {}, fp.templatestatement,ko.mapping.toJS(fp.dataFormula)), elemVer = {};
+            // for(var i in res.data.Element){
+            //     dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], res.data.Element[i] || {});
+            // }
+            // ko.mapping.fromJS(dataStatement, fp.dataFormula);
+            fp.refreshSimulateByIndex(1, res.data);
         });
     }
     if (fp.dataFormula.Element()[0].ElementVersion().length > 0){
@@ -204,13 +206,14 @@ fp.refreshAll = function(){
                     if (!res.data) {
                         res.data = [];
                     }
-                    var dataStatement = $.extend(true, {}, ko.mapping.toJS(fp.dataFormula)), elemVer = {}, indexVer = i+2, indexyo = 0;
-                    for (var i in dataStatement.Element){
-                        dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], ko.mapping.toJS(fp.dataFormula.Element()[i]) || {});
-                        indexyo = parseInt(indexVer) - 2;
-                        dataStatement.Element[i].ElementVersion[indexyo] = res.data.Element[i];
-                    }
-                    ko.mapping.fromJS(dataStatement, fp.dataFormula);
+                    // var dataStatement = $.extend(true, {}, ko.mapping.toJS(fp.dataFormula)), elemVer = {}, indexVer = i+2, indexyo = 0;
+                    // for (var i in dataStatement.Element){
+                    //     dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], ko.mapping.toJS(fp.dataFormula.Element()[i]) || {});
+                    //     indexyo = parseInt(indexVer) - 2;
+                    //     dataStatement.Element[i].ElementVersion[indexyo] = res.data.Element[i];
+                    // }
+                    // ko.mapping.fromJS(dataStatement, fp.dataFormula);
+                    fp.refreshSimulateByIndex(aa,res.data)
                 });
             }
         }
@@ -272,78 +275,26 @@ fp.refreshSimulateByIndex = function(index,data){
     }
     swal({title: "Selector successfully simulate", type: "success"});
     fp.refreshHeightTable();
+    fp.changeValueVariable(index,false);
 }
-// fp.saveStatement = function(){
-//     // harus di cek atau diganti
-//     var objFormula = [], postParam = {
-//         _id : "",
-//         title : "",
-//         statementid : fp.tempStatementId(),
-//         element : []
-//     }, elementVer = [], mappingVer = {};
-//     objFormula = $('#version1').ecLookupDD("get");
-//     if (objFormula.length > 0){
-//         postParam = {
-//             _id : objFormula[0]._id,
-//             title : objFormula[0].title,
-//             statementid : objFormula[0].statementid,
-//             element : ko.mapping.toJS(fp.dataFormula.Element())
-//         };
-//     } else {
-//         postParam = {
-//             _id : "",
-//             title : $(".table-formula-data>thead td[indexid="+1+"]").find(".eclookup-txt>input").val(),
-//             statementid : fp.tempStatementId(),
-//             element : ko.mapping.toJS(fp.dataFormula.Element())
-//         };
-//     }
-//     app.ajaxPost("/statement/savestatementversion", postParam, function(res){
-//         if(!app.isFine(res)){
-//             return;
-//         }
-//         if (!res.data) {
-//             res.data = [];
-//         }
-//         swal({title: "Selector successfully save", type: "success"});
-//         fp.refreshAll();
-//     });
-//     if (fp.dataFormula.Element()[0].ElementVersion().length > 0){
-//         for (var i in fp.dataFormula.Element()[0].ElementVersion()){
-//             elementVer = [];
-//             var aa = (parseInt(i)+2);
-//             objFormula = $('#version'+aa).ecLookupDD("get");
-//             mappingVer = ko.mapping.toJS(fp.dataFormula);
-//             for(var a in mappingVer.Element){
-//                 elementVer.push(mappingVer.Element[a].ElementVersion[i]);
-//             };
-//             if (objFormula.length > 0){
-//                 postParam = {
-//                     _id : objFormula[0]._id,
-//                     title : objFormula[0].title,
-//                     statementid : objFormula[0].statementid,
-//                     element: elementVer
-//                 };
-//             } else {
-//                 postParam = {
-//                     _id : "",
-//                     title : $(".table-formula-data>thead td[indexid="+(i+2)+"]").find(".eclookup-txt>input").val(),
-//                     statementid : fp.tempStatementId(),
-//                     element: elementVer
-//                 };
-//             }
-//             app.ajaxPost("/statement/savestatementversion", postParam, function(res){
-//                 if(!app.isFine(res)){
-//                     return;
-//                 }
-//                 if (!res.data) {
-//                     res.data = [];
-//                 }
-//                 swal({title: "Selector successfully save", type: "success"});
-//                 fp.refreshAll();
-//             });
-//         }
-//     }
-// }
+fp.changeValueVariable = function(index,valueChange){
+    indexElem = index - 2;
+    if (valueChange == true){
+        if (index == 1 && fp.dataFormula.Element()[0].ChangeValue() == false){
+            fp.dataFormula.Element()[0].ChangeValue(true);
+        } else if (index > 1 && fp.dataFormula.Element()[0].ElementVersion()[indexElem].ChangeValue() == false) {
+            fp.dataFormula.Element()[0].ElementVersion()[indexElem].ChangeValue(true);
+        }
+    }
+    if (valueChange == false){
+        if (index == 1 && fp.dataFormula.Element()[0].ChangeValue() == true){
+            fp.dataFormula.Element()[0].ChangeValue(false);
+        } else if (index > 1 && fp.dataFormula.Element()[0].ElementVersion()[indexElem].ChangeValue() == true) {
+            index = index - 2;
+            fp.dataFormula.Element()[0].ElementVersion()[indexElem].ChangeValue(false);
+        }
+    }
+};
 fp.saveStatementNew = function(index){
     var objFormula = [], postParam = {
         _id : "",
@@ -351,7 +302,8 @@ fp.saveStatementNew = function(index){
         statementid : fp.tempStatementId(),
         element : []
     }, elementVer = [], mappingVer = {};
-    if (index == 1){
+    indexElem = index - 2;
+    if (index == 1 && fp.dataFormula.Element()[0].ChangeValue() == false){
         objFormula = $('#version1').ecLookupDD("get");
         if (objFormula.length > 0){
             postParam = {
@@ -378,42 +330,41 @@ fp.saveStatementNew = function(index){
             swal({title: "Selector successfully save", type: "success"});
             fp.refreshAll();
         });
-    } else {
-        if (fp.dataFormula.Element()[0].ElementVersion().length > 0){
-            elementVer = [];
-            var aa = (parseInt(index)-2);
-            objFormula = $('#version'+index).ecLookupDD("get");
-            mappingVer = ko.mapping.toJS(fp.dataFormula);
-            for(var a in mappingVer.Element){
-                elementVer.push(mappingVer.Element[a].ElementVersion[aa]);
+    } else if (index > 1 && fp.dataFormula.Element()[0].ElementVersion()[indexElem].ChangeValue()== false){
+        elementVer = [];
+        var aa = (parseInt(index)-2);
+        objFormula = $('#version'+index).ecLookupDD("get");
+        mappingVer = ko.mapping.toJS(fp.dataFormula);
+        for(var a in mappingVer.Element){
+            elementVer.push(mappingVer.Element[a].ElementVersion[aa]);
+        };
+        if (objFormula.length > 0){
+            postParam = {
+                _id : objFormula[0]._id,
+                title : objFormula[0].title,
+                statementid : objFormula[0].statementid,
+                element: elementVer
             };
-            if (objFormula.length > 0){
-                postParam = {
-                    _id : objFormula[0]._id,
-                    title : objFormula[0].title,
-                    statementid : objFormula[0].statementid,
-                    element: elementVer
-                };
-            } else {
-                postParam = {
-                    _id : "",
-                    title : $(".table-formula-data>thead td[indexid="+index+"]").find(".eclookup-txt>input").val(),
-                    statementid : fp.tempStatementId(),
-                    element: elementVer
-                };
-            }
-            app.ajaxPost("/statement/savestatementversion", postParam, function(res){
-                if(!app.isFine(res)){
-                    return;
-                }
-                if (!res.data) {
-                    res.data = [];
-                }
-                swal({title: "Selector successfully save", type: "success"});
-                fp.refreshAll();
-            });
-            
+        } else {
+            postParam = {
+                _id : "",
+                title : $(".table-formula-data>thead td[indexid="+index+"]").find(".eclookup-txt>input").val(),
+                statementid : fp.tempStatementId(),
+                element: elementVer
+            };
         }
+        app.ajaxPost("/statement/savestatementversion", postParam, function(res){
+            if(!app.isFine(res)){
+                return;
+            }
+            if (!res.data) {
+                res.data = [];
+            }
+            swal({title: "Selector successfully save", type: "success"});
+            fp.refreshAll();
+        });
+    } else {
+        swal({title: "You must simulate before save", type: "warning"});
     }
 }
 fp.selectKoefisien = function(event){
@@ -892,7 +843,12 @@ $(function (){
             $('#formula-editor').ecLookupDD("addLookup",{id: moment().format("hhmmDDYYYYx"), value: fp.konstanta().toString(), title: fp.konstanta().toString(), koefisien:true});
             fp.konstanta(0);
         }
-    })
+    });
+    $(".table-formula-data").bind("keyup",".efs-number", function(e) {
+        var index = $(e.target).closest("td").attr("indexid");
+        console.log(index);
+        fp.changeValueVariable(index, true);
+    });
 	$('#formula-editor').ecLookupDD({
 		dataSource:{
 			data:[],
