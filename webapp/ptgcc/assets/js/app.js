@@ -197,6 +197,17 @@ app.registerSearchKeyup = function ($selector, callback) {
         }
     });
 };
+app.Logout = function(){
+    app.ajaxPost("/login/logout", {}, function(res){
+        if(!app.isFine(res)){
+            return;
+        }
+        if (!res.data) {
+            res.data = [];
+        }
+        location.href = "/web/login";
+    });
+}
 
 
 $(function () {
