@@ -442,6 +442,7 @@ $.ecDataSourceDDLookup = function(element,options){
 								var dataStatement = $.extend(true, {}, fp.templatestatement,ko.mapping.toJS(fp.dataFormula)), elemVer = {}, formulaindex = "", formulatext = "";
 						        for(var i in res.data.Element){
 						            dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], res.data.Element[i] || {});
+						            dataStatement.Element[i].FormulaText = [];
 						            for(var d in dataStatement.Element[i].Formula){
 						            	if (dataStatement.Element[i].Formula[d].substring(0,1) == "@")
 							            	formulaindex = dataStatement.Element[i].Formula[d].substring(1,dataStatement.Element[i].Formula[d].length);
@@ -469,6 +470,7 @@ $.ecDataSourceDDLookup = function(element,options){
 							        res.data.Element[i]["FormulaText"] = [];
 							        res.data.Element[i]["ChangeValue"] = false;
 							        dataStatement.Element[i].ElementVersion[indexyo] = res.data.Element[i];
+							        dataStatement.Element[i].ElementVersion[indexyo].FormulaText = [];
 							        for(var d in dataStatement.Element[i].ElementVersion[indexyo].Formula){
 						            	if (dataStatement.Element[i].ElementVersion[indexyo].Formula[d].substring(0,1) == "@")
 							            	formulaindex = dataStatement.Element[i].ElementVersion[indexyo].Formula[d].substring(1,dataStatement.Element[i].ElementVersion[indexyo].Formula[d].length);
