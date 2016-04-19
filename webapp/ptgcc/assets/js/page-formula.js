@@ -873,6 +873,7 @@ $(function (){
 		idField: "id", 
 		idText: "title", 
 		displayFields: "title", 
+        hoverRemove: true,
         displayTemplate: function(){
             return "<span>#*title#</span>";
         },
