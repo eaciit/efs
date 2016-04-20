@@ -4,6 +4,8 @@ import (
 	"github.com/eaciit/dbox"
 	"github.com/eaciit/efs"
 	"github.com/eaciit/efs/webapp/ptgcc/controller"
+	"github.com/eaciit/efs/webapp/ptgcc/installation"
+	"github.com/eaciit/efs/webapp/ptgcc/model"
 	"github.com/eaciit/knot/knot.v1"
 	"github.com/eaciit/toolkit"
 	"net/http"
@@ -17,16 +19,23 @@ var (
 )
 
 func main() {
-	/*if controller.EFS_CONFIG_PATH == "" {
-		fmt.Println("Please set the EFS_CONFIG_PATH variable")
-		return
-	}*/
-
 	runtime.GOMAXPROCS(4)
-	// efs.ConfigPath = controller.EFS_DATA_PATH
+	efscore.ConfigPath = controller.EFS_CONFIG_PATH
 
 	server = new(knot.Server)
-	server.Address = "localhost:8000"
+
+	port := new(efscore.Ports)
+	port.ID = "port"
+	if err := port.GetPort(); err != nil {
+		toolkit.Printf("Error get port: %s \n", err.Error())
+	}
+	if port.Port == 0 {
+		if err := setup.Port(port); err != nil {
+			toolkit.Printf("Error set port: %s \n", err.Error())
+		}
+	}
+
+	server.Address = toolkit.Sprintf("localhost:%v", toolkit.ToString(port.Port))
 	server.RouteStatic("res", filepath.Join(controller.AppBasePath, "assets"))
 	server.RouteStatic("image", filepath.Join(controller.EFS_DATA_PATH, "image"))
 	server.Register(controller.CreateWebController(server), "")
