@@ -859,7 +859,6 @@ $(function (){
     });
     $(".table-formula-data").bind("keyup",".efs-number", function(e) {
         var index = $(e.target).closest("td").attr("indexid");
-        console.log(index);
         fp.changeValueVariable(index, true);
     });
 	$('#formula-editor').ecLookupDD({

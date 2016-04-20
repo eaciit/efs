@@ -5,10 +5,8 @@ ly.account  = ko.observable(false);
 ly.session  = ko.observable('');
 ly.username = ko.observable('');
 
-// ly.varMenu = [{"id":"formula", "title":"Formula Editor", "childrens":[], "link":"/web/index"},
-// 			{"id":"simulation", "title":"Simulation", "childrens":[], "link":"/web/datasource"}];
-
-ly.varMenu = [];
+ly.varMenu = [{"id":"formula", "title":"EFS", "childrens":[], "link":"/web/index"},
+			{"id":"simulation", "title":"EFS Designer", "childrens":[], "link":"/web/efsdesigner"}];
 ly.element = function(data){
 	console.log(data.length);
 	$parent = $('#nav-ul');

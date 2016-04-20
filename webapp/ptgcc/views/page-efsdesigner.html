@@ -1,0 +1,69 @@
+<script src="/res/js/page-efsdesigner.js"></script>
+
+<div class="col-xs-12 col-sm-12" id="content" data-bind="with: EfsDesigner">
+	<div class="col-md-12" data-bind="visible: (app.section() == 'efsdesigner')">
+		<h1>EFS Editor</h1>
+		<nav class="navbar" data-bind="visible: (app.mode() == '')">
+			<div class="btn-group" role="group">
+		        <button class="btn btn-sm btn-primary mgTop15">
+		            <span class="glyphicon glyphicon-refresh"></span> Refresh
+		        </button>
+		        <button class="btn btn-sm btn-primary mgTop15" data-bind="click: addEfs">
+		            <span class="glyphicon glyphicon-plus"></span> Add
+		        </button>
+		        <button class="btn btn-sm btn-danger mgTop15" id="removeEfs">
+		            <span class="glyphicon glyphicon-remove"></span> Delete
+		        </button>
+		    </div>
+		</nav>
+		<div class="panel" data-bind="visible: (app.mode() == '')">
+			<div class="panel-body">
+		    	<div class="grid grid-efs" data-bind="kendoGrid: { dataSource: { pageSize: 15 }, data: ed.pageData, change: ed.selectEfs, selectable: 'row', columns: ed.efsColumns, filterfable: false, pageable: true, dataBound: app.gridBoundTooltipster('.grid-efs') }"></div>
+		    </div>
+		    <p class="bg-danger bgcustom">Please click row to edit!</p>
+		</div>
+		<nav class="navbar" data-bind="visible: (app.mode() == 'edit')">
+			<button class="btn btn-sm btn-warning navbar-btn" data-bind="click: backToFront">
+	    		<span class="glyphicon glyphicon-chevron-left"></span> Back
+	    	</button>
+            <button class="btn btn-sm btn-primary navbar-btn" data-bind="click: saveEfs">
+	    		<span class="glyphicon glyphicon-save"></span> Save
+	    	</button>
+		</nav>
+		<div class="panel" data-bind="visible: (app.mode() == 'edit')">
+			<div class="panel-body">
+		    	<form class="form-horizontal form-add-page" data-bind="with: configEfs" novalidate>
+			    	<div class="col-md-12">
+			    		<div class="form-group">
+				    		<label class="col-md-1 databrowser-label">ID</label>
+				    		<div class="col-md-5">
+					    		<input required type="text" class="form-control input-sm" name="_id" placeholder="Type the page id Here" data-bind="value: _id">
+								<span class="k-invalid-msg" data-for="_id"></span>
+				    		</div>
+			    		</div>
+			    		<div class="form-group">
+				    		<label class="col-md-1 databrowser-label">Title</label>
+				    		<div class="col-md-5">
+					    		<input required type="text" class="form-control input-sm" name="title" placeholder="Type the page title Here" data-bind="value: Title">
+								<span class="k-invalid-msg" data-for="title"></span>
+				    		</div>
+			    		</div>
+		    		</div>
+		    		<div class="col-md-12">
+		    			<div class="btn-group" role="group">
+					        <button class="btn btn-sm btn-primary" data-bind="click: ed.addStatement">
+					            <span class="glyphicon glyphicon-plus"></span> Add Statement
+					        </button>
+					        <button class="btn btn-sm btn-danger" data-bind="click: ed.removeStatement">
+					            <span class="glyphicon glyphicon-trash"></span> Remove Statement
+					        </button>
+					    </div>
+		    		</div>
+		    		<div class="col-md-12 mgTop15">
+		    			<div id="grid-statement" data-bind="kendoGrid: { data: Statement,selectable: 'multiple, row', columns: ed.statementColumns, editable: true, filterfable: false, dataBound: app.gridBoundTooltipster('.grid-statement') }"></div>
+		    		</div>
+		    	</form>
+		    </div>
+		</div>
+	</div>
+</div>
