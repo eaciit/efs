@@ -9,11 +9,11 @@ import (
 
 type Comments struct {
 	orm.ModelBase `bson:"-",json:"-"`
-	ID            string    `json:"_id",bson:"_id"`
-	Sveid         string    `json:"sveid",bson:"sveid"`
-	Name          string    `json:"name",bson:"name"`
-	Text          string    `json:"text",bson:"text"`
-	Time          time.Time `json:"time",bson:"time"`
+	ID            string `json:"_id",bson:"_id"`
+	// Sveid         string    `json:"sveid",bson:"sveid"`
+	Name string    `json:"name",bson:"name"`
+	Text string    `json:"text",bson:"text"`
+	Time time.Time `json:"time",bson:"time"`
 }
 
 func (e *Comments) RecordID() interface{} {
@@ -24,36 +24,37 @@ func (e *Comments) TableName() string {
 	return "comments"
 }
 
-func Countcomment(sveid string) int {
-	n := 0
-	c := new(Comments)
+// func Countcomment(sveid string) int {
+// 	n := 0
+// 	c := new(Comments)
 
-	filter := dbox.Eq("sveid", sveid)
-	cur, err := Find(c, filter, nil)
+// 	filter := dbox.Eq("sveid", sveid)
+// 	cur, err := Find(c, filter, nil)
 
-	if err == nil && cur != nil {
-		n = cur.Count()
-	}
+// 	if err == nil && cur != nil {
+// 		n = cur.Count()
+// 	}
 
-	return n
-}
+// 	return n
+// }
 
-func Getcomment(sveid string) (arrcom []Comments) {
+func Getcomment(arrid []string) (arrcom []Comments) {
 	arrcom = make([]Comments, 0, 0)
 	c := new(Comments)
 
-	filter := dbox.Eq("sveid", sveid)
+	arrinterface := make([]interface{}, 0, 0)
+	for _, val := range arrid {
+		arrinterface = append(arrinterface, val)
+	}
+
+	filter := dbox.In("_id", arrinterface...)
 	cur, err := Find(c, filter, nil)
 
 	if err != nil {
 		return
 	}
 
-	// artkm := make([]toolkit.M, 0, 0)
 	err = cur.Fetch(&arrcom, 0, false)
-	// for _, val := range artkm {
-	// 	arrstr = append(arrstr, toolkit.ToString(val.Get("text", "")))
-	// }
 
 	return
 }

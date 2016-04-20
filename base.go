@@ -9,7 +9,7 @@ import (
 	"github.com/eaciit/orm/v1"
 	"github.com/eaciit/toolkit"
 	"os"
-	"strings"
+	// "strings"
 )
 
 var _db *orm.DataContext
@@ -62,11 +62,11 @@ func Delete(o orm.IModel) error {
 }
 
 func Save(o orm.IModel) error {
-	if strings.Contains(toolkit.TypeName(o), "StatementVersion") {
-		for i := 0; i < len(o.(*StatementVersion).Element); i++ {
-			o.(*StatementVersion).Element[i].Countcomment = Countcomment(o.(*StatementVersion).Element[i].Sveid)
-		}
-	}
+	// if strings.Contains(toolkit.TypeName(o), "StatementVersion") {
+	// 	for i := 0; i < len(o.(*StatementVersion).Element); i++ {
+	// 		o.(*StatementVersion).Element[i].Countcomment = Countcomment(o.(*StatementVersion).Element[i].Sveid)
+	// 	}
+	// }
 
 	e := DB().Save(o)
 	if e != nil {

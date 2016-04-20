@@ -37,15 +37,40 @@ func (e *Statements) Save() error {
 	return nil
 }
 
-func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion, err error) {
+func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion, comments []Comments, err error) {
 	sv = new(StatementVersion)
-	inst, aformula, arrsvid := toolkit.M{}, toolkit.M{}, make([]string, 0, 0)
+	comments = make([]Comments, 0, 0)
+	arrtkmcom := make([]toolkit.M, 0, 0)
+
+	inst, aformula, tidcomment := toolkit.M{}, toolkit.M{}, make([][]string, 0, 0)
 	if ins.Has("data") && strings.Contains(toolkit.TypeName(ins["data"]), "StatementVersion") {
 		sv = ins["data"].(*StatementVersion)
-		inst, aformula, arrsvid, err = extractdatainput(ins["data"].(*StatementVersion))
-	} else if ins.Has("data") && toolkit.TypeName(ins["data"]) != "*StatementVersion" {
+		inst, aformula, tidcomment, err = extractdatainput(ins["data"].(*StatementVersion))
+	} else if ins.Has("data") {
 		err = errors.New("Data has wrong format.")
 		return
+	}
+
+	if ins.Has("comment") && strings.Contains(toolkit.TypeName(ins["comment"]), ".M") {
+		arrtkmcom = ins["comment"].([]toolkit.M)
+	} else if ins.Has("comment") {
+		err = errors.New("Comment has wrong format.")
+		return
+	}
+
+	//set array comments and set id for new id
+	for i, val := range arrtkmcom {
+		comment := Comments{}
+
+		if val.Has("type") && toolkit.ToString(val["type"]) != "delete" {
+			toolkit.Serde(val, &comment, "json")
+			if comment.ID == "" {
+				comment.ID = toolkit.RandomString(32)
+				val.Set("_id", comment.ID)
+				arrtkmcom[i] = val
+			}
+			comments = append(comments, comment)
+		}
 	}
 
 	sv.StatementID = e.ID
@@ -53,15 +78,14 @@ func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion, err error) {
 	for i, v := range e.Elements {
 		tve := new(VersionElement)
 		tve.StatementElement = v
+		tve.Comments = make([]string, 0, 0)
 
-		if len(arrsvid) > 0 {
-			tve.Sveid = arrsvid[i]
+		if len(tidcomment) > i {
+			tve.Comments = append(tve.Comments, tidcomment[i]...)
 		}
 
-		if tve.Sveid == "" {
-			tve.Sveid = toolkit.RandomString(32)
-		} else {
-			tve.Countcomment = Countcomment(tve.Sveid)
+		if len(arrtkmcom) > 0 {
+			tve.Comments = updatecomment(tve.StatementElement.Index, tve.Comments, arrtkmcom)
 		}
 
 		tve.IsTxt = false
@@ -108,14 +132,15 @@ func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion, err error) {
 
 //= will be split to  helper ==
 
-func extractdatainput(inputsv *StatementVersion) (tkm, aformula toolkit.M, arrsvid []string, err error) {
+func extractdatainput(inputsv *StatementVersion) (tkm, aformula toolkit.M, tidcomments [][]string, err error) {
 	// toolkit.Println("ID of Statement version : ", inputsv.ID)
-	tkm, aformula = toolkit.M{}, toolkit.M{}
-	arrint, arrsvid := make([]int, 0, 0), make([]string, 0, 0)
+	tkm, aformula, tidcomments = toolkit.M{}, toolkit.M{}, make([][]string, 0, 0)
+	arrint := make([]int, 0, 0)
 
 	for _, val := range inputsv.Element {
 		//spare for other case depend on type and mode from config
-		arrsvid = append(arrsvid, val.Sveid)
+		// arrsvid = append(arrsvid, val.Sveid)
+		tidcomm := []string{}
 		switch {
 		case val.StatementElement.Type == ElementFormula:
 			//get formula
@@ -135,6 +160,11 @@ func extractdatainput(inputsv *StatementVersion) (tkm, aformula toolkit.M, arrsv
 
 		if val.StatementElement.Type != ElementNone {
 			arrint = append(arrint, val.StatementElement.Index)
+		}
+
+		if len(val.Comments) > 0 {
+			tidcomm = append(tidcomm, val.Comments...)
+			tidcomments = append(tidcomments, tidcomm)
 		}
 	}
 
@@ -261,5 +291,30 @@ func executefunction(key string, arrstr []string, tkm toolkit.M) (err error) {
 		}
 		arrstr[i] = toolkit.ToString(efsfunc[cname](tkm, cval))
 	}
+	return
+}
+
+func updatecomment(index int, comments []string, arrtkmcom []toolkit.M) (lastcomments []string) {
+	add, del, lastcomments := make([]string, 0, 0), make([]string, 0, 0), make([]string, 0, 0)
+	for _, val := range arrtkmcom {
+		if val.Has("index") && toolkit.ToInt(val["index"], toolkit.RoundingAuto) == index {
+			if val.Has("type") && toolkit.ToString(val["type"]) == "add" {
+				add = append(add, toolkit.ToString(toolkit.Id(val)))
+			} else if val.Has("type") && toolkit.ToString(val["type"]) == "delete" {
+				del = append(del, toolkit.ToString(toolkit.Id(val)))
+			}
+		}
+	}
+
+	for _, val := range comments {
+		if !toolkit.HasMember(del, val) {
+			lastcomments = append(lastcomments, val)
+		}
+	}
+
+	if len(add) > 0 {
+		lastcomments = append(lastcomments, add...)
+	}
+
 	return
 }
