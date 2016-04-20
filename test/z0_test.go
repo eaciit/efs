@@ -103,7 +103,7 @@ func TestLogic(t *testing.T) {
 		t.Errorf("Error to get statement by id, found : %s \n", err.Error())
 		return
 	}
-	tsv, _ := ds.Run(nil)
+	tsv, _, _ := ds.Run(nil)
 	tsv.ID = toolkit.RandomString(32)
 	tsv.Title = "v.2015"
 
@@ -130,7 +130,7 @@ func TestRunStatement(t *testing.T) {
 	}
 	// toolkit.Printf("Statements : %#v\n\n", ds)
 
-	tsv, _ := ds.Run(nil)
+	tsv, _, _ := ds.Run(nil)
 	// tsv.StatementID = sid
 
 	// ======================
@@ -151,7 +151,7 @@ func TestRunStatement(t *testing.T) {
 	// tsv.Element[9].Formula = []string{"@1", "+", "fn:SUM(@3..@5)"}
 	// ======================
 	ins := toolkit.M{}.Set("data", tsv)
-	sv, err := ds.Run(ins)
+	sv, _, err := ds.Run(ins)
 	if err != nil {
 		t.Errorf("Error to get run, found : %s \n", err.Error())
 		if err.Error() != "Formula not completed run" {
@@ -177,7 +177,7 @@ func TestSaveStatementVersion(t *testing.T) {
 	}
 
 	// ins := toolkit.M{}.Set("title", "base-v1")
-	sv, _ := ds.Run(nil)
+	sv, _, _ := ds.Run(nil)
 	sv.ID = toolkit.RandomString(32)
 	sv.Title = "base.v1"
 
