@@ -39,10 +39,11 @@ func (e *Statements) Save() error {
 
 func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion, err error) {
 	sv = new(StatementVersion)
-	inst, aformula, arrsvid := toolkit.M{}, toolkit.M{}, make([]string, 0, 0)
+	inst, aformula, arrcomment := toolkit.M{}, toolkit.M{}, make([][]string, 0, 0)
 	if ins.Has("data") && strings.Contains(toolkit.TypeName(ins["data"]), "StatementVersion") {
 		sv = ins["data"].(*StatementVersion)
-		inst, aformula, arrsvid, err = extractdatainput(ins["data"].(*StatementVersion))
+		sv = ins["comment"].(*StatementVersion)
+		inst, aformula, err = extractdatainput(ins["data"].(*StatementVersion))
 	} else if ins.Has("data") && toolkit.TypeName(ins["data"]) != "*StatementVersion" {
 		err = errors.New("Data has wrong format.")
 		return
@@ -53,16 +54,17 @@ func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion, err error) {
 	for i, v := range e.Elements {
 		tve := new(VersionElement)
 		tve.StatementElement = v
+		tve.Comments = make([]string, 0, 0)
 
-		if len(arrsvid) > 0 {
-			tve.Sveid = arrsvid[i]
+		if len(arrcomment) > i {
+			tve.Comments = append(tve.Comments, arrcomment[i]...)
 		}
 
-		if tve.Sveid == "" {
-			tve.Sveid = toolkit.RandomString(32)
-		} else {
-			tve.Countcomment = Countcomment(tve.Sveid)
-		}
+		// if tve.Sveid == "" {
+		// 	tve.Sveid = toolkit.RandomString(32)
+		// } else {
+		// 	tve.Countcomment = Countcomment(tve.Sveid)
+		// }
 
 		tve.IsTxt = false
 		switch {
@@ -108,14 +110,14 @@ func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion, err error) {
 
 //= will be split to  helper ==
 
-func extractdatainput(inputsv *StatementVersion) (tkm, aformula toolkit.M, arrsvid []string, err error) {
+func extractdatainput(inputsv *StatementVersion) (tkm, aformula toolkit.M, err error) {
 	// toolkit.Println("ID of Statement version : ", inputsv.ID)
 	tkm, aformula = toolkit.M{}, toolkit.M{}
-	arrint, arrsvid := make([]int, 0, 0), make([]string, 0, 0)
+	arrint := make([]int, 0, 0)
 
 	for _, val := range inputsv.Element {
 		//spare for other case depend on type and mode from config
-		arrsvid = append(arrsvid, val.Sveid)
+		// arrsvid = append(arrsvid, val.Sveid)
 		switch {
 		case val.StatementElement.Type == ElementFormula:
 			//get formula
