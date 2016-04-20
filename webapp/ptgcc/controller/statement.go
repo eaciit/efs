@@ -21,7 +21,7 @@ func CreateStatementController(s *knot.Server) *StatementController {
 	return controller
 }
 
-func (st *StatementController) Get(search toolkit.M) ([]efs.StatementVersion, error) {
+func (st *StatementController) GetSVList(search toolkit.M) ([]efs.StatementVersion, error) {
 	var query *dbox.Filter
 	if search.Has("key") && search.Has("val") {
 		key := toolkit.ToString(search.Get("key", ""))
@@ -43,6 +43,28 @@ func (st *StatementController) Get(search toolkit.M) ([]efs.StatementVersion, er
 	return data, nil
 }
 
+func (st *StatementController) GetStatementList(search toolkit.M) ([]efs.Statements, error) {
+	var query *dbox.Filter
+	if search.Has("key") && search.Has("val") {
+		key := toolkit.ToString(search.Get("key", ""))
+		val := toolkit.ToString(search.Get("val", ""))
+		if key != "" && val != "" {
+			query = dbox.Contains(key, val)
+		}
+	}
+
+	data := []efs.Statements{}
+	cursor, err := efs.Find(new(efs.Statements), query, nil)
+	if err != nil {
+		return nil, err
+	}
+	if err := cursor.Fetch(&data, 0, false); err != nil {
+		return nil, err
+	}
+	defer cursor.Close()
+	return data, nil
+}
+
 func (st *StatementController) GetComment(r *knot.WebContext) interface{} {
 	r.Config.OutputType = knot.OutputJson
 
@@ -50,7 +72,7 @@ func (st *StatementController) GetComment(r *knot.WebContext) interface{} {
 	if err := r.GetPayload(&payload); err != nil {
 		return helper.CreateResult(false, nil, err.Error())
 	}
-	data := efs.Getcomment(toolkit.ToString(payload.Get("sveid", "")))
+	data := efs.Getcomment(payload.Get("comment", "").([]string))
 	return helper.CreateResult(true, data, "")
 }
 
@@ -87,6 +109,60 @@ func (st *StatementController) SaveStatement(r *knot.WebContext) interface{} {
 
 	if err := efs.Save(payload); err != nil {
 		return helper.CreateResult(false, nil, err.Error())
+	}
+
+	return helper.CreateResult(true, nil, "")
+}
+
+func (st *StatementController) GetStatement(r *knot.WebContext) interface{} {
+	r.Config.OutputType = knot.OutputJson
+
+	payload := toolkit.M{}
+	if err := r.GetPayload(&payload); err != nil {
+		return helper.CreateResult(false, nil, err.Error())
+	}
+	val := toolkit.ToString(payload.Get("search", ""))
+
+	keyword := toolkit.M{}.Set("key", "_id").Set("val", val)
+	data, err := st.GetStatementList(keyword)
+	if err != nil {
+		return helper.CreateResult(false, nil, err.Error())
+	}
+	return helper.CreateResult(true, data, "")
+}
+
+func (st *StatementController) EditStatement(r *knot.WebContext) interface{} {
+	r.Config.OutputType = knot.OutputJson
+
+	data := efs.Statements{}
+	if err := r.GetPayload(&data); err != nil {
+		return helper.CreateResult(false, nil, err.Error())
+	}
+
+	if err := efs.Get(&data, data.ID); err != nil {
+		return helper.CreateResult(false, "", err.Error())
+	}
+
+	return helper.CreateResult(true, data, "")
+}
+
+func (st *StatementController) RemoveStatement(r *knot.WebContext) interface{} {
+	r.Config.OutputType = knot.OutputJson
+
+	payload := toolkit.M{}
+	if err := r.GetPayload(&payload); err != nil {
+		return helper.CreateResult(false, nil, err.Error())
+	}
+
+	idArray := payload.Get("_id").([]interface{})
+
+	for _, id := range idArray {
+		o := new(efs.Statements)
+		o.ID = id.(string)
+		toolkit.Println("id", o.ID)
+		if err := efs.Delete(o); err != nil {
+			return helper.CreateResult(false, nil, err.Error())
+		}
 	}
 
 	return helper.CreateResult(true, nil, "")
@@ -152,33 +228,11 @@ func (st *StatementController) SaveImageSV(r *knot.WebContext) interface{} {
 	r.Config.OutputType = knot.OutputJson
 
 	imageLocation := filepath.Join(EFS_DATA_PATH, "image", "sv")
-	// index := toolkit.ToInt(r.Request.FormValue("index"), toolkit.RoundingAuto)
 
 	err, imageName := helper.ImageUploadHandler(r, "userfile", imageLocation)
 	if err != nil {
 		return helper.CreateResult(false, "", err.Error())
 	}
-
-	// sv := new(efs.StatementVersion)
-	// sv.ID = toolkit.ToString(r.Request.FormValue("_id"))
-	// if err := efs.Get(sv, sv.ID); err != nil {
-	// 	return helper.CreateResult(false, "", err.Error())
-	// }
-
-	// versionElement := sv.Element
-	// sv.Element = nil
-	// for _, val := range versionElement {
-	// 	if val.StatementElement.Index == index {
-	// 		if val.ImageName != "" { /*if existing formula already has image, delete existing image*/
-	// 			if err := os.Remove(filepath.Join(imageLocation, val.ImageName)); err != nil {
-	// 				return helper.CreateResult(false, "", err.Error())
-	// 			}
-	// 		}
-	// 		val.ImageName = imageName
-	// 	}
-	// 	sv.Element = append(sv.Element, val)
-
-	// }
 
 	return helper.CreateResult(true, imageName, "")
 }
@@ -191,7 +245,7 @@ func (st *StatementController) GetSVBySID(r *knot.WebContext) interface{} {
 		return helper.CreateResult(false, "", err.Error())
 	}
 	keyword := toolkit.M{}.Set("key", "statementid").Set("val", toolkit.ToString(payload.Get("statementid", "")))
-	sv, err := st.Get(keyword)
+	sv, err := st.GetSVList(keyword)
 	if err != nil {
 		return helper.CreateResult(false, "", err.Error())
 	}
@@ -230,21 +284,20 @@ func (st *StatementController) GetStatementVersion(r *knot.WebContext) interface
 	if mode == "" {
 		mode = "new"
 	}
+	result := toolkit.M{}
 	if mode == "new" {
-		sv, err = statement.Run(nil)
+		sv, _, err = statement.Run(nil)
 		if err != nil {
 			return helper.CreateResult(false, sv, err.Error())
 		}
+		result.Set("data", sv)
 	} else if mode == "find" {
 		sv.ID = toolkit.ToString(payload.Get("_id", ""))
 		if err := efs.Get(sv, sv.ID); err != nil {
 			return helper.CreateResult(false, sv, err.Error())
 		}
 
-		//Just for count comment before show, next must be handle in model
-		for ix, _ := range sv.Element {
-			sv.Element[ix].Countcomment = efs.Countcomment(sv.Element[ix].Sveid)
-		}
+		result.Set("data", sv)
 
 	} else if mode == "simulate" {
 		data := toolkit.M{}
@@ -255,46 +308,13 @@ func (st *StatementController) GetStatementVersion(r *knot.WebContext) interface
 		}
 		data.Set("data", sv)
 		sv = nil
-		sv, err = statement.Run(data)
+		sv, comment, err := statement.Run(data)
 		if err != nil {
 			return helper.CreateResult(false, sv, err.Error())
 		}
+		result.Set("data", sv)
+		result.Set("comment", comment)
 	}
 
-	return helper.CreateResult(true, sv, "")
+	return helper.CreateResult(true, result, "")
 }
-
-// func (st *StatementController) EditStatement(r *knot.WebContext) interface{} {
-// 	r.Config.OutputType = knot.OutputJson
-
-// 	data := efs.Statements{}
-// 	if err := r.GetPayload(&data); err != nil {
-// 		return helper.CreateResult(false, nil, err.Error())
-// 	}
-// 	if err := data.GetById(); err != nil {
-// 		return helper.CreateResult(false, nil, err.Error())
-// 	}
-
-// 	return helper.CreateResult(true, data, "")
-// }
-
-// func (st *StatementController) RemoveStatement(r *knot.WebContext) interface{} {
-// 	r.Config.OutputType = knot.OutputJson
-
-// 	payload := map[string]interface{}{}
-// 	if err := r.GetPayload(&payload); !helper.HandleError(err) {
-// 		return helper.CreateResult(false, nil, err.Error())
-// 	}
-
-// 	idArray := payload["_id"].([]interface{})
-
-// 	for _, id := range idArray {
-// 		o := new(efs.Statements)
-// 		o.ID = id.(string)
-// 		if err := o.Delete(); err != nil {
-// 			return helper.CreateResult(false, nil, err.Error())
-// 		}
-// 	}
-
-// 	return helper.CreateResult(true, nil, "")
-// }
