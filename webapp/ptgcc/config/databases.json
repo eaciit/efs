@@ -1,0 +1,10 @@
+{
+    "_id": "database",
+    "data": {
+        "db": "test",
+        "driver": "mongo",
+        "host": "localhost:27017",
+        "pass": "",
+        "user": ""
+    }
+}

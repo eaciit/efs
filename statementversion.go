@@ -3,14 +3,15 @@ package efs
 import (
 	// "github.com/eaciit/dbox"
 	"github.com/eaciit/orm/v1"
-	// "github.com/eaciit/toolkit"
+	"time"
 )
 
 type StatementVersion struct {
 	orm.ModelBase `bson:"-",json:"-"`
-	ID            string `json:"_id",bson:"_id"`
-	Title         string `json:"title",bson:"title"`
-	StatementID   string `json:"statementid",bson:"statementid"`
+	ID            string    `json:"_id",bson:"_id"`
+	Title         string    `json:"title",bson:"title"`
+	Rundate       time.Time `json:"rundate",bson:"rundate"`
+	StatementID   string    `json:"statementid",bson:"statementid"`
 
 	Element []*VersionElement
 }
@@ -35,6 +36,6 @@ type VersionElement struct {
 	ValueTxt         string
 	ValueNum         float64
 	ImageName        string
-	Sveid            string
-	Countcomment     int
+	Comments         []string
+	// Countcomment     int
 }
