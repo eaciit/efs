@@ -1,24 +1,30 @@
 <script src="/res/js/page-efsdesigner.js"></script>
-
+<script src="/res/plugins/eclookup/eclookup.js"></script>
+<link rel="stylesheet" href="/res/plugins/eclookup/eclookup.css" />
+<style>
+	.modal#formula-popup .modal-dialog {
+		width: 75%;
+	}
+</style>
 <div class="col-xs-12 col-sm-12" id="content" data-bind="with: EfsDesigner">
 	<div class="col-md-12" data-bind="visible: (app.section() == 'efsdesigner')">
 		<h1>EFS Editor</h1>
 		<nav class="navbar" data-bind="visible: (app.mode() == '')">
 			<div class="btn-group" role="group">
-		        <button class="btn btn-sm btn-primary mgTop15">
+		        <button class="btn btn-sm btn-primary mgTop15" data-bind="click: ed.getStatement">
 		            <span class="glyphicon glyphicon-refresh"></span> Refresh
 		        </button>
 		        <button class="btn btn-sm btn-primary mgTop15" data-bind="click: addEfs">
 		            <span class="glyphicon glyphicon-plus"></span> Add
 		        </button>
-		        <button class="btn btn-sm btn-danger mgTop15" id="removeEfs">
+		        <button class="btn btn-sm btn-danger mgTop15" id="removeEfs" data-bind="click: removeEfs">
 		            <span class="glyphicon glyphicon-remove"></span> Delete
 		        </button>
 		    </div>
 		</nav>
 		<div class="panel" data-bind="visible: (app.mode() == '')">
 			<div class="panel-body">
-		    	<div class="grid grid-efs" data-bind="kendoGrid: { dataSource: { pageSize: 15 }, data: ed.pageData, change: ed.selectEfs, selectable: 'row', columns: ed.efsColumns, filterfable: false, pageable: true, dataBound: app.gridBoundTooltipster('.grid-efs') }"></div>
+		    	<div class="grid grid-efs" data-bind="kendoGrid: { dataSource: { pageSize: 15 }, data: ed.efsData, change: ed.selectEfs, selectable: 'multiple, row', change: ed.selectGridEfs, columns: ed.efsColumns, filterfable: false, pageable: true }"></div>
 		    </div>
 		    <p class="bg-danger bgcustom">Please click row to edit!</p>
 		</div>
@@ -32,7 +38,7 @@
 		</nav>
 		<div class="panel" data-bind="visible: (app.mode() == 'edit')">
 			<div class="panel-body">
-		    	<form class="form-horizontal form-add-page" data-bind="with: configEfs" novalidate>
+		    	<form class="form-horizontal form-add-efs" data-bind="with: configEfs" novalidate>
 			    	<div class="col-md-12">
 			    		<div class="form-group">
 				    		<label class="col-md-1 databrowser-label">ID</label>
@@ -44,8 +50,14 @@
 			    		<div class="form-group">
 				    		<label class="col-md-1 databrowser-label">Title</label>
 				    		<div class="col-md-5">
-					    		<input required type="text" class="form-control input-sm" name="title" placeholder="Type the page title Here" data-bind="value: Title">
+					    		<input required type="text" class="form-control input-sm" name="title" placeholder="Type the page title Here" data-bind="value: title">
 								<span class="k-invalid-msg" data-for="title"></span>
+				    		</div>
+			    		</div>
+			    		<div class="form-group">
+				    		<label class="col-md-1 databrowser-label">Enable</label>
+				    		<div class="col-md-5">
+					    		<input type="checkbox" data-bind="checked: enable" />
 				    		</div>
 			    		</div>
 		    		</div>
@@ -60,10 +72,140 @@
 					    </div>
 		    		</div>
 		    		<div class="col-md-12 mgTop15">
-		    			<div id="grid-statement" data-bind="kendoGrid: { data: Statement,selectable: 'multiple, row', columns: ed.statementColumns, editable: true, filterfable: false, dataBound: app.gridBoundTooltipster('.grid-statement') }"></div>
+		    			<div id="grid-statement" data-bind="kendoGrid: { data: elements, selectable: 'row', columns: ed.statementColumns, dataSource: {schema: {model:{id: 'index', fields: {index: {editable: false}}}}}, filterfable: false, dataBound: ed.gridStatementDataBound }"></div>
 		    		</div>
 		    	</form>
 		    </div>
 		</div>
 	</div>
+</div>
+
+<!-- Popup Formula -->
+<div class="modal fade" id="formula-popup" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel" data-bind="text:ed.titlePopUp"></h4>
+      </div>
+      <div class="modal-body">
+        <div class="row form-formula">
+        	<div class="col-md-3 nav-command">
+        		<label class="col-md-12 title-command">Account List</label>
+        		<div class="col-md-12" style="height:380px; overflow: auto;">
+        			<ul class="nav" data-bind="foreach: ed.dataFormula.Element()">
+        				<li><a href="#" data-bind="click: function(){ed.selectListAkun($index(),$data)}, text: StatementElement.Title2() != '' ? ($index()+1)+'. '+StatementElement.Title2():($index()+1)+'. '+' '+StatementElement.Title1()"></a></li>
+        			</ul>
+        		</div>
+        	</div>
+        	<div class="col-md-9">
+	        	<label class="col-md-12 title-command">Formula Editor</label>
+	        	<div class="col-md-12 formula-command">
+	        		<div class="btn-group btnKoefisien" role="group" aria-label="..." data-bind="visible: ed.modeFormula() == ''">
+						<button type="button" class="btn btn-primary btn-sm" data-bind="click: function(){ed.selectKoefisien('+')}">+</button>
+						<button type="button" class="btn btn-primary btn-sm" data-bind="click: function(){ed.selectKoefisien('-')}">-</button>
+						<button type="button" class="btn btn-primary btn-sm" data-bind="click: function(){ed.selectKoefisien('*')}">*</button>
+						<button type="button" class="btn btn-primary btn-sm" data-bind="click: function(){ed.selectKoefisien('/')}">/</button>
+					</div>
+					<div class="btn-group btnKoefisien" role="group" aria-label="..." data-bind="visible: ed.modeFormula() == ''">
+						<button type="button" class="btn btn-primary btn-sm" data-bind="click: function(){ed.selectKoefisien('(')}">(</button>
+						<button type="button" class="btn btn-primary btn-sm" data-bind="click: function(){ed.selectKoefisien(')')}">)</button>
+					</div>
+					<div class="btn-group btnKoefisien" role="group" aria-label="...">
+						<button type="button" class="btn btn-primary btn-sm" data-bind="click: function(){ed.selectKoefisienGroup('SUM')}">SUM</button>
+						<button type="button" class="btn btn-primary btn-sm" data-bind="click: function(){ed.selectKoefisienGroup('AVG')}">AVG</button>
+						<button type="button" class="btn btn-primary btn-sm" data-bind="click: function(){ed.selectKoefisienGroup('IF')}">IF</button>
+					</div>
+					<button class="btn btn-primary btnKoefisien btn-sm" data-bind="click: ed.clearFormula"><span class="glyphicon glyphicon-erase"></span></button>
+	        	</div>
+	        	<div class="row" data-bind="visible: ed.modeFormula() == ''">
+		        	<div class="col-md-12 area-editor">
+		        		<span class="col-md-2 databrowser-label">Constant</span>
+			    		<div class="col-md-10">
+				    		<input id="kostanta" data-bind="kendoNumericTextBox:{value:ed.konstanta, placeholder: 'Konstanta'}"/>
+			    		</div>
+		        	</div>
+		        	<div class="col-md-12 area-editor">
+		        		<input type="text" id="formula-editor" />
+		        	</div>
+		        </div>
+		        <div class="row" data-bind="visible: ed.modeFormula() == 'SUM' || ed.modeFormula() == 'AVG'">
+		        	<div class="col-md-12">
+			    		<button class="btn btn-sm btn-warning" data-bind="click: ed.backFormulaEditor"><span class="glyphicon glyphicon-chevron-left"></span> Back</button>
+			    		<button class="btn btn-sm btn-primary" data-bind="click: ed.addParameter"><span class="glyphicon glyphicon-plus"></span> Add Parameter</button>
+			    		<button class="btn btn-sm btn-success" data-bind="click: ed.addKostantaFormula"><span class="glyphicon glyphicon-ok"> OK</button>
+		        	</div>
+		        	<div class="col-md-12">
+		        		<table class="table" id="tablekoefisien">
+							<thead>
+								<tr style="width: 100%;">
+									<th width="45%">From</th>
+									<th width="45%">To</th>
+									<th width="10%"></th>
+								</tr>
+							</thead>
+							<tbody data-bind="foreach: ed.recordKoefisien">
+								<tr>
+									<td data-bind="attr:{idarea: 'koefisien1'+$index()}"><input class='areakoefisien' data-bind="attr:{'id':'koefisien1'+$index()}" /></td>
+									<td data-bind="attr:{idarea: 'koefisien2'+$index()}"><input class='areakoefisien' data-bind="attr:{'id':'koefisien2'+$index()}" /></td>
+									<td>
+										<button class="btn btn-sm btn-danger" data-bind="style: { 'visibility': ($index() > 0) ? 'visible' : 'hidden' }, click: function(){ed.removeKoefisien($data)}"><span class="glyphicon glyphicon-trash"></span></button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+		        	</div>
+		        </div>
+		        <div class="row" data-bind="visible: ed.modeFormula() == 'IF'">
+		        	<div class="col-md-12">
+			    		<button class="btn btn-sm btn-warning" data-bind="click: ed.backFormulaEditor"><span class="glyphicon glyphicon-chevron-left"></span> Back</button>
+			    		<!-- <button class="btn btn-sm btn-primary" data-bind="click: fp.addParameter"><span class="glyphicon glyphicon-plus"></span> Add Parameter</button> -->
+			    		<button class="btn btn-sm btn-success" data-bind="click: ed.addKostantaFormula"><span class="glyphicon glyphicon-ok"> OK</button>
+		        	</div>
+		        	<div class="col-md-12">
+		        		<table class="table" id="tableif">
+							<thead>
+								<tr style="width: 100%;">
+									<th width="20%">Value 1</th>
+									<th width="10%"></th>
+									<th width="20%">Value 2</th>
+									<th width="20%">Result 1</th>
+									<th width="20%">Result 2</th>
+								</tr>
+							</thead>
+							<tbody data-bind="foreach: ed.recordCondition">
+								<tr>
+									<td data-bind="attr:{idarea: 'condition1'+$index()}"><input class='areakoefisien' data-bind="attr:{'id':'condition1'+$index()}" /></td>
+									<td data-bind="attr:{idarea: 'condition'+$index()}">
+										<select class="form-control input-sm" data-bind="value:condition">
+											<option data-bind="text:'=='"></option>
+											<option data-bind="text:'>='"></option>
+											<option data-bind="text:'<='"></option>
+											<option data-bind="text:'>'"></option>
+											<option data-bind="text:'<'"></option>
+										</select>
+									</td>
+									<td data-bind="attr:{idarea: 'condition2'+$index()}"><input class='areakoefisien' data-bind="attr:{'id':'condition2'+$index()}" /></td>
+									<td data-bind="attr:{idarea: 'result1'+$index()}"><input class='areakoefisien' data-bind="attr:{'id':'result1'+$index()}" /></td>
+									<td data-bind="attr:{idarea: 'result2'+$index()}"><input class='areakoefisien' data-bind="attr:{'id':'result2'+$index()}" /></td>
+									<td>
+										<button class="btn btn-sm btn-danger" data-bind="style: { 'visibility': ($index() > 0) ? 'visible' : 'hidden' }, click: function(){ed.removeKoefisien($data)}"><span class="glyphicon glyphicon-trash"></span></button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+		        	</div>
+		        </div>
+        	</div>
+        </div>
+        <div style="clear:both;"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-bind="click:ed.saveFormulaEditor, visible: ed.modeFormula() == ''">OK</button>
+      </div>
+
+    </div>
+  </div>
 </div>
