@@ -40,6 +40,7 @@ func main() {
 	server.RouteStatic("image", filepath.Join(controller.EFS_DATA_PATH, "image"))
 	server.Register(controller.CreateWebController(server), "")
 	server.Register(controller.CreateStatementController(server), "")
+	server.Register(controller.CreateStatementVersionController(server), "")
 	server.Register(controller.CreateLoginController(server), "")
 
 	// server.Route("/", func(r *knot.WebContext) interface{} {
