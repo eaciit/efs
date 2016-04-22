@@ -7,6 +7,7 @@ ed.templateStatement = {
 	Title2:"",
 	Type:0,
 	DataValue: [],
+    DataValueText: "",
 	Show: true,
 	Showformula: true,
 	Bold: false,
@@ -31,6 +32,7 @@ ed.templateFormula = {
         Title2:"",
         Type:1,
         DataValue:[],
+        DataValueText:"",
         Show: true,
         Bold: false,
         NegateValue: false,
@@ -97,6 +99,7 @@ ed.titlePopUp = ko.observable("");
 ed.selectColumn = ko.observable({});
 ed.recordCondition = ko.observableArray([]);
 ed.recordKoefisien = ko.observableArray([]);
+ed.konstanta = ko.observable(0);
 ed.efsColumns = ko.observableArray([
 	{headerTemplate: "<center><input type='checkbox' class='efscheckall' onclick=\"ed.checkDeleteData(this, 'efsall')\"/></center>", width: 50, attributes: { style: "text-align: center;" }, template: function (d) {
 		return [
@@ -122,13 +125,36 @@ ed.statementColumns = ko.observableArray([
             input.kendoDropDownList({
                 dataTextField: "text",
                 dataValueField: "key",
-                dataSource: ed.dataType()
+                dataSource: ed.dataType(),
+                select: function(e){ var dataItem = this.dataItem(e.item), Index = container.parent().index(); ed.selectDDStatement(Index, dataItem, "Type") },
             }).appendTo(container);
         }},
-    // { width: 100, field: "DataValue", title: "Data Value"},
-    { width: 20, title: "Show", editable: true, template: "<center><input type='checkbox' #=Show ? \"checked='checked'\" : ''# class='showfield' data-field='Show' onchange='db.changeCheckboxOnGrid(this)' /></center>", headerTemplate: "<center><input type='checkbox' id='selectallshowfield' onclick=\"ed.checkAll(this, 'ShowField')\" />&nbsp;&nbsp;Show</center>"},
-    { width: 35, title: "Show Formula", editable: true, template: "<center><input type='checkbox' #=Showformula ? \"checked='checked'\" : ''# class='showfield' data-field='ShowFormula' onchange='db.changeCheckboxOnGrid(this)' /></center>", headerTemplate: "<center><input type='checkbox' id='selectallshowformula' onclick=\"ed.checkAll(this, 'ShowFormula')\" />&nbsp;&nbsp;Show Formula</center>"},
-    { width: 20, title: "Bold", editable: true, template: "<center><input type='checkbox' #=Bold ? \"checked='checked'\" : ''# class='bold' data-field='Bold' onchange='db.changeCheckboxOnGrid(this)' /></center>", headerTemplate: "<center><input type='checkbox' id='selectallshowformula' onclick=\"ed.checkAll(this, 'Bold')\" />&nbsp;&nbsp;Bold</center>"},
+    // { width: 100, field: "DataValueText", title: "Data Value", editable: true, template: "#= ed.dataDDOption(DataValueText, 'DataValue') #", 
+    //     editor: function(container, options){
+    //         var Index = container.parent().index();
+    //         var input = $('<input id="dataValue'+Index+'" name="datacolumn" />');
+    //         input.appendTo(container);
+    //         input.ecLookupDD({
+    //             dataSource:{
+    //                 data:[],
+    //             }, 
+    //             placeholder: "Data Value",
+    //             inputType: 'multiple', 
+    //             inputSearch: "value", 
+    //             idField: "id", 
+    //             idText: "title", 
+    //             displayFields: "title", 
+    //             hoverRemove: true,
+    //             addsearch: true,
+    //             displayTemplate: function(){
+    //                 return "<span>#*title#</span>";
+    //             },
+    //         });
+    //     }},
+    { width: 40, field: "DataValueText", title: "Data Value", editable: true},
+    { width: 20, title: "Show", editable: true, template: "<center><input type='checkbox' #=Show ? \"checked='checked'\" : ''# class='showfield' data-field='Show' onchange='ed.changeCheckboxOnGrid(this)' /></center>", headerTemplate: "<center><input type='checkbox' id='selectallshowfield' onclick=\"ed.checkAll(this, 'ShowField')\" />&nbsp;&nbsp;Show</center>"},
+    { width: 35, title: "Show Formula", editable: true, template: "<center><input type='checkbox' #=Showformula ? \"checked='checked'\" : ''# class='showfield' data-field='ShowFormula' onchange='ed.changeCheckboxOnGrid(this)' /></center>", headerTemplate: "<center><input type='checkbox' id='selectallshowformula' onclick=\"ed.checkAll(this, 'ShowFormula')\" />&nbsp;&nbsp;Show Formula</center>"},
+    { width: 20, title: "Bold", editable: true, template: "<center><input type='checkbox' #=Bold ? \"checked='checked'\" : ''# class='bold' data-field='Bold' onchange='ed.changeCheckboxOnGrid(this)' /></center>", headerTemplate: "<center><input type='checkbox' id='selectallshowformula' onclick=\"ed.checkAll(this, 'Bold')\" />&nbsp;&nbsp;Bold</center>"},
     { width: 30, field: "Column", editable: true, title: "Column", template: "#= ed.dataDDOption(Column, 'Column') #",
 		editor: function(container, options) {
             var input = $('<input id="datacolumnId" name="datacolumn" data-bind="value:' + options.field + '">');
@@ -160,18 +186,27 @@ ed.statementColumns = ko.observableArray([
             }).appendTo(container);
         }},
     { title: "Formula", width: 20, attributes: { style: "text-align: center; cursor: pointer;"}, template: function (d) {
-		return [
-			"<button class='btn btn-sm btn-default btn-text-success tooltipster btn-formula' indexstatement='"+d.Index+"' title='"+d.FormulaText.join('')+"'><span class='fa fa-calculator'></span></button>",
-			// "<div onclick='ed.showFormulaEditor("+d.Index+", "+d+")'>"+d.FormulaText.join('')+"</div>",
-		].join(" ");
+        if (d.Type == 50){
+    		return [
+    			"<button class='btn btn-sm btn-default btn-text-success tooltipster btn-formula' indexstatement='"+d.Index+"' title='"+d.FormulaText.join('')+"'><span class='fa fa-calculator'></span></button>",
+    			// "<div onclick='ed.showFormulaEditor("+d.Index+", "+d+")'>"+d.FormulaText.join('')+"</div>",
+    		].join(" ");
+        } else {
+            return "";
+        }
 	} },
 ]);
 
+ed.selectDDStatement = function(Index,dataItem, type){
+    ed.refreshStatement("select",Index, {value: dataItem.key, field: type});
+    $('#grid-statement').data('kendoGrid').dataSource.read();
+    $('#grid-statement').data('kendoGrid').refresh();
+};
 ed.gridStatementDataBound = function () {
 	$("#grid-statement .btn-formula").on("click", function (d) {
 		d.preventDefault();
 		var index = parseInt($(this).attr("indexstatement"));
-		ed.showFormulaEditor(index,ko.mapping.toJS(ed.dataFormula.Element()[index]));
+		ed.showFormulaEditor(index,ko.mapping.toJS(ed.configEfs.elements()[index-1]));
 	})
 
 	app.gridBoundTooltipster('#grid-statement')();
@@ -204,6 +239,12 @@ ed.selectKoefisien = function(event){
 ed.selectKoefisienGroup = function(event){
 	ed.backFormulaEditor();
     ed.modeFormula(event);
+};
+ed.removeKoefisien = function(data){
+    fp.recordKoefisien.remove(data)
+};
+ed.clearFormula = function(){
+    $('#formula-editor').ecLookupDD("clear");
 };
 ed.backFormulaEditor = function(){
     ed.recordKoefisien([]);
@@ -323,7 +364,8 @@ ed.addKostantaFormula = function(){
         }
     }
     if (boolsuccess){
-        $('#formula-editor').ecLookupDD("addLookup",{id:moment().format("hhmmDDYYYYx"), value:resultFormula , koefisien:true});
+        console.log(resultFormula);
+        $('#formula-editor').ecLookupDD("addLookup",{id:moment().format("hhmmDDYYYYx"), value:resultFormula, title: resultFormula , koefisien:true});
         ed.backFormulaEditor();
     }
 };
@@ -385,6 +427,29 @@ ed.addCondition = function(){
         showSearch: false,
         focusable: true,
     });
+};
+ed.saveFormulaEditor = function(){
+    var objFormula = $('#formula-editor').ecLookupDD("get"), resultFormula = "", resultFormulaArr = [];
+    ed.refreshStatement("all", 0, {});
+    ed.configEfs.elements()[ed.selectColumn().index-1].FormulaText([]);
+    for (var i in objFormula){
+        resultFormulaArr.push(objFormula[i].value);
+        ed.configEfs.elements()[ed.selectColumn().index-1].FormulaText.push(objFormula[i].title);
+    }
+    ed.configEfs.elements()[ed.selectColumn().index-1].Formula(resultFormulaArr)
+    $('#formula-editor').ecLookupDD("clear");
+    ed.backFormulaEditor();
+    $('#grid-statement').data('kendoGrid').dataSource.read();
+    $('#grid-statement').data('kendoGrid').refresh();
+    $("#formula-popup").modal("hide");
+};
+ed.refreshStatement = function(type, index, data){
+    var grids = $("#grid-statement").data("kendoGrid"), statement = grids.dataSource.data();
+    var dataStatement = $.extend(true, {}, ko.mapping.toJS(ed.configEfs));
+    dataStatement.elements = JSON.parse(kendo.stringify(statement));
+    if (type == "select")
+        dataStatement.elements[index][data.field] = data.value;
+    ko.mapping.fromJS(dataStatement, ed.configEfs);
 }
 ed.checkAll = function(ele, field) {
     var state = $(ele).is(':checked');    
@@ -498,7 +563,7 @@ ed.changeCheckboxOnGrid = function (o) {
 	db.headerCheckedAll();
 
 	return true;
-}
+};
 ed.dataDDOption = function (opt, typedd) {
 	var dataarr = [];
 	if (typedd == 'Type')
@@ -509,12 +574,16 @@ ed.dataDDOption = function (opt, typedd) {
 		dataarr = ed.dataTransReadType();
 	else if (typedd == 'TimeReadType')
 		dataarr = ed.dataTimeReadType();
-	var type = ko.utils.arrayFilter(dataarr, function (each) {
-        return each.key == opt;
-	});
-	if (type.length > 0)
-		return type[0].text;
-}
+    if (typedd != "DataValue"){
+    	var type = ko.utils.arrayFilter(dataarr, function (each) {
+            return each.key == opt;
+    	});
+        if (type.length > 0)
+            return type[0].text;
+    } else {
+
+    }
+};
 ed.selectAll = function(){
 	$(".grid-efs .select-row").each(function (i, d) {
 		$(d).prop("checked", o.checked);
@@ -539,6 +608,9 @@ ed.saveEfs = function(){
 	var grids = $("#grid-statement").data("kendoGrid"), statement = grids.dataSource.data();
 	var param = ko.mapping.toJS(ed.configEfs);
 	param.elements = JSON.parse(kendo.stringify(statement));
+    for (var i in param.elements){
+        param.elements[i].DataValue = param.elements[i].DataValueText.split(",");
+    }
 	app.ajaxPost("/statement/savestatement", param, function (res) {
         if (!app.isFine(res)) {
             return;
@@ -616,10 +688,37 @@ ed.getStatement = function(){
 		ed.efsData(res.data);
 	});
 }
-
+ed.changeValueVariable = function(index,valueChange){
+    indexElem = index - 2;
+    if (valueChange == true){
+        if (index == 1 && ed.dataFormula.Element()[0].ChangeValue() == false){
+            ed.dataFormula.Element()[0].ChangeValue(true);
+        } else if (index > 1 && ed.dataFormula.Element()[0].ElementVersion()[indexElem].ChangeValue() == false) {
+            ed.dataFormula.Element()[0].ElementVersion()[indexElem].ChangeValue(true);
+        }
+    }
+    if (valueChange == false){
+        if (index == 1 && ed.dataFormula.Element()[0].ChangeValue() == true){
+            ed.dataFormula.Element()[0].ChangeValue(false);
+        } else if (index > 1 && ed.dataFormula.Element()[0].ElementVersion()[indexElem].ChangeValue() == true) {
+            index = index - 2;
+            ed.dataFormula.Element()[0].ElementVersion()[indexElem].ChangeValue(false);
+        }
+    }
+};
 $(function (){
 	ed.getStatement();
 	ed.getDataStatement();
+    $("#kostanta").bind("keyup", function(e) {
+        if (e.keyCode == 13){
+            $('#formula-editor').ecLookupDD("addLookup",{id: moment().format("hhmmDDYYYYx"), value: ed.konstanta().toString(), title: ed.konstanta().toString(), koefisien:true});
+            ed.konstanta(0);
+        }
+    });
+    $(".table-formula-data").bind("keyup",".efs-number", function(e) {
+        var index = $(e.target).closest("td").attr("indexid");
+        ed.changeValueVariable(index, true);
+    });
 	$('#formula-editor').ecLookupDD({
 		dataSource:{
 			data:[],
