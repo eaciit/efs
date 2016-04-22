@@ -568,7 +568,7 @@ fp.addKostantaFormula = function(){
         }
     }
     if (boolsuccess){
-        $('#formula-editor').ecLookupDD("addLookup",{id:moment().format("hhmmDDYYYYx"), value:resultFormula , koefisien:true});
+        $('#formula-editor').ecLookupDD("addLookup",{id:moment().format("hhmmDDYYYYx"), value:resultFormula, title: resultFormula , koefisien:true});
         fp.backFormulaEditor();
     }
 }

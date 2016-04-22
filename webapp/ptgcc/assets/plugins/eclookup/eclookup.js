@@ -63,6 +63,7 @@ var Settings_EcLookup = {
 	minChar: 0,
 	boolClickSearch: false,
 	hoverRemove: false,
+	addsearch: false,
 	displayTemplate: function(){
 		return "";
 	},
@@ -161,7 +162,10 @@ var methodsLookupDD = {
 			        }
                 break;
                 case KEY.ENTER:
-					$co.find('li.hlight').bind('click').click();
+                	if (options.addsearch == false)
+						$co.find('li.hlight').bind('click').click();
+					else
+						$(this).data('ecLookupDD').addDataLookup({id: moment().format("hhmmDDYYYYx"), value: search, title: search});
                 break;
 				case KEY.BACKSPACE:
 					if (search.length > 0 && options.showSearch == true){
