@@ -26,7 +26,7 @@ func (st *StatementVersionController) GetComment(r *knot.WebContext) interface{}
 	if err := r.GetPayload(&payload); err != nil {
 		return helper.CreateResult(false, nil, err.Error())
 	}
-	data := efs.Getcomment(payload.Get("comment", "").([]string))
+	data := efs.Getcomment(payload.Get("comment").([]string))
 	return helper.CreateResult(true, data, "")
 }
 

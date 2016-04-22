@@ -51,15 +51,15 @@ func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion, comments []Commen
 		return
 	}
 
-	if ins.Has("comment") && strings.Contains(toolkit.TypeName(ins["comment"]), ".M") {
+	/*if ins.Has("comment") && strings.Contains(toolkit.TypeName(ins["comment"]), ".M") {
 		arrtkmcom = ins["comment"].([]toolkit.M)
 	} else if ins.Has("comment") {
 		err = errors.New("Comment has wrong format.")
 		return
-	}
+	}*/
 
 	//set array comments and set id for new id
-	for i, val := range arrtkmcom {
+	/*for i, val := range arrtkmcom {
 		comment := Comments{}
 
 		if val.Has("type") && toolkit.ToString(val["type"]) != "delete" {
@@ -71,6 +71,30 @@ func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion, comments []Commen
 			}
 			comments = append(comments, comment)
 		}
+	}*/
+	commentArr := []interface{}{}
+	if ins.Has("comment") {
+		commentArr = ins["comment"].([]interface{})
+	}
+
+	for _, val := range commentArr {
+		commentM, e := toolkit.ToM(val)
+		if e != nil {
+			err = e
+			return
+		}
+		comment := Comments{}
+
+		if commentM.Has("type") && toolkit.ToString(commentM["type"]) != "delete" {
+			toolkit.Serde(commentM, &comment, "json")
+			if comment.ID == "" {
+				comment.ID = toolkit.RandomString(32)
+				commentM.Set("_id", comment.ID)
+			}
+			// comment.Time = time.Now().UTC()
+			comments = append(comments, comment)
+		}
+		arrtkmcom = append(arrtkmcom, commentM)
 	}
 
 	sv.StatementID = e.ID

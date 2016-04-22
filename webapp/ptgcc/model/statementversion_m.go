@@ -110,11 +110,25 @@ func GetSVByRun(payload toolkit.M) (toolkit.M, error) {
 		if err := efs.Get(sv, sv.ID); err != nil {
 			return result, err
 		}
-
+		commentArr := []string{}
+		lenElement := toolkit.SliceLen(sv.Element)
+		for i := 0; i < lenElement; i++ {
+			if toolkit.SliceLen(sv.Element[i].Comments) > 0 {
+				for _, val := range sv.Element[i].Comments {
+					commentArr = append(commentArr, val)
+				}
+			}
+		}
+		comments := efs.Getcomment(commentArr)
 		result.Set("data", sv)
+		result.Set("comment", comments)
 
 	} else if mode == "simulate" {
 		data := toolkit.M{}
+		if payload.Has("comment") {
+			data.Set("comment", payload.Get("comment"))
+			payload.Unset("comment")
+		}
 		data.Set("mode", payload.Get("mode"))
 		payload.Unset("mode")
 		if err := toolkit.Serde(payload, sv, "json"); err != nil {
