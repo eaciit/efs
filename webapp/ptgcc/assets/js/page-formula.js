@@ -73,7 +73,7 @@ fp.saveImage = function(){
         formData.append("userfile", viewModel.fileData().file());   
     }
 
-    app.ajaxPost("/statement/saveimagesv", formData, function (res) {
+    app.ajaxPost("/statementversion/saveimagesv", formData, function (res) {
         if (!app.isFine(res)) {
             return;
         }
@@ -174,7 +174,7 @@ fp.refreshAll = function(){
             statementid : objFormula[0].statementid,
             mode: "find"
         };
-        app.ajaxPost("/statement/getstatementversion", postParam, function(res){
+        app.ajaxPost("/statementversion/getstatementversion", postParam, function(res){
             if(!app.isFine(res)){
                 return;
             }
@@ -186,7 +186,7 @@ fp.refreshAll = function(){
             //     dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], res.data.Element[i] || {});
             // }
             // ko.mapping.fromJS(dataStatement, fp.dataFormula);
-            fp.refreshSimulateByIndex(1, res.data);
+            fp.refreshSimulateByIndex(1, res.data.data);
         });
     }
     if (fp.dataFormula.Element()[0].ElementVersion().length > 0){
@@ -199,7 +199,7 @@ fp.refreshAll = function(){
                     statementid : objFormula[0].statementid,
                     mode: "find"
                 };
-                app.ajaxPost("/statement/getstatementversion", postParam, function(res){
+                app.ajaxPost("/statementversion/getstatementversion", postParam, function(res){
                     if(!app.isFine(res)){
                         return;
                     }
@@ -213,7 +213,7 @@ fp.refreshAll = function(){
                     //     dataStatement.Element[i].ElementVersion[indexyo] = res.data.Element[i];
                     // }
                     // ko.mapping.fromJS(dataStatement, fp.dataFormula);
-                    fp.refreshSimulateByIndex(aa,res.data)
+                    fp.refreshSimulateByIndex(aa,res.data.data)
                 });
             }
         }
@@ -325,7 +325,7 @@ fp.saveStatementNew = function(index){
             };
         }
         if (postParam.title != ''){
-            app.ajaxPost("/statement/savestatementversion", postParam, function(res){
+            app.ajaxPost("/statementversion/savestatementversion", postParam, function(res){
                 if(!app.isFine(res)){
                     return;
                 }
@@ -362,7 +362,7 @@ fp.saveStatementNew = function(index){
             };
         }
         if (postParam.title != ''){
-            app.ajaxPost("/statement/savestatementversion", postParam, function(res){
+            app.ajaxPost("/statementversion/savestatementversion", postParam, function(res){
                 if(!app.isFine(res)){
                     return;
                 }
@@ -579,18 +579,18 @@ fp.clearFormula = function(){
 	$('#formula-editor').ecLookupDD("clear");
 };
 fp.getDataStatement = function(){
-    app.ajaxPost("/statement/getstatementversion", {statementid: "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j", mode: "new"}, function(res){
+    app.ajaxPost("/statementversion/getstatementversion", {statementid: "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j", mode: "new"}, function(res){
         if(!app.isFine(res)){
             return;
         }
-        if (!res.data) {
-            res.data = [];
+        if (!res.data.data) {
+            res.data.data = [];
         }
-        for(var i in res.data.Element){
-            res.data.Element[i] = $.extend({}, fp.templateFormula, res.data.Element[i] || {});
+        for(var i in res.data.data.Element){
+            res.data.data.Element[i] = $.extend({}, fp.templateFormula, res.data.data.Element[i] || {});
         }
-        fp.tempStatementId(res.data.statementid);
-        ko.mapping.fromJS(res.data, fp.dataFormula);
+        fp.tempStatementId(res.data.data.statementid);
+        ko.mapping.fromJS(res.data.data, fp.dataFormula);
         fp.getListSugest();
         fp.refreshHeightTable();
     });
@@ -600,7 +600,7 @@ fp.getDataStatement = function(){
     // ko.mapping.fromJS(dataexample, fp.dataFormula);
 };
 fp.getListSugest = function(){
-    app.ajaxPost("/statement/getsvbysid", {statementid: fp.tempStatementId()}, function(res){
+    app.ajaxPost("/statementversion/getsvbysid", {statementid: fp.tempStatementId()}, function(res){
         if(!app.isFine(res)){
             return;
         }
@@ -660,14 +660,14 @@ fp.selectSimulate = function(index){
                 element : ko.mapping.toJS(fp.dataFormula.Element())
             };
         }
-        app.ajaxPost("/statement/getstatementversion", postParam, function(res){
+        app.ajaxPost("/statementversion/getstatementversion", postParam, function(res){
             if(!app.isFine(res)){
                 return;
             }
             if (!res.data) {
                 res.data = [];
             }
-            fp.refreshSimulateByIndex(index,res.data);
+            fp.refreshSimulateByIndex(index,res.data.data);
         });
     } else {
         if (fp.dataFormula.Element()[0].ElementVersion().length > 0){
@@ -695,33 +695,33 @@ fp.selectSimulate = function(index){
                     element: elementVer
                 };
             }
-            app.ajaxPost("/statement/getstatementversion", postParam, function(res){
+            app.ajaxPost("/statementversion/getstatementversion", postParam, function(res){
                 if(!app.isFine(res)){
                     return;
                 }
                 if (!res.data) {
                     res.data = [];
                 }
-                fp.refreshSimulateByIndex(index,res.data);
+                fp.refreshSimulateByIndex(index,res.data.data);
             });
         }
     }
 };
 fp.addColumn = function(){
-     app.ajaxPost("/statement/getstatementversion", {statementid: fp.tempStatementId(), mode: "new"}, function(res){
+     app.ajaxPost("/statementversion/getstatementversion", {statementid: fp.tempStatementId(), mode: "new"}, function(res){
         if(!app.isFine(res)){
             return;
         }
-        if (!res.data) {
-            res.data = [];
+        if (!res.data.data) {
+            res.data.data = [];
         }
         var datayo = ko.mapping.toJS(fp.dataFormula);
-        for(var i in res.data.Element){
-            res.data.Element[i] = $.extend({}, fp.templateFormula, res.data.Element[i] || {});
+        for(var i in res.data.data.Element){
+            res.data.data.Element[i] = $.extend({}, fp.templateFormula, res.data.data.Element[i] || {});
         }
         var dataStatement = $.extend(true, {}, datayo), elemVer = {};
         for (var i in dataStatement.Element){
-            elemVer = $.extend(true, {}, res.data.Element[i]);
+            elemVer = $.extend(true, {}, res.data.data.Element[i]);
             delete elemVer["ElementVersion"];
             dataStatement.Element[i].ElementVersion.push(elemVer);
         }
@@ -777,7 +777,7 @@ fp.showComment = function(index,sveid,formulatxt,title1,title2){
     else
         fp.titlePopUp("Comment");
     $("#comment-popup").modal("show");
-    app.ajaxPost("/statement/getcomment", {sveid: sveid}, function(res){
+    app.ajaxPost("/statementversion/getcomment", {sveid: sveid}, function(res){
         if(!app.isFine(res)){
             return;
         }
@@ -790,7 +790,7 @@ fp.showComment = function(index,sveid,formulatxt,title1,title2){
 };
 fp.saveComment = function(){
     var dataPost = ko.mapping.toJS(fp.configComment);
-    app.ajaxPost("/statement/savecomment", dataPost, function(res){
+    app.ajaxPost("/statementversion/savecomment", dataPost, function(res){
         if(!app.isFine(res)){
             return;
         }
