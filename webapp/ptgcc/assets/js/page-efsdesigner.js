@@ -441,7 +441,7 @@ ed.checkDeleteData = function(elem, e){
 	}
 };
 ed.getDataStatement = function(){
-    app.ajaxPost("/statement/getstatementversion", {statementid: ed.tempStatementId(), mode: "new"}, function(res){
+    app.ajaxPost("/statementversion/getstatementversion", {statementid: ed.tempStatementId(), mode: "new"}, function(res){
         if(!app.isFine(res)){
             return;
         }

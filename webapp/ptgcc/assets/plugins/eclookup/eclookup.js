@@ -431,17 +431,17 @@ $.ecDataSourceDDLookup = function(element,options){
 					// $(elementLookup).data('ecLookupDD').paramSetting.selectData(dataResult);
 					// HardCode
 					if (dataResult.length>0){
-						app.ajaxPost("/statement/getstatementversion", {statementid: dataResult[0].statementid, _id: dataResult[0]._id, mode: "find"}, function(res){
+						app.ajaxPost("/statementversion/getstatementversion", {statementid: dataResult[0].statementid, _id: dataResult[0]._id, mode: "find"}, function(res){
 							if(!app.isFine(res)){
 					            return;
 					        }
-					        if (!res.data) {
-					            res.data = [];
+					        if (!res.data.data) {
+					            res.data.data = [];
 					        }
 							if($(elementLookup).attr("id") == "version1"){
 								var dataStatement = $.extend(true, {}, fp.templatestatement,ko.mapping.toJS(fp.dataFormula)), elemVer = {}, formulaindex = "", formulatext = "";
-						        for(var i in res.data.Element){
-						            dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], res.data.Element[i] || {});
+						        for(var i in res.data.data.Element){
+						            dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], res.data.data.Element[i] || {});
 						            dataStatement.Element[i].FormulaText = [];
 						            for(var d in dataStatement.Element[i].Formula){
 						            	if (dataStatement.Element[i].Formula[d].substring(0,1) == "@")
@@ -467,9 +467,9 @@ $.ecDataSourceDDLookup = function(element,options){
 							    for (var i in dataStatement.Element){
 							    	dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], ko.mapping.toJS(fp.dataFormula.Element()[i]) || {});
 							        indexyo = parseInt(indexVer) - 2;
-							        res.data.Element[i]["FormulaText"] = [];
-							        res.data.Element[i]["ChangeValue"] = false;
-							        dataStatement.Element[i].ElementVersion[indexyo] = res.data.Element[i];
+							        res.data.data.Element[i]["FormulaText"] = [];
+							        res.data.data.Element[i]["ChangeValue"] = false;
+							        dataStatement.Element[i].ElementVersion[indexyo] = res.data.data.Element[i];
 							        dataStatement.Element[i].ElementVersion[indexyo].FormulaText = [];
 							        for(var d in dataStatement.Element[i].ElementVersion[indexyo].Formula){
 						            	if (dataStatement.Element[i].ElementVersion[indexyo].Formula[d].substring(0,1) == "@")
