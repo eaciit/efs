@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"github.com/eaciit/efs"
 	"github.com/eaciit/efs/webapp/ptgcc/helper"
 	"github.com/eaciit/efs/webapp/ptgcc/model"
 	"github.com/eaciit/knot/knot.v1"
@@ -26,11 +25,12 @@ func (st *StatementVersionController) GetComment(r *knot.WebContext) interface{}
 	if err := r.GetPayload(&payload); err != nil {
 		return helper.CreateResult(false, nil, err.Error())
 	}
-	data := efs.Getcomment(payload.Get("comment").([]string))
+	data := efscore.GetComment(payload)
+
 	return helper.CreateResult(true, data, "")
 }
 
-func (st *StatementVersionController) SaveComment(r *knot.WebContext) interface{} {
+/*func (st *StatementVersionController) SaveComment(r *knot.WebContext) interface{} {
 	r.Config.OutputType = knot.OutputJson
 
 	payload := new(efscore.Comment)
@@ -42,7 +42,7 @@ func (st *StatementVersionController) SaveComment(r *knot.WebContext) interface{
 	}
 
 	return helper.CreateResult(true, nil, "")
-}
+}*/
 
 func (st *StatementVersionController) RemoveComment(r *knot.WebContext) interface{} {
 	r.Config.OutputType = knot.OutputJson
@@ -61,11 +61,15 @@ func (st *StatementVersionController) RemoveComment(r *knot.WebContext) interfac
 func (st *StatementVersionController) SaveStatementVersion(r *knot.WebContext) interface{} {
 	r.Config.OutputType = knot.OutputJson
 
-	payload := new(efscore.StatementVersion)
+	// payload := new(efscore.StatementVersion)
+	payload := toolkit.M{}
 	if err := r.GetPayload(&payload); err != nil {
 		return helper.CreateResult(false, "", err.Error())
 	}
-	if err := payload.Save(); err != nil {
+	/*if err := payload.Save(); err != nil {
+		return helper.CreateResult(false, nil, err.Error())
+	}*/
+	if err := new(efscore.StatementVersion).Save(payload); err != nil {
 		return helper.CreateResult(false, nil, err.Error())
 	}
 
