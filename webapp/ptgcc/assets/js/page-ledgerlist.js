@@ -45,7 +45,7 @@ ll.removeLedgerList = function(){
 	if (ll.tempCheckIdLedger().length === 0) {
 		swal({
 			title: "",
-			text: 'You havent choose any datasource to delete',
+			text: 'You havent choose any ledger list to delete',
 			type: "warning",
 			confirmButtonColor: "#DD6B55",
 			confirmButtonText: "OK",
@@ -67,7 +67,7 @@ ll.removeLedgerList = function(){
 						return;
 					}
 					ll.backToFront();
-					swal({ title: "Efs(s) successfully deleted", type: "success" });
+					swal({ title: "Ledger List(s) successfully deleted", type: "success" });
 				});
 			}, 1000);
 		});
