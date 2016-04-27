@@ -1,0 +1,69 @@
+<script src="/res/js/page-ledgerlist.js"></script>
+<div class="col-xs-12 col-sm-12" id="content" data-bind="with: LedgerList">
+	<div class="col-md-12" data-bind="visible: (app.section() == 'ledgerlist')">
+		<h1>EFS Editor</h1>
+		<nav class="navbar" data-bind="visible: (app.mode() == '')">
+			<div class="btn-group" role="group">
+		        <button class="btn btn-sm btn-primary mgTop15" data-bind="click: ll.getLedgerList">
+		            <span class="glyphicon glyphicon-refresh"></span> Refresh
+		        </button>
+		        <button class="btn btn-sm btn-primary mgTop15" data-bind="click: addLedgerList">
+		            <span class="glyphicon glyphicon-plus"></span> Add
+		        </button>
+		        <button class="btn btn-sm btn-danger mgTop15" id="removeLedgerList" data-bind="click: removeLedgerList">
+		            <span class="glyphicon glyphicon-remove"></span> Delete
+		        </button>
+		    </div>
+		</nav>
+		<div class="panel" data-bind="visible: (app.mode() == '')">
+			<div class="panel-body">
+		    	<div class="grid grid-efs" data-bind="kendoGrid: { dataSource: { pageSize: 15 }, data: ll.ledgerListData, selectable: 'multiple, row', change: ll.selectGridLedgerList, columns: ll.ledgerListColumns, filterfable: false, pageable: true }"></div>
+		    </div>
+		    <p class="bg-danger bgcustom">Please click row to edit!</p>
+		</div>
+		<nav class="navbar" data-bind="visible: (app.mode() == 'edit')">
+			<button class="btn btn-sm btn-warning navbar-btn" data-bind="click: backToFront">
+	    		<span class="glyphicon glyphicon-chevron-left"></span> Back
+	    	</button>
+            <button class="btn btn-sm btn-primary navbar-btn" data-bind="click: saveLedgerList">
+	    		<span class="glyphicon glyphicon-save"></span> Save
+	    	</button>
+		</nav>
+		<div class="panel" data-bind="visible: (app.mode() == 'edit')">
+			<div class="panel-body">
+		    	<form class="form-horizontal form-add-efs" data-bind="with: configLedgerList" novalidate>
+			    	<div class="col-md-12">
+			    		<div class="form-group">
+				    		<label class="col-md-1 databrowser-label">ID</label>
+				    		<div class="col-md-5">
+					    		<input required type="text" class="form-control input-sm" name="_id" placeholder="Type the page id Here" data-bind="value: _id">
+								<span class="k-invalid-msg" data-for="_id"></span>
+				    		</div>
+			    		</div>
+			    		<div class="form-group">
+				    		<label class="col-md-1 databrowser-label">Title</label>
+				    		<div class="col-md-5">
+					    		<input required type="text" class="form-control input-sm" name="title" placeholder="Type the page title Here" data-bind="value: title">
+								<span class="k-invalid-msg" data-for="title"></span>
+				    		</div>
+			    		</div>
+			    		<div class="form-group">
+				    		<label class="col-md-1 databrowser-label">Type</label>
+				    		<div class="col-md-5">
+					    		<input data-bind="kendoDropDownList:{dataTextField:'text', dataValueField: 'value', dataSource: ll.dataType, value: type}" />
+				    		</div>
+			    		</div>
+			    		<div class="form-group" data-bind="visible: type() == 'Group'">
+				    		<label class="col-md-1 databrowser-label">Group</label>
+				    		<div class="col-md-5">
+					    		<input data-bind="kendoMultiSelect:{dataSource: ll.dataGroup(), value: group}" />
+				    		</div>
+			    		</div>
+		    		</div>
+		    	</form>
+
+		    </div>
+		</div>
+
+	</div>
+</div>

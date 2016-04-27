@@ -634,9 +634,6 @@ ed.selectAll = function(){
 		$(d).prop("checked", o.checked);
 	});
 };
-ed.selectEfs = function(){
-
-};
 ed.addEfs = function(){
 	app.mode("edit");
 	ko.mapping.fromJS(ed.templateEfs, ed.configEfs);

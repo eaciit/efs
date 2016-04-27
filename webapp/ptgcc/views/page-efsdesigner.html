@@ -24,7 +24,7 @@
 		</nav>
 		<div class="panel" data-bind="visible: (app.mode() == '')">
 			<div class="panel-body">
-		    	<div class="grid grid-efs" data-bind="kendoGrid: { dataSource: { pageSize: 15 }, data: ed.efsData, change: ed.selectEfs, selectable: 'multiple, row', change: ed.selectGridEfs, columns: ed.efsColumns, filterfable: false, pageable: true }"></div>
+		    	<div class="grid grid-efs" data-bind="kendoGrid: { dataSource: { pageSize: 15 }, data: ed.efsData, selectable: 'multiple, row', change: ed.selectGridEfs, columns: ed.efsColumns, filterfable: false, pageable: true }"></div>
 		    </div>
 		    <p class="bg-danger bgcustom">Please click row to edit!</p>
 		</div>
