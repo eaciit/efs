@@ -41,7 +41,7 @@ func (w *WebController) EfsDesigner(r *knot.WebContext) interface{} {
 	return true
 }
 
-func (w *WebController) LedgerList(r *knot.WebContext) interface{} {
+func (w *WebController) Accounts(r *knot.WebContext) interface{} {
 	r.Config.OutputType = knot.OutputTemplate
 	r.Config.LayoutTemplate = LayoutFile
 	r.Config.IncludeFiles = IncludeFiles

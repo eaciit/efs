@@ -6,7 +6,7 @@ ly.session  = ko.observable('');
 ly.username = ko.observable('');
 
 ly.varMenu = [{"id":"formula", "title":"EFS", "childrens":[], "link":"/web/index"},
-			{"id":"ledgerlist", "title":"Ledger List", "childrens":[], "link":"/web/ledgerlist"},
+			{"id":"accounts", "title":"Accounts", "childrens":[], "link":"/web/accounts"},
 			{"id":"simulation", "title":"EFS Designer", "childrens":[], "link":"/web/efsdesigner"}];
 ly.element = function(data){
 	console.log(data.length);
