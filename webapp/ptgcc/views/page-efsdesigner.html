@@ -71,10 +71,12 @@
 					        </button>
 					    </div>
 		    		</div>
-		    		<div class="col-md-12 mgTop15">
-		    			<div id="grid-statement" data-bind="kendoGrid: { data: elements, selectable: 'row', columns: ed.statementColumns, dataSource: {schema: {model:{id: 'index', fields: {index: {editable: false}}}}},editable:true, filterfable: false, dataBound: ed.gridStatementDataBound }"></div>
-		    		</div>
 		    	</form>
+
+		    		<div class="col-md-12 mgTop15">
+		    			<div id="grid-statement" data-bind="kendoGrid: { data: ed.configEfs.elements, selectable: 'row', columns: ed.statementColumns, dataSource: {batch: false,schema: {model:{id: 'index', fields: {index: {editable: false}}}}},editable:true, filterfable: false, dataBound: ed.gridStatementDataBound }"></div>
+		    			<!-- <div id="grid-statement"></div> -->
+		    		</div>
 		    </div>
 		</div>
 	</div>
@@ -134,7 +136,7 @@
 		        	<div class="col-md-12">
 			    		<button class="btn btn-sm btn-warning" data-bind="click: ed.backFormulaEditor"><span class="glyphicon glyphicon-chevron-left"></span> Back</button>
 			    		<button class="btn btn-sm btn-primary" data-bind="click: ed.addParameter"><span class="glyphicon glyphicon-plus"></span> Add Parameter</button>
-			    		<button class="btn btn-sm btn-success" data-bind="click: ed.addKostantaFormula"><span class="glyphicon glyphicon-ok"> OK</button>
+			    		<button class="btn btn-sm btn-success" data-bind="click: ed.addKostantaFormula"><span class="glyphicon glyphicon-ok"></span> OK</button>
 		        	</div>
 		        	<div class="col-md-12">
 		        		<table class="table" id="tablekoefisien">
@@ -161,7 +163,7 @@
 		        	<div class="col-md-12">
 			    		<button class="btn btn-sm btn-warning" data-bind="click: ed.backFormulaEditor"><span class="glyphicon glyphicon-chevron-left"></span> Back</button>
 			    		<!-- <button class="btn btn-sm btn-primary" data-bind="click: fp.addParameter"><span class="glyphicon glyphicon-plus"></span> Add Parameter</button> -->
-			    		<button class="btn btn-sm btn-success" data-bind="click: ed.addKostantaFormula"><span class="glyphicon glyphicon-ok"> OK</button>
+			    		<button class="btn btn-sm btn-success" data-bind="click: ed.addKostantaFormula"><span class="glyphicon glyphicon-ok"></span> OK</button>
 		        	</div>
 		        	<div class="col-md-12">
 		        		<table class="table" id="tableif">

@@ -8,6 +8,7 @@ ed.templateStatement = {
 	Type:0,
 	DataValue: [],
     DataValueText: "",
+    DataValueTemp: [],
 	Show: true,
 	Showformula: true,
 	Bold: false,
@@ -78,6 +79,7 @@ ed.dataTimeReadType = ko.observableArray([
 	{ key: 4, text: "Last Quarter" },
 	{ key: 5, text: "Last Year" },
 ]);
+ed.dataDataValue = ko.observableArray([]);
 ed.templatestatement = {
     _id: "",
     Title: "",
@@ -116,8 +118,8 @@ ed.statementColumns = ko.observableArray([
 		].join(" ");
 	}},
 	{ width: 15, field: "Index", title: "No", editable: false },
-	{ width: 70, field: "Title1", title: "Title 1", editable: true},
-	{ width: 70, field: "Title2", title: "Title 2", editable: true},
+	{ width: 60, field: "Title1", title: "Title 1", editable: true},
+	{ width: 60, field: "Title2", title: "Title 2", editable: true},
 	{ width: 35, field: "Type", editable: true, title: "Type", template: "#= ed.dataDDOption(Type, 'Type') #",
 		editor: function(container, options) {
             var input = $('<input id="datatypeId" name="datatype" data-bind="value:' + options.field + '">');
@@ -129,33 +131,24 @@ ed.statementColumns = ko.observableArray([
                 select: function(e){ var dataItem = this.dataItem(e.item), Index = container.parent().index(); ed.selectDDStatement(Index, dataItem, "Type") },
             }).appendTo(container);
         }},
-    // { width: 100, field: "DataValueText", title: "Data Value", editable: true, template: "#= ed.dataDDOption(DataValueText, 'DataValue') #", 
-    //     editor: function(container, options){
-    //         var Index = container.parent().index();
-    //         var input = $('<input id="dataValue'+Index+'" name="datacolumn" />');
-    //         input.appendTo(container);
-    //         input.ecLookupDD({
-    //             dataSource:{
-    //                 data:[],
-    //             }, 
-    //             placeholder: "Data Value",
-    //             inputType: 'multiple', 
-    //             inputSearch: "value", 
-    //             idField: "id", 
-    //             idText: "title", 
-    //             displayFields: "title", 
-    //             hoverRemove: true,
-    //             addsearch: true,
-    //             displayTemplate: function(){
-    //                 return "<span>#*title#</span>";
-    //             },
-    //         });
-    //     }},
-    { width: 40, field: "DataValueText", title: "Data Value", editable: true},
+    // { width: 40, field: "DataValueText", title: "Data Value", editable: true},
+    { width: 40, field: "DataValueText", title: "Data Value", values: ed.dataDataValue(), editable: true, template: "#= ed.dataDDOption(DataValueTemp, 'DataValue') #", 
+        editor: function(container, options){
+            var input = $('<input id="datavalueId" name="datavaluecolumn" data-bind="value:DataValueTemp">');
+            input.appendTo(container);
+            input.kendoMultiSelect({
+                animation: false,
+                dataTextField: "text",
+                dataValueField: "value",
+                dataSource: ed.dataDataValue(),
+                dataBound: ed.filtermultiselect,
+                select: ed.onSelectmulti,
+            }).appendTo(container);
+        }},
     { width: 20, title: "Show", editable: true, template: "<center><input type='checkbox' #=Show ? \"checked='checked'\" : ''# class='showfield' data-field='Show' onchange='ed.changeCheckboxOnGrid(this)' /></center>", headerTemplate: "<center><input type='checkbox' id='selectallshowfield' onclick=\"ed.checkAll(this, 'ShowField')\" />&nbsp;&nbsp;Show</center>"},
     { width: 35, title: "Show Formula", editable: true, template: "<center><input type='checkbox' #=Showformula ? \"checked='checked'\" : ''# class='showfield' data-field='ShowFormula' onchange='ed.changeCheckboxOnGrid(this)' /></center>", headerTemplate: "<center><input type='checkbox' id='selectallshowformula' onclick=\"ed.checkAll(this, 'ShowFormula')\" />&nbsp;&nbsp;Show Formula</center>"},
     { width: 20, title: "Bold", editable: true, template: "<center><input type='checkbox' #=Bold ? \"checked='checked'\" : ''# class='bold' data-field='Bold' onchange='ed.changeCheckboxOnGrid(this)' /></center>", headerTemplate: "<center><input type='checkbox' id='selectallshowformula' onclick=\"ed.checkAll(this, 'Bold')\" />&nbsp;&nbsp;Bold</center>"},
-    { width: 30, field: "Column", editable: true, title: "Column", template: "#= ed.dataDDOption(Column, 'Column') #",
+    { width: 20, field: "Column", editable: true, title: "Column", template: "#= ed.dataDDOption(Column, 'Column') #",
 		editor: function(container, options) {
             var input = $('<input id="datacolumnId" name="datacolumn" data-bind="value:' + options.field + '">');
             input.appendTo(container);
@@ -182,7 +175,7 @@ ed.statementColumns = ko.observableArray([
             input.kendoDropDownList({
                 dataTextField: "text",
                 dataValueField: "key",
-                dataSource: ed.dataTimeReadType()
+                dataSource: ed.dataTimeReadType(),
             }).appendTo(container);
         }},
     { title: "Formula", width: 20, attributes: { style: "text-align: center; cursor: pointer;"}, template: function (d) {
@@ -196,18 +189,64 @@ ed.statementColumns = ko.observableArray([
         }
 	} },
 ]);
+var newItem = "";
+ed.filtermultiselect = function(e){
+    if ((newItem || this._prev) && newItem !== this._prev) {
+        var ds = this.dataSource,
+            datas = ds.data(),
+            lastItem = datas[datas.length - 1];
 
+        newItem = this._prev;
+
+        if (datas.length > 0){
+            if (/\(Add New\)$/i.test(lastItem.text)) {
+                ds.remove(lastItem);
+                ed.dataDataValue.remove(function (item) { return item.text == lastItem.text; });
+            }
+        }
+        var newEntryFound = _.findWhere(datas, { text: newItem }) != null;
+        if (newItem.length > 0 && !newEntryFound) {
+            ds.add({ text: newItem + " (Add New)" , value: newItem});
+            ed.dataDataValue.push({ text: newItem  + " (Add New)", value: newItem });
+            this.open();
+        }
+        // if (datas.length > 0){
+        //     if (/\(Add New\)$/i.test(lastItem)) {
+        //         ds.remove(lastItem);
+        //     }
+        // }
+
+        // var newEntryFound = _.find(datas, function(e){ return e == newItem; });
+        // if (newItem.length > 0 && newEntryFound == undefined) {
+        //     ds.data().push(newItem + " (Add New)");
+        //     this.open();
+        // }
+    }
+};
+ed.onSelectmulti = function(e) {
+  var dataItem = this.dataSource.view()[e.item.index()],
+      datas = this.dataSource.data(),
+      lastData = datas[datas.length - 1];
+  // if (parseInt(dataItem) > 0) {
+  //   this.dataSource.remove(lastData);            
+  // } else {
+  //   dataItem = dataItem.replace(" (Add New)", "");
+  // }
+  dataItem.text = dataItem.text.replace(" (Add New)", "");
+  ed.dataDataValue()[datas.length - 1].text = ed.dataDataValue()[datas.length - 1].text.replace(" (Add New)", "");
+};
 ed.selectDDStatement = function(Index,dataItem, type){
     ed.refreshStatement("select",Index, {value: dataItem.key, field: type});
+    ed.setDataSource("select", dataItem.key);
     $('#grid-statement').data('kendoGrid').dataSource.read();
     $('#grid-statement').data('kendoGrid').refresh();
 };
-ed.gridStatementDataBound = function () {
+ed.gridStatementDataBound = function (e) {
 	$("#grid-statement .btn-formula").on("click", function (d) {
 		d.preventDefault();
 		var index = parseInt($(this).attr("indexstatement"));
 		ed.showFormulaEditor(index,ko.mapping.toJS(ed.configEfs.elements()[index-1]));
-	})
+	});
 
 	app.gridBoundTooltipster('#grid-statement')();
 };
@@ -241,7 +280,7 @@ ed.selectKoefisienGroup = function(event){
     ed.modeFormula(event);
 };
 ed.removeKoefisien = function(data){
-    fp.recordKoefisien.remove(data)
+    fp.recordKoefisien.remove(data);
 };
 ed.clearFormula = function(){
     $('#formula-editor').ecLookupDD("clear");
@@ -364,7 +403,6 @@ ed.addKostantaFormula = function(){
         }
     }
     if (boolsuccess){
-        console.log(resultFormula);
         $('#formula-editor').ecLookupDD("addLookup",{id:moment().format("hhmmDDYYYYx"), value:resultFormula, title: resultFormula , koefisien:true});
         ed.backFormulaEditor();
     }
@@ -580,8 +618,15 @@ ed.dataDDOption = function (opt, typedd) {
     	});
         if (type.length > 0)
             return type[0].text;
-    } else {
-
+    } else if (typedd == "DataValue" && opt.length > 0){
+        var result = [];
+        for (var i=0; i < opt.length; i++){
+            result.push(opt[i].text);
+            // result.push(opt[i]);
+        }
+        return result.join(', ');
+    } else if (typedd == "DataValue" && opt.length == 0){
+        return "";
     }
 };
 ed.selectAll = function(){
@@ -596,6 +641,7 @@ ed.addEfs = function(){
 	app.mode("edit");
 	ko.mapping.fromJS(ed.templateEfs, ed.configEfs);
 	ed.addStatement();
+    ed.setDataSource('all','');
 };
 ed.backToFront = function(){
 	app.mode("");
@@ -605,11 +651,15 @@ ed.saveEfs = function(){
 	if (!app.isFormValid(".form-add-efs")) {
 		return;
 	}
-	var grids = $("#grid-statement").data("kendoGrid"), statement = grids.dataSource.data();
+	var grids = $("#grid-statement").data("kendoGrid"), statement = grids.dataSource.data(), arrayValue = [];
 	var param = ko.mapping.toJS(ed.configEfs);
 	param.elements = JSON.parse(kendo.stringify(statement));
-    for (var i in param.elements){
-        param.elements[i].DataValue = param.elements[i].DataValueText.split(",");
+    for (i = 0; i < param.elements.length; i++){
+        arrayValue = [];
+        for (a = 0; a < param.elements[i].DataValueTemp.length; a++){
+            arrayValue.push(param.elements[i].DataValueTemp[a].text);
+        }
+        param.elements[i].DataValue = arrayValue;
     }
 	app.ajaxPost("/statement/savestatement", param, function (res) {
         if (!app.isFine(res)) {
@@ -635,7 +685,29 @@ ed.editEfs = function(_id){
 
 		app.mode("edit");	
 		app.resetValidation(".form-add-efs");
+        var dataValue = [], dataDataValue = [];
+        for(i = 0; i < res.data.elements.length; i++){
+            res.data.elements[i] = $.extend({}, ed.templateStatement, res.data.elements[i] || {});
+            dataValue = [];
+            for(a = 0; a < res.data.elements[i].DataValue.length; a++){
+                dataDataValue = ko.utils.arrayFilter(ed.dataDataValue(), function (each) {
+                    return each.value == res.data.elements[i].DataValue[a];
+                });
+                if (dataDataValue.length == 0){
+                    ed.dataDataValue.push({
+                        text: res.data.elements[i].DataValue[a],
+                        value: res.data.elements[i].DataValue[a],
+                    });
+                }
+                dataValue.push({
+                    text: res.data.elements[i].DataValue[a],
+                    value: res.data.elements[i].DataValue[a],
+                });
+            }
+            res.data.elements[i].DataValueTemp = dataValue;
+        }
 		ko.mapping.fromJS(res.data, ed.configEfs);	
+        ed.setDataSource('all','');
 	});
 }
 ed.removeEfs = function(){
@@ -671,12 +743,33 @@ ed.removeEfs = function(){
 	} 
 }
 ed.addStatement = function(){
-	var dataStatement = $.extend(true, {}, ko.mapping.toJS(ed.configEfs)), confStatement = ed.templateStatement;
+    var grids = $("#grid-statement").data("kendoGrid"), statement = grids.dataSource.data();
+    var param = ko.mapping.toJS(ed.configEfs);
+    param.elements = JSON.parse(kendo.stringify(statement));
+
+	var dataStatement = $.extend(true, {}, param), confStatement = ed.templateStatement;
 	confStatement.Index = dataStatement.elements.length+1;
 	dataStatement.elements.push(confStatement);
 	ko.mapping.fromJS(dataStatement, ed.configEfs);
 };
+Array.prototype.removeArray = function(name, value){
+   var array = $.map(this, function(v,i){
+      return v[name] === value ? null : v;
+   });
+   this.length = 0;
+   this.push.apply(this, array);
+}
 ed.removeStatement = function(){
+    var grids = $("#grid-statement").data("kendoGrid"), statement = grids.dataSource.data();
+    var param = ko.mapping.toJS(ed.configEfs);
+    param.elements = JSON.parse(kendo.stringify(statement));
+    $("#grid-statement .statementcheck:checked").each(function() {
+        param.elements.removeArray("Index", parseInt($(this).attr("idcheck")));
+    });
+    for (var i in param.elements){
+        param.elements[i].Index = parseInt(i) + 1;
+    }
+    ko.mapping.fromJS(param, ed.configEfs);
 
 };
 ed.getStatement = function(){
@@ -687,7 +780,7 @@ ed.getStatement = function(){
 
 		ed.efsData(res.data);
 	});
-}
+};
 ed.changeValueVariable = function(index,valueChange){
     indexElem = index - 2;
     if (valueChange == true){
@@ -705,6 +798,33 @@ ed.changeValueVariable = function(index,valueChange){
             ed.dataFormula.Element()[0].ElementVersion()[indexElem].ChangeValue(false);
         }
     }
+};
+ed.setDataSource = function(choose, valuetype){
+    var fieldsDs = {
+            Index: { editable: false }, 
+            DataValueText: { editable: false }, 
+            TransactionReadType: { editable: false }, 
+            TimeReadType: { editable: false }, 
+        }
+    console.log(valuetype);
+    if (valuetype == 1 || valuetype == 2){
+        fieldsDs = {
+            Index: { editable: false }, 
+        }
+    }
+    console.log(fieldsDs);
+    var ds = new kendo.data.DataSource({
+        batch: true,
+        schema: { 
+            model: { 
+                id: 'Index', 
+                fields: fieldsDs
+            } 
+        },
+        data: ko.mapping.toJS(ed.configEfs.elements())
+    });
+
+    $("#grid-statement").data("kendoGrid").setDataSource(ds);
 };
 $(function (){
 	ed.getStatement();
