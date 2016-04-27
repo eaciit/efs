@@ -16,15 +16,42 @@ type Comment struct {
 	efs.Comments
 }
 
-func (cm *Comment) Save() error {
-	if cm.ID == "" {
-		cm.ID = toolkit.RandomString(32)
+func GetComment(payload toolkit.M) []efs.Comments {
+	var commentArr []string
+	for _, comment := range payload.Get("comment").([]interface{}) {
+		commentArr = append(commentArr, comment.(string))
 	}
-	cm.Time = time.Now().UTC()
+	return efs.Getcomment(commentArr)
+}
 
-	if err := efs.Save(cm); err != nil {
-		return err
+func (cm *Comment) Save(data toolkit.M) error {
+	for _, val := range data.Get("comment").([]interface{}) {
+		comment, err := toolkit.ToM(val)
+		if err != nil {
+			return err
+		}
+		_type := toolkit.ToString(comment.Get("type", ""))
+		comment.Unset("type")
+		comment.Set("time", time.Now().UTC())
+		if err := toolkit.Serde(comment, cm, "json"); err != nil {
+			return err
+		}
+		if _type == "add" || _type == "update" {
+			/*if cm.ID == "" {
+				cm.ID = toolkit.RandomString(32)
+			}
+			cm.Time = time.Now().UTC()*/
+			if err := efs.Save(cm); err != nil {
+				return err
+			}
+		} else if _type == "delete" {
+			if err := efs.Delete(cm); err != nil {
+				return err
+			}
+
+		}
 	}
+
 	return nil
 }
 
@@ -154,22 +181,36 @@ func (sv *StatementVersion) GetById() error {
 	return nil
 }
 
-func (sv *StatementVersion) Save() error {
-	query := dbox.And(dbox.Eq("statementid", sv.StatementID), dbox.Eq("title", sv.Title))
+func (sv *StatementVersion) Save(payload toolkit.M) error {
+	data := toolkit.M{}
+	SVersion := new(efs.StatementVersion)
+	if payload.Has("comment") {
+		data.Set("comment", payload.Get("comment"))
+		payload.Unset("comment")
+	}
+	if err := toolkit.Serde(payload, SVersion, "json"); err != nil {
+		return err
+	}
+
+	query := dbox.And(dbox.Eq("statementid", SVersion.StatementID), dbox.Eq("title", SVersion.Title))
 
 	svFind := new(efs.StatementVersion)
 	cursor, _ := efs.Find(svFind, query, nil)
 	cursor.Fetch(&svFind, 1, false)
 	defer cursor.Close()
 
-	if cursor.Count() > 0 && sv.ID == "" {
+	if cursor.Count() > 0 && SVersion.ID == "" {
 		return errors.New("please choose another new title")
 	}
-	if sv.ID == "" {
-		sv.ID = toolkit.RandomString(32)
+	if SVersion.ID == "" {
+		SVersion.ID = toolkit.RandomString(32)
 	}
 
-	if err := efs.Save(sv); err != nil {
+	if err := efs.Save(SVersion); err != nil {
+		return err
+	}
+
+	if err := new(Comment).Save(data); err != nil {
 		return err
 	}
 	return nil
