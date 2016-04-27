@@ -711,7 +711,7 @@ ed.removeEfs = function(){
 	if (ed.tempCheckIdEfs().length === 0) {
 		swal({
 			title: "",
-			text: 'You havent choose any datasource to delete',
+			text: 'You havent choose any efs to delete',
 			type: "warning",
 			confirmButtonColor: "#DD6B55",
 			confirmButtonText: "OK",
