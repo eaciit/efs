@@ -442,6 +442,7 @@ $.ecDataSourceDDLookup = function(element,options){
 					        if (!res.data.data) {
 					            res.data.data = [];
 					        }
+					        var indexcomment = 0;
 							if($(elementLookup).attr("id") == "version1"){
 								var dataStatement = $.extend(true, {}, fp.templatestatement,ko.mapping.toJS(fp.dataFormula)), elemVer = {}, formulaindex = "", formulatext = "";
 						        for(var i in res.data.data.Element){
@@ -465,6 +466,7 @@ $.ecDataSourceDDLookup = function(element,options){
 							            	dataStatement.Element[i].FormulaText.push(dataStatement.Element[i].Formula[d]+" ");
 						            }
 						        }
+						        indexcomment = 1;
 						        ko.mapping.fromJS(dataStatement, fp.dataFormula);
 							} else {
 					            var dataStatement = $.extend(true, {}, ko.mapping.toJS(fp.dataFormula)), elemVer = {}, indexVer = $(elementLookup).attr("indexcolumn"), indexyo = 0;
@@ -494,7 +496,13 @@ $.ecDataSourceDDLookup = function(element,options){
 						            }
 
 							    }
+							    indexcomment = parseInt(indexVer);
 							    ko.mapping.fromJS(dataStatement, fp.dataFormula);
+							}
+							for (var k in fp.recordAllComment()){
+								if (fp.recordAllComment()[k].index == indexcomment){
+									fp.recordAllComment()[k].data = res.data.comment;
+								}
 							}
 							fp.refreshHeightTable();
 						});

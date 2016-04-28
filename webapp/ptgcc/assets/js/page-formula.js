@@ -38,8 +38,11 @@ fp.templateFormula = {
 fp.templateComment = {
     _id: "", 
     name: "", 
-    sveid: "", 
+    // sveid: "", 
     text: "",
+    type: "update",
+    index: 0
+
 }
 fp.configFormula = ko.mapping.fromJS(fp.templateFormula);
 fp.configComment = ko.mapping.fromJS(fp.templateComment);
@@ -58,6 +61,7 @@ fp.boolHeightTable = ko.observable(0);
 fp.titlePopUp = ko.observable("");
 fp.tempStatementId = ko.observable("");
 fp.formulaTitle = ko.observable("");
+fp.recordAllComment = ko.observableArray([]);
 
 fp.saveImage = function(){
     var idstatement = "";
@@ -592,6 +596,10 @@ fp.getDataStatement = function(){
         fp.tempStatementId(res.data.data.statementid);
         ko.mapping.fromJS(res.data.data, fp.dataFormula);
         fp.getListSugest();
+        fp.recordAllComment.push({
+            index: 1,
+            data: [],
+        });
         fp.refreshHeightTable();
     });
     // for(var i in dataexample.Element){
@@ -624,6 +632,7 @@ fp.getListSugest = function(){
 }
 fp.removeColumnFormula = function(index){
     var aa = (parseInt(index)-2);
+    fp.recordAllComment.remove( function (item) { return item.index == index; } ); 
     var dataStatement = $.extend(true, {}, ko.mapping.toJS(fp.dataFormula));
     for (var i in dataStatement.Element){
         dataStatement.Element[i] = $.extend({}, dataStatement.Element[i], ko.mapping.toJS(fp.dataFormula.Element()[i]) || {});
@@ -741,6 +750,10 @@ fp.addColumn = function(){
             inputSearch: "title",
             boolClickSearch: true,
         });
+        fp.recordAllComment.push({
+            index: index,
+            data: [],
+        });
         fp.refreshHeightTable();
     });
 };
@@ -767,46 +780,61 @@ fp.refreshHeightTable = function(){
     }
     fp.boolHeightTable(1);
 };
-fp.showComment = function(index,sveid,formulatxt,title1,title2){
-    fp.formulaTitle(formulatxt);
-    fp.modeFormula("");
-    if(title2 != "")
-        fp.titlePopUp(title2);
-    else if (title1 != "")
-        fp.titlePopUp(title1);
-    else
-        fp.titlePopUp("Comment");
+// fp.showComment = function(index,sveid,formulatxt,title1,title2){
+//     fp.formulaTitle(formulatxt);
+//     fp.modeFormula("");
+//     if(title2 != "")
+//         fp.titlePopUp(title2);
+//     else if (title1 != "")
+//         fp.titlePopUp(title1);
+//     else
+//         fp.titlePopUp("Comment");
+//     $("#comment-popup").modal("show");
+//     app.ajaxPost("/statementversion/getcomment", {sveid: sveid}, function(res){
+//         if(!app.isFine(res)){
+//             return;
+//         }
+//         if (!res.data) {
+//             res.data = [];
+//         }
+//         fp.recordComment(res.data);
+//         fp.configComment.sveid(sveid);
+//     });
+// };
+fp.showComment = function(index, idcomment){
+    var commenttemp = [], rescomment = [];
+    for (var key in idcomment){
+        rescomment = ko.utils.arrayFilter(fp.recordAllComment()[(index-1)].data, function (each) {
+            return each._id == idcomment[key];
+        });
+        if (rescomment.length > 0)
+            commenttemp.push(rescomment[0]);
+    }
+    fp.recordComment(commenttemp);
     $("#comment-popup").modal("show");
-    app.ajaxPost("/statementversion/getcomment", {sveid: sveid}, function(res){
-        if(!app.isFine(res)){
-            return;
-        }
-        if (!res.data) {
-            res.data = [];
-        }
-        fp.recordComment(res.data);
-        fp.configComment.sveid(sveid);
-    });
 };
 fp.saveComment = function(){
-    var dataPost = ko.mapping.toJS(fp.configComment);
-    app.ajaxPost("/statementversion/savecomment", dataPost, function(res){
-        if(!app.isFine(res)){
-            return;
-        }
-        if (!res.data) {
-            res.data = [];
-        }
-        fp.recordComment.push({
-            _id: dataPost._id,
-            name: dataPost.name,
-            sveid: dataPost.sveid,
-            text: dataPost.text,
-            time: "",
-        })
-        ko.mapping.fromJS(fp.templateComment,fp.configComment);
-    });
+
 };
+// fp.saveComment = function(){
+//     var dataPost = ko.mapping.toJS(fp.configComment);
+//     app.ajaxPost("/statementversion/savecomment", dataPost, function(res){
+//         if(!app.isFine(res)){
+//             return;
+//         }
+//         if (!res.data) {
+//             res.data = [];
+//         }
+//         fp.recordComment.push({
+//             _id: dataPost._id,
+//             name: dataPost.name,
+//             sveid: dataPost.sveid,
+//             text: dataPost.text,
+//             time: "",
+//         })
+//         ko.mapping.fromJS(fp.templateComment,fp.configComment);
+//     });
+// };
 fp.hoverHeadFormula = function(data, event){
     var $el = $(event.target).closest("tr.rightfreeze");
     $el.addClass("selected-tableformula");
