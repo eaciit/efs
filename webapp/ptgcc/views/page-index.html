@@ -95,7 +95,7 @@
 		<!-- ko if: StatementElement.Type() == 10-->
 		<td data-bind="attr:{'indexid':'1'}, style: {textAlign: 'Right'}">
 			<div class="col-md-2 icon-container">
-				<div class="icon-efs icon-chat" data-bind="click:function(){fp.showComment($index(),'','', StatementElement.Title1(), StatementElement.Title2())}"><span class="badge" data-bind="text:Comments() == undefined ? 0:Comments().length"></span></div>
+				<div class="icon-efs icon-chat" data-bind="click:function(){fp.showComment($index(), Comments())}"><span class="badge" data-bind="text:Comments() == undefined ? 0:Comments().length"></span></div>
 			</div>
 			<div class="col-md-5"><div data-bind="visible: StatementElement.Column() == 1"><input class="efs-number" data-bind="attr:{'id':'valueversion'+$index()}, kendoNumericTextBox:{value:ValueNum}"/></div></div>
 			<div class="col-md-5"><div data-bind="visible: StatementElement.Column() == 2"><input class="efs-number" data-bind="attr:{'id':'valueversion'+$index()}, kendoNumericTextBox:{value:ValueNum}"/></div></div>
@@ -144,7 +144,7 @@
 			<!-- ko if: StatementElement.Type() == 10 -->
 			<td data-bind="attr:{'indexid':($index()+2).toString()}, style: {textAlign: 'Right'}">
 				<div class="col-md-2 icon-container">
-					<div class="icon-efs icon-chat" data-bind="click:function(){fp.showComment($($element).index(),'','', StatementElement.Title1(), StatementElement.Title2())}"><span class="badge" data-bind="text:Comments() == undefined ? 0:Comments().length"></span></div>
+					<div class="icon-efs icon-chat" data-bind="click:function(){fp.showComment(($index()+2), Comments())}"><span class="badge" data-bind="text:Comments() == undefined ? 0:Comments().length"></span></div>
 				</div>
 				<div class="col-md-5"><div data-bind="visible: StatementElement.Column() == 1"><input class="efs-number" data-bind="attr:{'id':'valueversion'+$index()}, kendoNumericTextBox:{value:ValueNum}"/></div></div>
 				<div class="col-md-5"><div data-bind="visible: StatementElement.Column() == 2"><input class="efs-number" data-bind="attr:{'id':'valueversion'+$index()}, kendoNumericTextBox:{value:ValueNum}"/></div></div>
