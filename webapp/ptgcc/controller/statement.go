@@ -40,7 +40,7 @@ func (st *StatementController) GetStatement(r *knot.WebContext) interface{} {
 	}
 	val := toolkit.ToString(payload.Get("search", ""))
 
-	keyword := toolkit.M{}.Set("key", "_id").Set("val", val)
+	keyword := toolkit.M{}.Set("key", "title").Set("val", val)
 	data, err := efscore.GetStatementList(keyword)
 	if err != nil {
 		return helper.CreateResult(false, nil, err.Error())
