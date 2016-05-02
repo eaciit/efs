@@ -34,13 +34,15 @@ fp.templateFormula = {
     FormulaText: [],
     ChangeValue: false,
     ElementVersion: [],
+    Comments: [],
+    CommentsTemp: [],
 };
 fp.templateComment = {
     _id: "", 
     name: "", 
     // sveid: "", 
     text: "",
-    type: "update",
+    type: "old",
     index: 0
 
 }
@@ -62,6 +64,7 @@ fp.titlePopUp = ko.observable("");
 fp.tempStatementId = ko.observable("");
 fp.formulaTitle = ko.observable("");
 fp.recordAllComment = ko.observableArray([]);
+fp.recordPostComment = ko.observableArray([]);
 
 fp.saveImage = function(){
     var idstatement = "";
@@ -304,6 +307,9 @@ fp.changeValueVariable = function(index,valueChange){
     }
 };
 fp.saveStatementNew = function(index){
+    var recordAllComment = ko.utils.arrayFilter(fp.recordAllComment(), function (each) {
+        return each.index == index;
+    });
     var objFormula = [], postParam = {
         _id : "",
         title : "",
@@ -316,6 +322,7 @@ fp.saveStatementNew = function(index){
         if (objFormula.length > 0){
             postParam = {
                 _id : objFormula[0]._id,
+                comment: recordAllComment[0].data,
                 title : objFormula[0].title,
                 statementid : objFormula[0].statementid,
                 element : ko.mapping.toJS(fp.dataFormula.Element())
@@ -323,6 +330,7 @@ fp.saveStatementNew = function(index){
         } else {
             postParam = {
                 _id : "",
+                comment: recordAllComment[0].data,
                 title : $(".table-formula-data>thead td[indexid="+1+"]").find(".eclookup-txt>input").val(),
                 statementid : fp.tempStatementId(),
                 element : ko.mapping.toJS(fp.dataFormula.Element())
@@ -354,12 +362,14 @@ fp.saveStatementNew = function(index){
             postParam = {
                 _id : objFormula[0]._id,
                 title : objFormula[0].title,
+                comment: recordAllComment[0].data,
                 statementid : objFormula[0].statementid,
                 element: elementVer
             };
         } else {
             postParam = {
                 _id : "",
+                comment: recordAllComment[0].data,
                 title : $(".table-formula-data>thead td[indexid="+index+"]").find(".eclookup-txt>input").val(),
                 statementid : fp.tempStatementId(),
                 element: elementVer
@@ -643,6 +653,9 @@ fp.removeColumnFormula = function(index){
     fp.refreshHeightTable();
 };
 fp.selectSimulate = function(index){
+    var recordAllComment = ko.utils.arrayFilter(fp.recordAllComment(), function (each) {
+        return each.index == index;
+    });
     if (index == 1){
         var objFormula = [], postParam = {
             mode: "simulate",
@@ -656,6 +669,7 @@ fp.selectSimulate = function(index){
             postParam = {
                 mode: "simulate",
                 _id : objFormula[0]._id,
+                comment: recordAllComment[0].data,
                 title : objFormula[0].title,
                 statementid : objFormula[0].statementid,
                 element : ko.mapping.toJS(fp.dataFormula.Element())
@@ -663,6 +677,7 @@ fp.selectSimulate = function(index){
         } else {
             postParam = {
                 mode: "simulate",
+                comment: recordAllComment[0].data,
                 _id : "",
                 title : $(".table-formula-data>thead td[indexid="+1+"]").find(".eclookup-txt>input").val(),
                 statementid : fp.tempStatementId(),
@@ -690,6 +705,7 @@ fp.selectSimulate = function(index){
             if (objFormula.length > 0){
                 postParam = {
                     mode: "simulate",
+                    comment: recordAllComment[0].data,
                     _id : objFormula[0]._id,
                     title : objFormula[0].title,
                     statementid : objFormula[0].statementid,
@@ -698,6 +714,7 @@ fp.selectSimulate = function(index){
             } else {
                 postParam = {
                     mode: "simulate",
+                    comment: recordAllComment[0].data,
                     _id : "",
                     title : $(".table-formula-data>thead td[indexid="+index+"]").find(".eclookup-txt>input").val(),
                     statementid : fp.tempStatementId(),
@@ -801,20 +818,76 @@ fp.refreshHeightTable = function(){
 //         fp.configComment.sveid(sveid);
 //     });
 // };
-fp.showComment = function(index, idcomment){
+fp.showComment = function(index, indexColoumn, idcomment,title1,title2, formulatxt){
+    fp.selectColumn({index:index,indexcol:indexColoumn});
     var commenttemp = [], rescomment = [];
     for (var key in idcomment){
-        rescomment = ko.utils.arrayFilter(fp.recordAllComment()[(index-1)].data, function (each) {
+        rescomment = ko.utils.arrayFilter(fp.recordAllComment()[(indexColoumn-1)].data, function (each) {
             return each._id == idcomment[key];
         });
-        if (rescomment.length > 0)
-            commenttemp.push(rescomment[0]);
+        if (rescomment.length > 0){
+            commenttemp.push($.extend({}, fp.templateComment, rescomment[0] || {}));
+        }
     }
     fp.recordComment(commenttemp);
+    fp.formulaTitle(formulatxt);
+    fp.modeFormula("");
+    if(title2 != "")
+        fp.titlePopUp(title2);
+    else if (title1 != "")
+        fp.titlePopUp(title1);
+    else
+        fp.titlePopUp("Comment");
     $("#comment-popup").modal("show");
 };
 fp.saveComment = function(){
-
+    var dataPost = ko.mapping.toJS(fp.configComment);
+    if (dataPost._id != ''){
+        fp.recordComment.push({
+            _id: "", 
+            name: dataPost.name,  
+            text: dataPost.text,
+            type: "add",
+            index: fp.selectColumn().index,
+            idtemp: fp.selectColumn().index,
+        });
+    } else {
+        for (var i in fp.recordComment()){
+            if (dataPost._id == fp.recordComment()[i]._id){
+                fp.recordComment()[i] = {
+                    _id: dataPost._id, 
+                    name: dataPost.name,  
+                    text: dataPost.text,
+                    type: "update",
+                    index: fp.selectColumn().index,
+                    idtemp: '',
+                }
+            }
+        }
+    }
+    var rescomment = ko.utils.arrayFilter(fp.recordComment(), function (each) {
+        return each._id == idcomment[key];
+    });
+    fp.recordPostComment(fp.recordComment());
+    fp.clearComment();
+};
+fp.updateDataComment = function(status,data){
+    
+};
+fp.clearComment = function(){
+    ko.mapping.fromJS(fp.templateComment ,fp.configComment);
+};
+fp.removeComment = function(id){
+    for (var i in fp.recordComment()){
+        if (id == fp.recordComment()[i]._id){
+            fp.recordComment()[i].type = "delete";
+            fp.recordComment()[i].index = fp.selectColumn().index;
+        }
+    }
+    fp.recordPostComment(fp.recordComment());
+};
+fp.selectComment = function(data){
+    ko.mapping.fromJS(data ,fp.configComment);
 };
 // fp.saveComment = function(){
 //     var dataPost = ko.mapping.toJS(fp.configComment);

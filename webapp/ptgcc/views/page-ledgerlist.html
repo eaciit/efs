@@ -1,4 +1,7 @@
 <script src="/res/js/page-ledgerlist.js"></script>
+<script src="/res/plugins/eclookup/eclookup.js"></script>
+<link rel="stylesheet" href="/res/plugins/eclookup/eclookup.css" />
+
 <div class="col-xs-12 col-sm-12" id="content" data-bind="with: LedgerList">
 	<div class="col-md-12" data-bind="visible: (app.section() == 'ledgerlist')">
 		<h1>Accounts</h1>
@@ -53,10 +56,11 @@
 					    		<input data-bind="kendoDropDownList:{dataTextField:'text', dataValueField: 'value', dataSource: ll.dataType, value: type}" />
 				    		</div>
 			    		</div>
-			    		<div class="form-group" data-bind="visible: type() == 'Account'">
+			    		<div class="form-group" data-bind="visible: type() == 0">
 				    		<label class="col-md-1 databrowser-label">Group</label>
 				    		<div class="col-md-5">
-					    		<input data-bind="kendoMultiSelect:{dataSource: ll.dataGroup(), value: group}" />
+					    		<!-- <input data-bind="kendoMultiSelect:{dataSource: ll.dataGroup(), value: group}" /> -->
+					    		<input id="grouptype" />
 				    		</div>
 			    		</div>
 		    		</div>
