@@ -770,7 +770,8 @@ fp.addColumn = function(){
         }
         ko.mapping.fromJS(dataStatement, fp.dataFormula);
         var index = parseInt($(".table-formula-data>thead>tr.searchsv input.searchversion:last").attr("indexcolumn")) + 1;
-        $(".table-formula-data>thead>tr.searchsv").append("<td indexid='"+index+"'><div class='searchversion'><input class='searchversion' id='version"+index+"' indexcolumn='"+index+"' /></div><div class='searchversion'><ul class='icon-tableheader'><li onClick='fp.selectSimulate("+index+")' data-toggle='tooltip' data-placement='top' title='Simulate'><span class='glyphicon glyphicon-refresh'></span></li><li onClick='fp.saveStatementNew("+index+")' data-toggle='tooltip' data-placement='top' title='Save'><span class='glyphicon glyphicon-floppy-disk'></span></li> <li data-toggle='tooltip' data-placement='top' title='Excel'><span class='fa fa-file-excel-o'></span></li> <li data-toggle='tooltip' data-placement='top' title='Pdf'><span class='fa fa-file-pdf-o'></span></li> <li onClick='fp.removeColumnFormula("+index+")' data-toggle='tooltip' data-placement='top' title='Remove'><span class='glyphicon glyphicon-remove'></span></li></ul></div></td>");
+        // $(".table-formula-data>thead>tr.searchsv").append("<td indexid='"+index+"'><div class='searchversion'><input class='searchversion' id='version"+index+"' indexcolumn='"+index+"' /></div><div class='searchversion'><ul class='icon-tableheader'><li onClick='fp.selectSimulate("+index+")' data-toggle='tooltip' data-placement='top' title='Simulate'><span class='glyphicon glyphicon-refresh'></span></li><li onClick='fp.saveStatementNew("+index+")' data-toggle='tooltip' data-placement='top' title='Save'><span class='glyphicon glyphicon-floppy-disk'></span></li> <li data-toggle='tooltip' data-placement='top' title='Excel'><span class='fa fa-file-excel-o'></span></li> <li data-toggle='tooltip' data-placement='top' title='Pdf'><span class='fa fa-file-pdf-o'></span></li> <li onClick='fp.removeColumnFormula("+index+")' data-toggle='tooltip' data-placement='top' title='Remove'><span class='glyphicon glyphicon-remove'></span></li></ul></div></td>");
+        $(".table-formula-data>thead>tr.searchsv").append("<td indexid='"+index+"'><div class='searchversion2'><ul class='icon-tableheader'><li onClick='fp.selectSimulate("+index+")' data-toggle='tooltip' data-placement='top' title='Simulate'><span class='glyphicon glyphicon-refresh'></span></li><li onClick='fp.saveStatementNew("+index+")' data-toggle='tooltip' data-placement='top' title='Save'><span class='glyphicon glyphicon-floppy-disk'></span></li> <li data-toggle='tooltip' data-placement='top' title='Excel'><span class='fa fa-file-excel-o'></span></li> <li data-toggle='tooltip' data-placement='top' title='Pdf'><span class='fa fa-file-pdf-o'></span></li> <li onClick='fp.removeColumnFormula("+index+")' data-toggle='tooltip' data-placement='top' title='Remove'><span class='glyphicon glyphicon-remove'></span></li></ul></div><div class='searchversion'><input class='searchversion' id='version"+index+"' indexcolumn='"+index+"' /></div><div class='searchversion headerright'><input id='rundate"+index+"'/></div></td>");
         $('[data-toggle="tooltip"]').tooltip()
         $('#version'+index).ecLookupDD({
             dataSource:{
@@ -783,6 +784,9 @@ fp.addColumn = function(){
             displayFields: "title", 
             inputSearch: "title",
             boolClickSearch: true,
+        });
+        $('#rundate'+index).kendoDatePicker({
+            format: "dd MMM yyyy",
         });
         fp.recordAllComment.push({
             index: index,
@@ -1012,4 +1016,7 @@ $(function (){
             return "<span>#*title#</span>";
         },
 	});
+    $("#rundate1").kendoDatePicker({
+        format: "dd MMM yyyy",
+    });
 });
