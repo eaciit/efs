@@ -25,7 +25,13 @@ ll.ledgerListColumns = ko.observableArray([
 	{ field: "_id", title: "ID" },
 	{ field: "title", title: "Title" },
 	{ field: "type", title: "Type" },
-	{ field: "group", title: "Group" },
+	{ field: "group", title: "Group", template: function (d) {
+		var html = [];
+		for (var i = 0; i < d.group.length; i++) {
+			html.push('<span>' + d.group[i] + '</span>');
+		}
+		return html.join(', ');
+	} },
 ]);
 
 ll.getLedgerList = function(){
