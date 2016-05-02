@@ -64,6 +64,7 @@ var Settings_EcLookup = {
 	boolClickSearch: false,
 	hoverRemove: false,
 	addsearch: false,
+	statementversion: true,
 	displayTemplate: function(){
 		return "";
 	},
@@ -434,7 +435,7 @@ $.ecDataSourceDDLookup = function(element,options){
 					$(elementLookup).data('ecLookupDD').ParamDataSource.dataSelect = dataSelectTemp;
 					// $(elementLookup).data('ecLookupDD').paramSetting.selectData(dataResult);
 					// HardCode
-					if (dataResult.length>0){
+					if (dataResult.length>0 && $(elementLookup).data('ecLookupDDSettings').statementversion == true){
 						app.ajaxPost("/statementversion/getstatementversion", {statementid: dataResult[0].statementid, _id: dataResult[0]._id, mode: "find"}, function(res){
 							if(!app.isFine(res)){
 					            return;

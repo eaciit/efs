@@ -4,12 +4,12 @@ viewModel.LedgerList = {}; var ll = viewModel.LedgerList;
 ll.templateLedgerList = {
 	_id: "",
     title: "",
-    type: "Group",
+    type: 1,
     group: [],
 }
 ll.dataType = ko.observableArray([
-	{text: "Group", value: "Group"},
-	{text: "Account", value: "Account"},
+	{text: "Group", value: 1},
+	{text: "Account", value: 0},
 ]);
 ll.searchField = ko.observable('');
 ll.configLedgerList = ko.mapping.fromJS(ll.templateLedgerList);
@@ -29,7 +29,7 @@ ll.ledgerListColumns = ko.observableArray([
 ]);
 
 ll.getLedgerList = function(){
-	app.ajaxPost("/ledgerlist/getledgerlist", { search: ll.searchField() }, function (res) {
+	app.ajaxPost("/account/getaccount", { search: ll.searchField() }, function (res) {
 		if (!app.isFine(res)) {
 			return;
 		}
@@ -54,7 +54,7 @@ ll.removeLedgerList = function(){
 	}else{
 		swal({
 		    title: "Are you sure?",
-		    text: 'Efs(s) '+ed.tempCheckIdLedger().toString()+' will be deleted',
+		    text: 'Efs(s) '+ll.tempCheckIdLedger().toString()+' will be deleted',
 		    type: "warning",
 		    showCancelButton: true,
 		    confirmButtonColor: "#DD6B55",
@@ -62,7 +62,7 @@ ll.removeLedgerList = function(){
 		    closeOnConfirm: true
 		}, function() {
 			setTimeout(function () {
-				app.ajaxPost("/ledgerlist/removeledgerlist", { _id: ed.tempCheckIdLedger() }, function (res) {
+				app.ajaxPost("/account/removeaccount", { _id: ll.tempCheckIdLedger() }, function (res) {
 					if (!app.isFine(res)) {
 						return;
 					}
@@ -74,16 +74,46 @@ ll.removeLedgerList = function(){
 	} 
 };
 ll.selectGridLedgerList = function(){
+	app.wrapGridSelect(".grid-efs", ".btn", function (d) {
+		ll.editLedger(d._id);
+		ll.tempCheckIdLedger.push(d._id);
+	});
+};
+ll.editLedger = function(_id){
+	ko.mapping.fromJS(ll.templateLedgerList, ll.configLedgerList);
+	app.ajaxPost("/account/editaccount", { _id: _id }, function (res) {
+		if (!app.isFine(res)) {
+			return;
+		}
 
+		app.mode("edit");	
+		app.resetValidation(".form-add-efs");
+		ko.mapping.fromJS(res.data, ll.configLedgerList);	
+	});
 };
 ll.backToFront = function(){
 	app.mode("");
 	ll.getLedgerList();
+	$('#grouptype').ecLookupDD('clear');
 };
 ll.saveLedgerList = function(){
-
+	if (!app.isFormValid(".form-add-efs")) {
+		return;
+	}
+	var param = ko.mapping.toJS(ll.configLedgerList), grouptype = $('#grouptype').ecLookupDD('get'), groupid = [];
+	for (var i in grouptype){
+		groupid.push(grouptype[i]._id);
+	}
+	param.group = groupid;
+	param.type = parseInt(param.type);
+	app.ajaxPost("/account/saveaccount", param, function (res) {
+        if (!app.isFine(res)) {
+            return;
+        }
+		ll.backToFront();
+    });
 };
-ll.checkDeleteData = function(e){
+ll.checkDeleteData = function(elem, e){
 	if (e === 'ledger'){
 		if ($(elem).prop('checked') === true){
 			ll.tempCheckIdLedger.push($(elem).attr('idcheck'));
@@ -92,13 +122,13 @@ ll.checkDeleteData = function(e){
 		}
 	} if (e === 'ledgerall'){
 		if ($(elem).prop('checked') === true){
-			$('.efscheck').each(function(index) {
+			$('.ledgercheck').each(function(index) {
 				$(this).prop("checked", true);
 				ll.tempCheckIdLedger.push($(this).attr('idcheck'));
 			});
 		} else {
 			var idtemp = '';
-			$('.efscheck').each(function(index) {
+			$('.ledgercheck').each(function(index) {
 				$(this).prop("checked", false);
 				idtemp = $(this).attr('idcheck');
 				ll.tempCheckIdLedger.remove( function (item) { return item === idtemp; } );
@@ -109,4 +139,20 @@ ll.checkDeleteData = function(e){
 
 $(function (){
 	ll.getLedgerList();
+	$('#grouptype').ecLookupDD({
+		dataSource:{
+			url: "/account/getallgroup",
+			call: 'post',
+			callData: {},
+			resultData: function(a){
+				return a.data;
+			}
+		}, 
+		inputType: 'multiple', 
+		inputSearch: "_id", 
+		idField: "_id", 
+		idText: "_id", 
+		displayFields: "_id", 
+		statementversion: false,
+	});
 });
