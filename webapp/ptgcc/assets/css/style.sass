@@ -536,11 +536,6 @@ a
 	text-align: right
 	padding-top: 5px
 
-.grid-stack
-	min-height: 500px
-	.grid-stack-item-content
-		background-color: #94D5EB
-
 /** structured stylesheet */
 
 body
@@ -628,10 +623,6 @@ body
 		padding: 10px 15px
 		text-decoration: none
 
-	.nav>li.grid-stack-item
-		&:hover
-			background-color: #eee
-
 	#content
 		padding: 0px
 
@@ -702,13 +693,6 @@ body
 
 									span
 										color: #3A8BDF
-
-				#datasource-settings
-					thead tr th
-						padding-top: 15px
-					tbody tr td 
-						padding-top: 8px
-						padding-right: 5px 
 
 				#grid-metadata
 					tr.has-lookup
@@ -856,14 +840,20 @@ body
 	background-size: contain
 	float: left
 
-.efs-number .k-input
+/**.efs-number .k-input*/
+/**	text-align: right*/
+
+/**.efs-number .k-state-default*/
+/**	padding-right: 30px*/
+
+/**.efs-number.k-numerictextbox*/
+/**	width: 130px*/
+
+.efs-number
 	text-align: right
 
-.efs-number .k-state-default
-	padding-right: 30px
-
-.efs-number.k-numerictextbox
-	width: 130px
+.nominal-txt
+	display: none
 
 .icon-efs .badge
 	margin-left: 13px
@@ -900,17 +890,38 @@ body
 .icon-container
 	padding: 0px
 
-/**	tbody>tr.datafor td */
-/**		border: none */
+tbody>tr.datafor td
+	border-right: 1px solid #ddd
+
+tbody>tr.rightfreeze
+	border-right: 3px solid #ddd
+
+tbody tr.datafor:nth-child(odd)
+	background-color: #D6D6D6
+
+tbody tr.datafor:nth-child(even)
+	background-color: #FFFFFF
+
+tbody tr.rightfreeze:nth-child(odd)
+	background-color: #D6D6D6
+
+tbody tr.rightfreeze:nth-child(even)
+	background-color: #FFFFFF
+
+.table-con-formula .table>thead
+	border-top: 1px solid #ddd
+	border-left: 1px solid #ddd
+	td
+		border-right: 1px solid #ddd
+
+.table>thead>tr>th
+	border-bottom: none
 
 .boldFontEfs
 	font-weight: bold
 
 .normalFontEfs
 	font-weight: normal
-
-/**.table-formula-data>thead tr */
-/**	width: 150px */
 
 .selected-tableformula
 	background-color: #9EE7FF
@@ -1045,6 +1056,30 @@ ul.icon-tableheader
 	#content-preview
 		border: 1px solid whitesmoke
 		min-height: 500px
+
+.search-efs
+	text-align: center
+	.content-search
+		display: inline-block
+	.search-input
+		float: left
+		width: 200px
+	.search-btn
+		float: left
+		margin-left: 10px
+
+span.boxcaption-efs
+	left: 0
+	text-shadow: none !important
+	cursor: pointer
+	color: white
+	float: left
+	position: absolute
+	background: rgba(51,152,182,.9)
+	height: 100px
+	width: 100%
+	padding-top: 12px
+	padding-left: 18px
 
 .k-grid
 	tr

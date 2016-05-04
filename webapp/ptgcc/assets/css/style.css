@@ -518,11 +518,6 @@ a {
   text-align: right;
   padding-top: 5px; }
 
-.grid-stack {
-  min-height: 500px; }
-  .grid-stack .grid-stack-item-content {
-    background-color: #94D5EB; }
-
 /** structured stylesheet */
 body {
   padding-top: 86px;
@@ -585,8 +580,6 @@ body {
     display: block;
     padding: 10px 15px;
     text-decoration: none; }
-  body .nav > li.grid-stack-item:hover {
-    background-color: #eee; }
   body #content {
     padding: 0px; }
     body #content > .col-md-12 > h1 {
@@ -640,11 +633,6 @@ body {
               color: #5F5F5F; }
               body #content > .col-md-12 .panel h1 .area-command ul.token-input-list-facebook .token-input-token-facebook:hover span {
                 color: #3A8BDF; }
-      body #content > .col-md-12 .panel #datasource-settings thead tr th {
-        padding-top: 15px; }
-      body #content > .col-md-12 .panel #datasource-settings tbody tr td {
-        padding-top: 8px;
-        padding-right: 5px; }
       body #content > .col-md-12 .panel #grid-metadata tr.has-lookup td {
         font-weight: bold; }
       body #content > .col-md-12 .panel .grid-service tr td .btn-start {
@@ -756,14 +744,17 @@ body {
   background-size: contain;
   float: left; }
 
-.efs-number .k-input {
+/**.efs-number .k-input */
+/**	text-align: right */
+/**.efs-number .k-state-default */
+/**	padding-right: 30px */
+/**.efs-number.k-numerictextbox */
+/**	width: 130px */
+.efs-number {
   text-align: right; }
 
-.efs-number .k-state-default {
-  padding-right: 30px; }
-
-.efs-number.k-numerictextbox {
-  width: 130px; }
+.nominal-txt {
+  display: none; }
 
 .icon-efs .badge {
   margin-left: 13px;
@@ -800,16 +791,39 @@ body {
 .icon-container {
   padding: 0px; }
 
-/**	tbody>tr.datafor td */
-/**		border: none */
+tbody > tr.datafor td {
+  border-right: 1px solid #ddd; }
+
+tbody > tr.rightfreeze {
+  border-right: 3px solid #ddd; }
+
+tbody tr.datafor:nth-child(odd) {
+  background-color: #D6D6D6; }
+
+tbody tr.datafor:nth-child(even) {
+  background-color: #FFFFFF; }
+
+tbody tr.rightfreeze:nth-child(odd) {
+  background-color: #D6D6D6; }
+
+tbody tr.rightfreeze:nth-child(even) {
+  background-color: #FFFFFF; }
+
+.table-con-formula .table > thead {
+  border-top: 1px solid #ddd;
+  border-left: 1px solid #ddd; }
+  .table-con-formula .table > thead td {
+    border-right: 1px solid #ddd; }
+
+.table > thead > tr > th {
+  border-bottom: none; }
+
 .boldFontEfs {
   font-weight: bold; }
 
 .normalFontEfs {
   font-weight: normal; }
 
-/**.table-formula-data>thead tr */
-/**	width: 150px */
 .selected-tableformula {
   background-color: #9EE7FF; }
 
@@ -936,6 +950,30 @@ ul.icon-tableheader {
   .dropdown-submenu > li > a #content-preview {
     border: 1px solid whitesmoke;
     min-height: 500px; }
+
+.search-efs {
+  text-align: center; }
+  .search-efs .content-search {
+    display: inline-block; }
+  .search-efs .search-input {
+    float: left;
+    width: 200px; }
+  .search-efs .search-btn {
+    float: left;
+    margin-left: 10px; }
+
+span.boxcaption-efs {
+  left: 0;
+  text-shadow: none !important;
+  cursor: pointer;
+  color: white;
+  float: left;
+  position: absolute;
+  background: rgba(51, 152, 182, 0.9);
+  height: 100px;
+  width: 100%;
+  padding-top: 12px;
+  padding-left: 18px; }
 
 .k-grid tr td.status {
   background-color: #D9534F;

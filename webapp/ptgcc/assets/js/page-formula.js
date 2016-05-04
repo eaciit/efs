@@ -46,6 +46,7 @@ fp.templateComment = {
     index: 0
 
 }
+fp.PageNumber = ko.observableArray([]);
 fp.configFormula = ko.mapping.fromJS(fp.templateFormula);
 fp.configComment = ko.mapping.fromJS(fp.templateComment);
 fp.konstanta = ko.observable(0);
@@ -596,7 +597,7 @@ fp.clearFormula = function(){
 	$('#formula-editor').ecLookupDD("clear");
 };
 fp.getDataStatement = function(){
-    app.ajaxPost("/statementversion/getstatementversion", {statementid: "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j", mode: "new"}, function(res){
+    app.ajaxPost("/statementversion/getstatementversion", {statementid: fp.tempStatementId(), mode: "new"}, function(res){
         if(!app.isFine(res)){
             return;
         }
@@ -606,7 +607,7 @@ fp.getDataStatement = function(){
         for(var i in res.data.data.Element){
             res.data.data.Element[i] = $.extend({}, fp.templateFormula, res.data.data.Element[i] || {});
         }
-        fp.tempStatementId(res.data.data.statementid);
+        // fp.tempStatementId(res.data.data.statementid);
         ko.mapping.fromJS(res.data.data, fp.dataFormula);
         fp.getListSugest();
         fp.recordAllComment.push({
@@ -617,12 +618,9 @@ fp.getDataStatement = function(){
             index: 1,
             data: [],
         });
+        app.mode("edit");
         fp.refreshHeightTable();
     });
-    // for(var i in dataexample.Element){
-    //     dataexample.Element[i] = $.extend({}, fp.templateFormula, dataexample.Element[i] || {});
-    // }
-    // ko.mapping.fromJS(dataexample, fp.dataFormula);
 };
 fp.getListSugest = function(){
     app.ajaxPost("/statementversion/getsvbysid", {statementid: fp.tempStatementId()}, function(res){
@@ -960,11 +958,19 @@ fp.hoverDataFormula = function(data, event){
     var $el = $(event.target).closest("tr.datafor");
     $el.addClass("selected-tableformula");
     $(".table-formula-head>tbody tr.rightfreeze").eq($el.index()).addClass("selected-tableformula");
+
+    var $el2 = $(event.target).closest("td");
+    $el2.find(".nominal-txt").show();
+    $el2.find(".nominal-label").hide();
 };
 fp.blurDataFormula = function(data, event){
     var $el = $(event.target).closest("tr.datafor");
     $el.removeClass("selected-tableformula");
     $(".table-formula-head>tbody tr.rightfreeze").eq($el.index()).removeClass("selected-tableformula");
+
+    var $el2 = $(event.target).closest("td");
+    $el2.find(".nominal-txt").hide();
+    $el2.find(".nominal-label").show();
 };
 
 ko.bindingHandlers.tooltip = {
@@ -986,10 +992,27 @@ ko.bindingHandlers.tooltip = {
         container: 'body'
     }
 };
+ko.bindingHandlers.numeric = {
+    init: function (element, valueAccessor) {
+        $(element).on("keydown", function (event) {
+            if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 ||
+                (event.keyCode == 65 && event.ctrlKey === true) ||
+                (event.keyCode == 188 || event.keyCode == 190 || event.keyCode == 110) ||
+                (event.keyCode >= 35 && event.keyCode <= 39)) {
+                return;
+            }
+            else {
+                if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105)) {
+                    event.preventDefault();
+                }
+            }
+        });
+    }
+};
 
 $(function (){
     kendo.culture("de-DE");
-    fp.getDataStatement();
+    // fp.getDataStatement();
     $("#kostanta").bind("keyup", function(e) {
         if (e.keyCode == 13){
             $('#formula-editor').ecLookupDD("addLookup",{id: moment().format("hhmmDDYYYYx"), value: fp.konstanta().toString(), title: fp.konstanta().toString(), koefisien:true});

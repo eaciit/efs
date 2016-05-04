@@ -1,25 +1,95 @@
+<script src="/res/plugins/jquery.slides.min.js"></script>
 <script src="/res/js/page-formula.js"></script>
+<script src="/res/js/page-gridefs.js"></script>
 <script src="/res/plugins/eclookup/eclookup.js"></script>
 <link rel="stylesheet" href="/res/plugins/eclookup/eclookup.css" />
+<link rel="stylesheet" href="/res/css/ihover.css" />
 <style>
 	.modal#formula-popup .modal-dialog {
 		width: 85%;
 	}
+	.ih-item .img {
+        width: 100%;
+        height: 195px;
+    }
+    .container {
+        margin: 0 auto;
+    }
+    .slidesjs-pagination .active {
+        color: red;
+    }
+    .cvn {
+        width: 1170px;
+        height: 530px;
+        /*border-radius: 4px;*/
+        margin: 0 auto;
+        /*border: solid 2px;*/
+        /*box-shadow: 0 0 10px #888888;*/
+    }
+    .slidesjs-container {
+        width: 1170px !important;
+        height: 500px !important;
+    }
+    .slidesjs-next {
+        position: fixed;
+        right: 20px;
+        top: 50%;
+        font-size: 40px;
+        text-decoration: none;
+    }
+    .slidesjs-previous {
+        position: fixed;
+        left: 20px;
+        top: 50%;
+        font-size: 40px;
+        text-decoration: none;
+    }
+        .slidesjs-previous:hover {
+            text-decoration: none;
+        }
+    .slidesjs-next:hover {
+        text-decoration: none;
+    }
+    .slidesjs-pagination {
+        display: none;
+    }
+    .cvnIns {
+        margin-top: 15px;
+    }
+    .webui-popover-content {
+        font-weight: bold;
+        font-size: 15px;
+    }
 </style>
 <!-- main area -->
 <div class="col-xs-12 col-sm-12" id="content" data-bind="with: FormulaPage">
 	<div class="col-md-12" data-bind="visible: (app.section() == 'formula')">
 		<h1>To edit formula, click on <img src="/res/images/formula-icon2.png" width="22" height="22"/></h1>
 		<div class="panel" data-bind="visible: (app.mode() == '')">
+			<div class="panel-body">
+				<div class="col-sm-12">
+			        <div class="cvn">
+			            <div class="col-sm-12 search-efs" style="margin:10px;">
+			            	<div class="content-search">
+				            	<input type="text" class="form-control input-sm search-input" placeholder="Type search in here"/>
+				            	<button class="btn btn-sm btn-primary search-btn"><span class="glyphicon glyphicon-search"></span></button>
+			            	<div style="clear: both;"></div>
+			            	</div>
+			            </div>
+			            <div class="container grid-efs"></div>
+			        </div>
+			    </div>
+			</div>
+		</div>
+		<div class="panel" data-bind="visible: (app.mode() == 'edit')">
 		    <div class="panel-body table-formula">
 		    	<div class="col-md-12">
+		    		<button class="btn btn-sm btn-warning" data-bind="click:fp.backToGrid"><span class="glyphicon glyphicon-chevron-left"></span> Back</button>
 		    		<button class="btn btn-sm btn-primary" data-bind="click:fp.addColumn"><span class="glyphicon glyphicon-plus"></span> Add Column</button>
-		    		<!-- <button class="btn btn-sm btn-warning" data-bind="click:fp.refreshAll"><span class="glyphicon glyphicon-refresh"></span> Refresh</button>
-		    		<button class="btn btn-sm btn-success" data-bind="click:fp.saveStatement"><span class="glyphicon glyphicon-floppy-disk"></span> Save</button> -->
 		    	</div>
 		    	<div class="col-md-12 table-con-formula">
 		    		<div class="headcol">
-		    			<table class="table table-bordered table-formula-head">
+		    			<table class="table table-formula-head">
 				            <thead>
 				            	<tr>
 					                <!-- <th width="20">No</th> -->
@@ -32,7 +102,7 @@
 				        </table>
 		    		</div>
 		    		<div class="right-formula">
-		    			<table class="table table-bordered table-formula-data">
+		    			<table class="table table-formula-data">
 				            <thead>
 				            	<tr class="searchsv">
 				                	<td indexid="1">
@@ -99,8 +169,8 @@
 			<div class="col-md-2 icon-container">
 				<div class="icon-efs icon-chat" data-bind="click:function(){fp.showComment($index(),1, Comments(), StatementElement.Title1(), StatementElement.Title2())}"><span class="badge" data-bind="text:Comments() == undefined ? 0:Comments().length"></span></div>
 			</div>
-			<div class="col-md-5"><div data-bind="visible: StatementElement.Column() == 1"><input class="efs-number" data-bind="attr:{'id':'valueversion'+$index()}, kendoNumericTextBox:{value:ValueNum}"/></div></div>
-			<div class="col-md-5"><div data-bind="visible: StatementElement.Column() == 2"><input class="efs-number" data-bind="attr:{'id':'valueversion'+$index()}, kendoNumericTextBox:{value:ValueNum}"/></div></div>
+			<div class="col-md-5"><div data-bind="visible: StatementElement.Column() == 1"><input class="efs-number form-control input-sm nominal-txt" data-bind="attr:{'id':'valueversion'+$index()}, numeric, value: ValueNum"/><span class="nominal-label" data-bind="html:kendo.toString(ValueNum(), 'n2')"></span></div></div>
+			<div class="col-md-5"><div data-bind="visible: StatementElement.Column() == 2"><input class="efs-number form-control input-sm nominal-txt" data-bind="attr:{'id':'valueversion'+$index()}, numeric, value: ValueNum"/><span class="nominal-label" data-bind="html:kendo.toString(ValueNum(), 'n2')"></span></div></div>
 		</td>
 		<!-- /ko -->
 		<!-- ko if: StatementElement.Type() == 11 -->
@@ -148,8 +218,8 @@
 				<div class="col-md-2 icon-container">
 					<div class="icon-efs icon-chat" data-bind="click:function(){fp.showComment($($element).closest('tr').index(),($index()+2), Comments(), StatementElement.Title1(), StatementElement.Title2())}"><span class="badge" data-bind="text:Comments() == undefined ? 0:Comments().length"></span></div>
 				</div>
-				<div class="col-md-5"><div data-bind="visible: StatementElement.Column() == 1"><input class="efs-number" data-bind="attr:{'id':'valueversion'+$index()}, kendoNumericTextBox:{value:ValueNum}"/></div></div>
-				<div class="col-md-5"><div data-bind="visible: StatementElement.Column() == 2"><input class="efs-number" data-bind="attr:{'id':'valueversion'+$index()}, kendoNumericTextBox:{value:ValueNum}"/></div></div>
+				<div class="col-md-5"><div data-bind="visible: StatementElement.Column() == 1"><input class="efs-number form-control input-sm nominal-txt" data-bind="attr:{'id':'valueversion'+$index()}, numeric, value: ValueNum"/><span class="nominal-label" data-bind="html:kendo.toString(ValueNum(), 'n2')"></span></div></div>
+				<div class="col-md-5"><div data-bind="visible: StatementElement.Column() == 2"><input class="efs-number form-control input-sm nominal-txt" data-bind="attr:{'id':'valueversion'+$index()}, numeric, value: ValueNum"/><span class="nominal-label" data-bind="html:kendo.toString(ValueNum(), 'n2')"></span></div></div>
 			</td>
 			<!-- /ko -->
 			<!-- ko if: StatementElement.Type() == 11 -->
