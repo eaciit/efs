@@ -1,6 +1,13 @@
 app.section('efsdesigner');
 viewModel.EfsDesigner = {}; var ed = viewModel.EfsDesigner;
-
+viewModel.fileData = ko.observable({
+    dataURL: ko.observable(),
+});
+viewModel.onClear = function(fileData){
+    if(confirm('Are you sure?')){
+        fileData.clear && fileData.clear();
+    }                            
+};
 ed.templateStatement = {
 	Index: 0,
 	Title1: "",
@@ -658,11 +665,27 @@ ed.saveEfs = function(){
         }
         param.elements[i].DataValue = arrayValue;
     }
-	app.ajaxPost("/statement/savestatement", param, function (res) {
+	// app.ajaxPost("/statement/savestatement", param, function (res) {
+ //        if (!app.isFine(res)) {
+ //            return;
+ //        }
+	// 	ed.backToFront();
+ //    });
+    var formData = new FormData();
+    formData.append("_id", param._id);
+    formData.append("title", param.title);
+    formData.append("enable", param.enable);
+    formData.append("elements", param.elements);
+    
+    var file = viewModel.fileData().dataURL();
+    if (file != "") {
+        formData.append("userfile", viewModel.fileData().file());   
+    }
+    app.ajaxPost("/statement/savestatement", formData, function (res) {
         if (!app.isFine(res)) {
             return;
         }
-		ed.backToFront();
+        ed.backToFront();
     });
 };
 ed.selectGridEfs = function(){
