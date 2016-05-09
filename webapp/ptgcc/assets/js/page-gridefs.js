@@ -51,7 +51,10 @@ function createGalery(arrayData) {
             $divImg.appendTo($aGal);
 
             $img = jQuery('<img />');
-            $img.attr({'src': arrayGal[key].Contents[page].logo, 'alt' : 'img'});
+            if (arrayGal[key].Contents[page].imagename == '')
+                $img.attr({'src': arrayGal[key].Contents[page].logo, 'alt' : 'img'});
+            else
+                $img.attr({'src': '/image/statement/'+arrayGal[key].Contents[page].imagename, 'alt' : 'img'});
             $img.appendTo($divImg);
 
             $info = jQuery('<div />');
