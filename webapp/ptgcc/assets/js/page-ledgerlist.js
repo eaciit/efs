@@ -6,6 +6,11 @@ ll.templateLedgerList = {
     title: "",
     type: 1,
     group: [],
+    periode: moment().format(),
+    opening: "",
+    in: 0,
+    out: 0,
+    balance: 0,
 }
 ll.dataType = ko.observableArray([
 	{text: "Group", value: 1},
@@ -37,6 +42,10 @@ ll.ledgerListColumns = ko.observableArray([
 		}
 		return html.join(', ');
 	} },
+	{ field: "period", title: "Period" },
+	{ field: "in", title: "In" },
+	{ field: "out", title: "Out" },
+	{ field: "balance", title: "Balance" },
 ]);
 
 ll.getLedgerList = function(){

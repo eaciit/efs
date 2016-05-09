@@ -1,0 +1,83 @@
+<script src="/res/js/page-transaction.js"></script>
+<script src="/res/plugins/eclookup/eclookup.js"></script>
+<link rel="stylesheet" href="/res/plugins/eclookup/eclookup.css" />
+
+<div class="col-xs-12 col-sm-12" id="content" data-bind="with: Transaction">
+	<div class="col-md-12" data-bind="visible: (app.section() == 'transaction')">
+		<h1>Transaction</h1>
+		<nav class="navbar" data-bind="visible: (app.mode() == '')">
+			<div class="btn-group" role="group">
+		        <button class="btn btn-sm btn-primary mgTop15" data-bind="click: getTransaction">
+		            <span class="glyphicon glyphicon-refresh"></span> Refresh
+		        </button>
+		        <button class="btn btn-sm btn-primary mgTop15" data-bind="click: addTransaction">
+		            <span class="glyphicon glyphicon-plus"></span> Add
+		        </button>
+		        <button class="btn btn-sm btn-danger mgTop15" data-bind="click: removeTransaction">
+		            <span class="glyphicon glyphicon-remove"></span> Delete
+		        </button>
+		    </div>
+		</nav>
+		<div class="panel" data-bind="visible: (app.mode() == '')">
+			<div class="panel-body">
+		    	<div class="grid grid-transaction" data-bind="kendoGrid: { dataSource: { pageSize: 15 }, data: tr.transactionData, selectable: 'multiple, row', change: tr.selectGridTransaction, columns: tr.transactionColumns, filterfable: false, pageable: true }"></div>
+		    </div>
+		    <p class="bg-danger bgcustom">Please click row to edit!</p>
+		</div>
+		<nav class="navbar" data-bind="visible: (app.mode() == 'edit')">
+			<button class="btn btn-sm btn-warning navbar-btn" data-bind="click: backToFront">
+	    		<span class="glyphicon glyphicon-chevron-left"></span> Back
+	    	</button>
+            <button class="btn btn-sm btn-primary navbar-btn" data-bind="click: saveTransaction">
+	    		<span class="glyphicon glyphicon-save"></span> Save
+	    	</button>
+		</nav>
+		<div class="panel" data-bind="visible: (app.mode() == 'edit')">
+			<div class="panel-body">
+		    	<form class="form-horizontal form-add-efs" data-bind="with: configTransaction" novalidate>
+			    	<div class="col-md-6">
+			    		<div class="form-group">
+				    		<label class="col-md-3 databrowser-label">ID</label>
+				    		<div class="col-md-9">
+					    		<input required type="text" class="form-control input-sm" name="_id" placeholder="Type the page id Here" data-bind="value: _id">
+								<span class="k-invalid-msg" data-for="_id"></span>
+				    		</div>
+			    		</div>
+			    		<div class="form-group">
+				    		<label class="col-md-3 databrowser-label">Account</label>
+				    		<div class="col-md-9">
+					    		<input id="accounttype" />
+				    		</div>
+			    		</div>
+			    		<div class="form-group">
+				    		<label class="col-md-3 databrowser-label">Date</label>
+				    		<div class="col-md-9">
+					    		<input type="text" class="form-control input-sm" name="costcenter" data-bind="kendoDatePicker:{format:'dd MMM yyyy', value:date}" />
+				    		</div>
+			    		</div>
+			    	</div>
+			    	<div class="col-md-6">
+			    		<div class="form-group">
+				    		<label class="col-md-3 databrowser-label">Profit Center</label>
+				    		<div class="col-md-9">
+					    		<input type="text" class="form-control input-sm" name="profitcenter" placeholder="Type the page profit center Here" data-bind="value: profitcenter" />
+				    		</div>
+			    		</div>
+			    		<div class="form-group">
+				    		<label class="col-md-3 databrowser-label">Cost Center</label>
+				    		<div class="col-md-9">
+					    		<input type="text" class="form-control input-sm" name="costcenter" placeholder="Type the page cost center Here" data-bind="value: costcenter" />
+				    		</div>
+			    		</div>
+			    		<div class="form-group">
+				    		<label class="col-md-3 databrowser-label">Amount</label>
+				    		<div class="col-md-9">
+					    		<input type="text" class="form-control input-sm" name="amount" placeholder="Type the page amount Here" data-bind="value: amount, numeric" />
+				    		</div>
+			    		</div>
+			    	</div>
+			    </form>
+			</div>
+		</div>
+	</div>
+</div>
