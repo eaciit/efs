@@ -14,6 +14,7 @@ type Statements struct {
 	Title         string              `json:"title",bson:"title"`
 	Enable        bool                `json:"enable",bson:"enable"`
 	Elements      []*StatementElement `json:"elements",bson:"elements"`
+	ImageName     string              `json:"imagename",bson:"imagename"`
 }
 
 func (e *Statements) RecordID() interface{} {

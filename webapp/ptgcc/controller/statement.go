@@ -5,6 +5,7 @@ import (
 	"github.com/eaciit/efs/webapp/ptgcc/model"
 	"github.com/eaciit/knot/knot.v1"
 	"github.com/eaciit/toolkit"
+	"path/filepath"
 )
 
 type StatementController struct {
@@ -20,11 +21,39 @@ func CreateStatementController(s *knot.Server) *StatementController {
 func (st *StatementController) SaveStatement(r *knot.WebContext) interface{} {
 	r.Config.OutputType = knot.OutputJson
 
-	payload := new(efscore.Statement)
-	if err := r.GetPayload(&payload); err != nil {
+	efsstatement := new(efscore.Statement)
+	efsstatement.ID = r.Request.FormValue("_id")
+	efsstatement.Title = r.Request.FormValue("title")
+	if r.Request.FormValue("enable") == "true" {
+		efsstatement.Enable = true
+	}
+
+	err := toolkit.UnjsonFromString(r.Request.FormValue("elements"), &efsstatement.Elements)
+
+	if err != nil {
 		return helper.CreateResult(false, nil, err.Error())
 	}
-	if err := payload.Save(); err != nil {
+
+	imageLocation := filepath.Join(EFS_DATA_PATH, "image", "statement")
+	err, imageName := helper.ImageUploadHandler(r, "userfile", imageLocation)
+	if err != nil {
+		return helper.CreateResult(false, "", err.Error())
+	}
+
+	efsstatement.ImageName = imageName
+
+	// toolkit.Printfn("LINE 25 M : %s", r.Request.FormValue("elements"))
+	// payload := toolkit.M{}
+	// if err := r.GetForms(&payload); err != nil {
+	// 	toolkit.Printfn("LINE 28")
+	// 	return helper.CreateResult(false, nil, err.Error())
+	// }
+
+	// err r.GetForms(result)
+	// a := r.Request.Form("title")
+	// toolkit.Printfn("LINE 34 M : %s", payload)
+
+	if err := efsstatement.Save(); err != nil {
 		return helper.CreateResult(false, nil, err.Error())
 	}
 
