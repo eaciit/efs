@@ -675,7 +675,7 @@ ed.saveEfs = function(){
     formData.append("_id", param._id);
     formData.append("title", param.title);
     formData.append("enable", param.enable);
-    formData.append("elements", param.elements);
+    formData.append("elements", JSON.stringify(param.elements));
     
     var file = viewModel.fileData().dataURL();
     if (file != "") {

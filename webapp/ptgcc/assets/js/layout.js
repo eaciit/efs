@@ -6,8 +6,11 @@ ly.session  = ko.observable('');
 ly.username = ko.observable('');
 
 ly.varMenu = [{"id":"formula", "title":"EFS", "childrens":[], "link":"/web/index"},
-			{"id":"accounts", "title":"Accounts", "childrens":[], "link":"/web/accounts"},
-			{"id":"simulation", "title":"EFS Designer", "childrens":[], "link":"/web/efsdesigner"}];
+			{"id":"simulation", "title":"EFS Designer", "childrens":[], "link":"/web/efsdesigner"},
+			{"id":"ledger", "title":"Ledger", "childrens":[
+				{"id":"accounts", "title":"Accounts", "childrens":[], "link":"/web/accounts"},
+				{"id":"transaction", "title":"Transaction", "childrens":[], "link":"/web/transaction"},
+			], "link":"#"},];
 ly.element = function(data){
 	console.log(data.length);
 	$parent = $('#nav-ul');

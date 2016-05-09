@@ -24,7 +24,12 @@ ll.ledgerListColumns = ko.observableArray([
 	}},
 	{ field: "_id", title: "ID" },
 	{ field: "title", title: "Title" },
-	{ field: "type", title: "Type" },
+	{ field: "type", title: "Type", template: function(d){
+		if (d.type == 1)
+			return ["<span>Group</span>"].join(" ");
+		else
+			return ["<span>Account</span>"].join(" ");
+	} },
 	{ field: "group", title: "Group", template: function (d) {
 		var html = [];
 		for (var i = 0; i < d.group.length; i++) {
