@@ -116,6 +116,8 @@ var methodsLookupDD = {
 	createSearchLookup: function(element, options){
 		var $o = $(element), $container = $o.parent(), idLookup = $o.attr('id');
 		$o.css({'display':'none'});
+		$container.find(".eclookup-container").remove();
+		$container.find(".eclookup-dropdown").remove();
 		$divSearch = $('<div class="eclookup-container"></div>');
 		$divSearch.appendTo($container);
 
