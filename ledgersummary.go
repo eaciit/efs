@@ -10,8 +10,12 @@ type LedgerSummary struct {
 	orm.ModelBase `bson:"-",json:"-"`
 	ID            string `json:"_id",bson:"_id"`
 	TransDate     time.Time
-	Amount        float64
-	Account       string
+	// Amount        float64
+	Account string
+	Opening float64
+	In      float64
+	Out     float64
+	Balance float64
 }
 
 func (e *LedgerSummary) RecordID() interface{} {

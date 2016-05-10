@@ -9,10 +9,13 @@ import (
 type LedgerTrans struct {
 	orm.ModelBase `bson:"-",json:"-"`
 	ID            string `json:"_id",bson:"_id"`
+	Company       string
 	JournalNo     string
 	TransDate     time.Time
 	Amount        float64
 	Account       string
+	ProfitCenter  string
+	CostCenter    string
 }
 
 func (e *LedgerTrans) RecordID() interface{} {
