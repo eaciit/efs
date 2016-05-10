@@ -864,6 +864,14 @@ tbody tr.rightfreeze:nth-child(even) {
 .headerright {
   text-align: right; }
 
+.separator-filter {
+  font-size: 20px;
+  margin-left: 5px;
+  margin-right: 5px; }
+
+.filter-account {
+  text-align: right; }
+
 .fa-file-pdf-o, .fa-file-excel-o {
   font-size: 1.1em; }
 

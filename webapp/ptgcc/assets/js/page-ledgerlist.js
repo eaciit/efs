@@ -12,12 +12,17 @@ ll.templateLedgerList = {
     out: 0,
     balance: 0,
 }
+ll.templateFilter = {
+	datefrom: moment().format(),
+	dateto: moment().format(),
+}
 ll.dataType = ko.observableArray([
 	{text: "Group", value: 1},
 	{text: "Account", value: 0},
 ]);
 ll.searchField = ko.observable('');
 ll.configLedgerList = ko.mapping.fromJS(ll.templateLedgerList);
+ll.configFilter = ko.mapping.fromJS(ll.templateFilter);
 ll.ledgerListData = ko.observableArray([]);
 ll.dataGroup = ko.observableArray([]);
 ll.tempCheckIdLedger = ko.observableArray([]);
@@ -48,6 +53,12 @@ ll.ledgerListColumns = ko.observableArray([
 	{ field: "balance", title: "Balance" },
 ]);
 
+ll.getMonthDateRange = function() {
+    var startDate = moment([parseInt(moment().format('YYYY')), parseInt(moment().format('MM')) - 1]);
+    var endDate = moment(startDate).endOf('month');
+    ll.configFilter.datefrom(startDate.toDate());
+    ll.configFilter.dateto(endDate.toDate());
+}
 ll.getLedgerList = function(){
 	app.ajaxPost("/account/getaccount", { search: ll.searchField() }, function (res) {
 		if (!app.isFine(res)) {
@@ -108,7 +119,10 @@ ll.editLedger = function(_id){
 
 		app.mode("edit");	
 		app.resetValidation(".form-add-efs");
-		ko.mapping.fromJS(res.data, ll.configLedgerList);	
+		ko.mapping.fromJS(res.data, ll.configLedgerList);
+		for (var i in res.data.group){
+			$('#grouptype').ecLookupDD('addLookup', {_id: res.data.group[i]});	
+		}
 	});
 };
 ll.backToFront = function(){
@@ -159,6 +173,7 @@ ll.checkDeleteData = function(elem, e){
 
 $(function (){
 	ll.getLedgerList();
+	ll.getMonthDateRange();
 	$('#grouptype').ecLookupDD({
 		dataSource:{
 			url: "/account/getallgroup",
