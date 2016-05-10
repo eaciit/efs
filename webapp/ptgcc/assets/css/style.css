@@ -720,6 +720,7 @@ body {
       color: whitesmoke; }
 
 .table-con-formula {
+  float: left;
   display: inline-block; }
 
 .tooltip {
@@ -856,6 +857,9 @@ tbody tr.rightfreeze:nth-child(even) {
 .searchversion2 {
   float: left;
   width: 100%; }
+
+.headscroll {
+  overflow: auto; }
 
 .headerright {
   text-align: right; }

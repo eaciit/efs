@@ -97,11 +97,18 @@
 		    		<button class="btn btn-sm btn-primary" data-bind="click:fp.addColumn"><span class="glyphicon glyphicon-plus"></span> Add Column</button>
 		    	</div>
 		    	<div class="col-md-12 table-con-formula">
+		    		<!-- <div class="headtable">
+				        <table class="table table-formula-headpinggir">
+				            <tr>
+				                <th width="100">Column 1</th>
+				                <th width="100">Column 2</th>
+				            </tr>
+				        </table>
+				    </div> -->
 		    		<div class="headcol">
 		    			<table class="table table-formula-head">
 				            <thead>
 				            	<tr>
-					                <!-- <th width="20">No</th> -->
 					                <th width="100">Column 1</th>
 					                <th width="100">Column 2</th>
 					            </tr>
@@ -110,12 +117,37 @@
 				            </tbody>
 				        </table>
 		    		</div>
+		    		<!-- <div class="headscroll" style='float:left;'>
+		    			<div id="leftSideTable">
+		    				<table>
+		    					<thead>
+					            	<tr class="searchsv">
+					                	<td indexid="1">
+					                		<div class="searchversion2">
+					                			<ul class="icon-tableheader">
+					                				<li onClick="fp.selectSimulate(1)" data-bind="tooltip: {title:'Simulate', placement:'top'}"><span class="glyphicon glyphicon-refresh"></span></li>
+					                				<li onClick="fp.saveStatementNew(1)" data-bind="tooltip: {title:'Save', placement:'top'}"><span class="glyphicon glyphicon-floppy-disk"></span></li>
+					                				<li data-bind="tooltip: {title:'Excel', placement:'top'}">
+					                					<span class="fa fa-file-excel-o"></span>
+					                				</li>
+					                				<li data-bind="tooltip: {title:'Pdf', placement:'top'}">
+					                					<span class="fa fa-file-pdf-o"></span>
+					                				</li>
+					                			</ul>
+					                		</div>
+					                		<div class="searchversion"><input class='searchversion' id="version1" indexcolumn="1" /></div>
+					                		<div class="searchversion headerright"><input id="rundate1"/></div>
+					                	</td>
+					                </tr>
+					            </thead>
+		    				</table>
+		    			</div>
+		    		</div> -->
 		    		<div class="right-formula">
 		    			<table class="table table-formula-data">
 				            <thead>
 				            	<tr class="searchsv">
 				                	<td indexid="1">
-				                		<!-- <div class="searchversion"><input class='searchversion' id="version1" indexcolumn="1" /></div> -->
 				                		<div class="searchversion2">
 				                			<ul class="icon-tableheader">
 				                				<li onClick="fp.selectSimulate(1)" data-bind="tooltip: {title:'Simulate', placement:'top'}"><span class="glyphicon glyphicon-refresh"></span></li>
