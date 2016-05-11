@@ -10,6 +10,9 @@
 		        <button class="btn btn-sm btn-primary mgTop15" data-bind="click: getTransaction">
 		            <span class="glyphicon glyphicon-refresh"></span> Refresh
 		        </button>
+		        <button class="btn btn-sm btn-success mgTop15">
+		            <span class="glyphicon glyphicon-upload"></span> Upload File
+		        </button>
 		        <button class="btn btn-sm btn-primary mgTop15" data-bind="click: addTransaction">
 		            <span class="glyphicon glyphicon-plus"></span> Add
 		        </button>
@@ -44,15 +47,21 @@
 				    		</div>
 			    		</div>
 			    		<div class="form-group">
-				    		<label class="col-md-3 databrowser-label">Account</label>
+				    		<label class="col-md-3 databrowser-label">Journal No</label>
 				    		<div class="col-md-9">
-					    		<input id="accounttype" />
+					    		<input type="text" class="form-control input-sm" name="costcenter" placeholder="Type the page journal Here" data-bind="value: JournalNo" />
 				    		</div>
 			    		</div>
 			    		<div class="form-group">
-				    		<label class="col-md-3 databrowser-label">Date</label>
+				    		<label class="col-md-3 databrowser-label">Company</label>
 				    		<div class="col-md-9">
-					    		<input type="text" class="form-control input-sm" name="costcenter" data-bind="kendoDatePicker:{format:'dd MMM yyyy', value:date}" />
+					    		<input type="text" class="form-control input-sm" name="costcenter" placeholder="Type the page company Here" data-bind="value: Company" />
+				    		</div>
+			    		</div>
+			    		<div class="form-group">
+				    		<label class="col-md-3 databrowser-label">Account</label>
+				    		<div class="col-md-9">
+					    		<input id="accounttype" />
 				    		</div>
 			    		</div>
 			    	</div>
@@ -60,19 +69,25 @@
 			    		<div class="form-group">
 				    		<label class="col-md-3 databrowser-label">Profit Center</label>
 				    		<div class="col-md-9">
-					    		<input type="text" class="form-control input-sm" name="profitcenter" placeholder="Type the page profit center Here" data-bind="value: profitcenter" />
+					    		<input type="text" class="form-control input-sm" name="profitcenter" placeholder="Type the page profit center Here" data-bind="value: ProfitCenter" />
 				    		</div>
 			    		</div>
 			    		<div class="form-group">
 				    		<label class="col-md-3 databrowser-label">Cost Center</label>
 				    		<div class="col-md-9">
-					    		<input type="text" class="form-control input-sm" name="costcenter" placeholder="Type the page cost center Here" data-bind="value: costcenter" />
+					    		<input type="text" class="form-control input-sm" name="costcenter" placeholder="Type the page cost center Here" data-bind="value: CostCenter" />
 				    		</div>
 			    		</div>
 			    		<div class="form-group">
 				    		<label class="col-md-3 databrowser-label">Amount</label>
 				    		<div class="col-md-9">
-					    		<input type="text" class="form-control input-sm" name="amount" placeholder="Type the page amount Here" data-bind="value: amount, numeric" />
+					    		<input type="text" class="form-control input-sm" name="amount" placeholder="Type the page amount Here" data-bind="value: Amount, numeric" />
+				    		</div>
+			    		</div>
+			    		<div class="form-group">
+				    		<label class="col-md-3 databrowser-label">Date</label>
+				    		<div class="col-md-9">
+					    		<input type="text" class="form-control input-sm" name="costcenter" data-bind="kendoDatePicker:{format:'dd MMM yyyy', value:TransDate}" />
 				    		</div>
 			    		</div>
 			    	</div>

@@ -804,7 +804,7 @@ fp.refreshHeightTable = function(){
     if (fp.dataFormula.Element()[0].ElementVersion().length>0)
         plusheight = 0;
     $(".table-formula-data").css("width",(fp.dataFormula.Element()[0].ElementVersion().length+1)*400);
-    for(var i in fp.dataFormula.Element()){
+    for(var i=0; i < (fp.dataFormula.Element().length+1); i++){
         height1 = $(".table-formula-head tr").eq(i).height();
         height2 = $(".table-formula-data tr").eq(i).height();
         if(height1>height2)

@@ -720,6 +720,7 @@ body {
       color: whitesmoke; }
 
 .table-con-formula {
+  float: left;
   display: inline-block; }
 
 .tooltip {
@@ -793,10 +794,13 @@ body {
   padding: 0px; }
 
 tbody > tr.datafor td {
-  border-right: 1px solid #ddd; }
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd; }
 
 tbody > tr.rightfreeze {
-  border-right: 3px solid #ddd; }
+  border-right: 3px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  border-left: 1px solid #ddd; }
 
 tbody tr.datafor:nth-child(odd) {
   background-color: #D6D6D6; }
@@ -854,7 +858,18 @@ tbody tr.rightfreeze:nth-child(even) {
   float: left;
   width: 100%; }
 
+.headscroll {
+  overflow: auto; }
+
 .headerright {
+  text-align: right; }
+
+.separator-filter {
+  font-size: 20px;
+  margin-left: 5px;
+  margin-right: 5px; }
+
+.filter-account {
   text-align: right; }
 
 .fa-file-pdf-o, .fa-file-excel-o {

@@ -246,6 +246,7 @@ $.ecDataSourceDDLookup = function(element,options){
 	this.clearDataLookup = function(){
 		$(elementLookup).data('ecLookupDD').ParamDataSource.dataSelect = [];
 		$(elementLookup).parent().find('ul.eclookup-list>.eclookup-item').remove();
+		$(elementLookup).parent().find('li.eclookup-txt').css('display','block');
 	}
 	this.addDataLookup = function(dataAdd){
 		if ($(elementLookup).data('ecLookupDDSettings').inputType == "multiple" || (this.ParamDataSource.dataSelect.length < 1 && $(elementLookup).data('ecLookupDDSettings').inputType == "ddl")){
