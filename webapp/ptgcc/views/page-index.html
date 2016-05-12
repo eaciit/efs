@@ -97,28 +97,32 @@
 		    		<button class="btn btn-sm btn-primary" data-bind="click:fp.addColumn"><span class="glyphicon glyphicon-plus"></span> Add Column</button>
 		    	</div>
 		    	<div class="col-md-12 table-con-formula">
-		    		<!-- <div class="headtable">
-				        <table class="table table-formula-headpinggir">
-				            <tr>
-				                <th width="100">Column 1</th>
-				                <th width="100">Column 2</th>
-				            </tr>
-				        </table>
-				    </div> -->
 		    		<div class="headcol">
-		    			<table class="table table-formula-head">
-				            <thead>
-				            	<tr>
-					                <th width="100">Column 1</th>
-					                <th width="100">Column 2</th>
-					            </tr>
-				            </thead>
-				            <tbody data-bind="template:{name:'formulahead', foreach:fp.dataFormula.Element()}">
-				            </tbody>
-				        </table>
+			    		<div>
+					        <table class="table table-formula-headpinggir">
+					        	<thead>
+						            <tr>
+						                <th width="100">Column 1</th>
+						                <th width="100">Column 2</th>
+						            </tr>
+						        </thead>
+					        </table>
+					    </div>
+					    <div class="freazerow">
+			    			<table class="table table-formula-head">
+					            <!-- <thead>
+					            	<tr>
+						                <th width="100">Column 1</th>
+						                <th width="100">Column 2</th>
+						            </tr>
+					            </thead> -->
+					            <tbody data-bind="template:{name:'formulahead', foreach:fp.dataFormula.Element()}">
+					            </tbody>
+					        </table>
+				        </div>
 		    		</div>
-		    		<!-- <div class="headscroll" style='float:left;'>
-		    			<div id="leftSideTable">
+		    		<div class="right-formula" style='float:left;'>
+		    			<div id="freazehead">
 		    				<table>
 		    					<thead>
 					            	<tr class="searchsv">
@@ -142,8 +146,14 @@
 					            </thead>
 		    				</table>
 		    			</div>
-		    		</div> -->
-		    		<div class="right-formula">
+		    			<div id="sideTable" style="height:380px;">
+		    				<table class="table table-formula-data">
+			    				<tbody data-bind="template:{name:'formuladata', foreach:fp.dataFormula.Element()}">
+					            </tbody>
+				        	</table>
+		    			</div>
+		    		</div>
+		    		<!-- <div class="right-formula">
 		    			<table class="table table-formula-data">
 				            <thead>
 				            	<tr class="searchsv">
@@ -168,9 +178,10 @@
 				            <tbody data-bind="template:{name:'formuladata', foreach:fp.dataFormula.Element()}">
 				            </tbody>
 				        </table>
-		    		</div>
-		    		<div style="clear:both;"></div>
+		    		</div> -->
+		    		<!-- <div style="clear:both;"></div> -->
 		    	</div>
+		    	<div style="clear:both;"></div>
 		    </div>
 		</div>
 	</div>
@@ -210,8 +221,8 @@
 			<div class="col-md-2 icon-container">
 				<div class="icon-efs icon-chat" data-bind="click:function(){fp.showComment($index(),1, Comments(), StatementElement.Title1(), StatementElement.Title2())}"><span class="badge" data-bind="text:Comments() == undefined ? 0:Comments().length"></span></div>
 			</div>
-			<div class="col-md-5"><div data-bind="visible: StatementElement.Column() == 1"><input class="efs-number form-control input-sm nominal-txt" data-bind="attr:{'id':'valueversion'+$index()}, numeric, value: ValueNum"/><span class="nominal-label" data-bind="html:kendo.toString(ValueNum(), 'n2')"></span></div></div>
-			<div class="col-md-5"><div data-bind="visible: StatementElement.Column() == 2"><input class="efs-number form-control input-sm nominal-txt" data-bind="attr:{'id':'valueversion'+$index()}, numeric, value: ValueNum"/><span class="nominal-label" data-bind="html:kendo.toString(ValueNum(), 'n2')"></span></div></div>
+			<div class="col-md-5"><div data-bind="visible: StatementElement.Column() == 1"><input class="efs-number form-control input-sm nominal-txt" data-bind="attr:{'id':'valueversion'+$index()}, valueNumber: ValueNum"/><span class="nominal-label" data-bind="html:kendo.toString(ValueNum(), 'n2')"></span></div></div>
+			<div class="col-md-5"><div data-bind="visible: StatementElement.Column() == 2"><input class="efs-number form-control input-sm nominal-txt" data-bind="attr:{'id':'valueversion'+$index()}, valueNumber: ValueNum"/><span class="nominal-label" data-bind="html:kendo.toString(ValueNum(), 'n2')"></span></div></div>
 		</td>
 		<!-- /ko -->
 		<!-- ko if: StatementElement.Type() == 11 -->
@@ -259,8 +270,8 @@
 				<div class="col-md-2 icon-container">
 					<div class="icon-efs icon-chat" data-bind="click:function(){fp.showComment($($element).closest('tr').index(),($index()+2), Comments(), StatementElement.Title1(), StatementElement.Title2())}"><span class="badge" data-bind="text:Comments() == undefined ? 0:Comments().length"></span></div>
 				</div>
-				<div class="col-md-5"><div data-bind="visible: StatementElement.Column() == 1"><input class="efs-number form-control input-sm nominal-txt" data-bind="attr:{'id':'valueversion'+$index()}, numeric, value: ValueNum"/><span class="nominal-label" data-bind="html:kendo.toString(ValueNum(), 'n2')"></span></div></div>
-				<div class="col-md-5"><div data-bind="visible: StatementElement.Column() == 2"><input class="efs-number form-control input-sm nominal-txt" data-bind="attr:{'id':'valueversion'+$index()}, numeric, value: ValueNum"/><span class="nominal-label" data-bind="html:kendo.toString(ValueNum(), 'n2')"></span></div></div>
+				<div class="col-md-5"><div data-bind="visible: StatementElement.Column() == 1"><input class="efs-number form-control input-sm nominal-txt" data-bind="attr:{'id':'valueversion'+$index()}, valueNumber: ValueNum"/><span class="nominal-label" data-bind="html:kendo.toString(ValueNum(), 'n2')"></span></div></div>
+				<div class="col-md-5"><div data-bind="visible: StatementElement.Column() == 2"><input class="efs-number form-control input-sm nominal-txt" data-bind="attr:{'id':'valueversion'+$index()}, valueNumber: ValueNum"/><span class="nominal-label" data-bind="html:kendo.toString(ValueNum(), 'n2')"></span></div></div>
 			</td>
 			<!-- /ko -->
 			<!-- ko if: StatementElement.Type() == 11 -->

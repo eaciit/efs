@@ -335,7 +335,7 @@ fp.saveStatementNew = function(index){
             postParam = {
                 _id : "",
                 comment: recordPostComment[0].data,
-                title : $(".table-formula-data>thead td[indexid="+1+"]").find(".eclookup-txt>input").val(),
+                title : $(".right-formula>#freazehead thead td[indexid="+1+"]").find(".eclookup-txt>input").val(),
                 statementid : fp.tempStatementId(),
                 element : ko.mapping.toJS(fp.dataFormula.Element())
             };
@@ -374,7 +374,7 @@ fp.saveStatementNew = function(index){
             postParam = {
                 _id : "",
                 comment: recordPostComment[0].data,
-                title : $(".table-formula-data>thead td[indexid="+index+"]").find(".eclookup-txt>input").val(),
+                title : $(".right-formula>#freazehead thead td[indexid="+index+"]").find(".eclookup-txt>input").val(),
                 statementid : fp.tempStatementId(),
                 element: elementVer
             };
@@ -655,7 +655,7 @@ fp.removeColumnFormula = function(index){
         dataStatement.Element[i].ElementVersion.splice(aa,1);
     }
     ko.mapping.fromJS(dataStatement, fp.dataFormula);
-    $(".table-formula-data>thead>tr.searchsv td[indexid="+index+"]").remove();
+    $(".right-formula>#freazehead thead>tr.searchsv td[indexid="+index+"]").remove();
     fp.refreshHeightTable();
 };
 fp.selectSimulate = function(index){
@@ -687,7 +687,7 @@ fp.selectSimulate = function(index){
                 mode: "simulate",
                 comment: recordPostComment[0].data,
                 _id : "",
-                title : $(".table-formula-data>thead td[indexid="+1+"]").find(".eclookup-txt>input").val(),
+                title : $(".right-formula>#freazehead thead td[indexid="+1+"]").find(".eclookup-txt>input").val(),
                 statementid : fp.tempStatementId(),
                 element : ko.mapping.toJS(fp.dataFormula.Element())
             };
@@ -727,7 +727,7 @@ fp.selectSimulate = function(index){
                     mode: "simulate",
                     comment: recordPostComment[0].data,
                     _id : "",
-                    title : $(".table-formula-data>thead td[indexid="+index+"]").find(".eclookup-txt>input").val(),
+                    title : $(".right-formula>#freazehead thead td[indexid="+index+"]").find(".eclookup-txt>input").val(),
                     statementid : fp.tempStatementId(),
                     element: elementVer
                 };
@@ -767,10 +767,11 @@ fp.addColumn = function(){
             dataStatement.Element[i].ElementVersion.push(elemVer);
         }
         ko.mapping.fromJS(dataStatement, fp.dataFormula);
-        var index = parseInt($(".table-formula-data>thead>tr.searchsv input.searchversion:last").attr("indexcolumn")) + 1;
-        // $(".table-formula-data>thead>tr.searchsv").append("<td indexid='"+index+"'><div class='searchversion'><input class='searchversion' id='version"+index+"' indexcolumn='"+index+"' /></div><div class='searchversion'><ul class='icon-tableheader'><li onClick='fp.selectSimulate("+index+")' data-toggle='tooltip' data-placement='top' title='Simulate'><span class='glyphicon glyphicon-refresh'></span></li><li onClick='fp.saveStatementNew("+index+")' data-toggle='tooltip' data-placement='top' title='Save'><span class='glyphicon glyphicon-floppy-disk'></span></li> <li data-toggle='tooltip' data-placement='top' title='Excel'><span class='fa fa-file-excel-o'></span></li> <li data-toggle='tooltip' data-placement='top' title='Pdf'><span class='fa fa-file-pdf-o'></span></li> <li onClick='fp.removeColumnFormula("+index+")' data-toggle='tooltip' data-placement='top' title='Remove'><span class='glyphicon glyphicon-remove'></span></li></ul></div></td>");
-        $(".table-formula-data>thead>tr.searchsv").append("<td indexid='"+index+"'><div class='searchversion2'><ul class='icon-tableheader'><li onClick='fp.selectSimulate("+index+")' data-toggle='tooltip' data-placement='top' title='Simulate'><span class='glyphicon glyphicon-refresh'></span></li><li onClick='fp.saveStatementNew("+index+")' data-toggle='tooltip' data-placement='top' title='Save'><span class='glyphicon glyphicon-floppy-disk'></span></li> <li data-toggle='tooltip' data-placement='top' title='Excel'><span class='fa fa-file-excel-o'></span></li> <li data-toggle='tooltip' data-placement='top' title='Pdf'><span class='fa fa-file-pdf-o'></span></li> <li onClick='fp.removeColumnFormula("+index+")' data-toggle='tooltip' data-placement='top' title='Remove'><span class='glyphicon glyphicon-remove'></span></li></ul></div><div class='searchversion'><input class='searchversion' id='version"+index+"' indexcolumn='"+index+"' /></div><div class='searchversion headerright'><input id='rundate"+index+"'/></div></td>");
-        $('[data-toggle="tooltip"]').tooltip()
+        // var index = parseInt($(".table-formula-data>thead>tr.searchsv input.searchversion:last").attr("indexcolumn")) + 1;
+        var index = parseInt($(".right-formula>#freazehead thead>tr.searchsv input.searchversion:last").attr("indexcolumn")) + 1;
+        // $(".table-formula-data>thead>tr.searchsv").append("<td indexid='"+index+"'><div class='searchversion2'><ul class='icon-tableheader'><li onClick='fp.selectSimulate("+index+")' data-toggle='tooltip' data-placement='top' title='Simulate'><span class='glyphicon glyphicon-refresh'></span></li><li onClick='fp.saveStatementNew("+index+")' data-toggle='tooltip' data-placement='top' title='Save'><span class='glyphicon glyphicon-floppy-disk'></span></li> <li data-toggle='tooltip' data-placement='top' title='Excel'><span class='fa fa-file-excel-o'></span></li> <li data-toggle='tooltip' data-placement='top' title='Pdf'><span class='fa fa-file-pdf-o'></span></li> <li onClick='fp.removeColumnFormula("+index+")' data-toggle='tooltip' data-placement='top' title='Remove'><span class='glyphicon glyphicon-remove'></span></li></ul></div><div class='searchversion'><input class='searchversion' id='version"+index+"' indexcolumn='"+index+"' /></div><div class='searchversion headerright'><input id='rundate"+index+"'/></div></td>");
+        $(".right-formula>#freazehead thead>tr.searchsv").append("<td indexid='"+index+"'><div class='searchversion2'><ul class='icon-tableheader'><li onClick='fp.selectSimulate("+index+")' data-toggle='tooltip' data-placement='top' title='Simulate'><span class='glyphicon glyphicon-refresh'></span></li><li onClick='fp.saveStatementNew("+index+")' data-toggle='tooltip' data-placement='top' title='Save'><span class='glyphicon glyphicon-floppy-disk'></span></li> <li data-toggle='tooltip' data-placement='top' title='Excel'><span class='fa fa-file-excel-o'></span></li> <li data-toggle='tooltip' data-placement='top' title='Pdf'><span class='fa fa-file-pdf-o'></span></li> <li onClick='fp.removeColumnFormula("+index+")' data-toggle='tooltip' data-placement='top' title='Remove'><span class='glyphicon glyphicon-remove'></span></li></ul></div><div class='searchversion'><input class='searchversion' id='version"+index+"' indexcolumn='"+index+"' /></div><div class='searchversion headerright'><input id='rundate"+index+"'/></div></td>");
+        $('[data-toggle="tooltip"]').tooltip();
         $('#version'+index).ecLookupDD({
             dataSource:{
                 data:fp.recordSugest(),
@@ -804,6 +805,8 @@ fp.refreshHeightTable = function(){
     if (fp.dataFormula.Element()[0].ElementVersion().length>0)
         plusheight = 0;
     $(".table-formula-data").css("width",(fp.dataFormula.Element()[0].ElementVersion().length+1)*400);
+    $("#freazehead>table").css("width",(fp.dataFormula.Element()[0].ElementVersion().length+1)*400);
+    $(".right-formula>div").css("width",(fp.dataFormula.Element()[0].ElementVersion().length+1)*400);
     for(var i=0; i < (fp.dataFormula.Element().length+1); i++){
         height1 = $(".table-formula-head tr").eq(i).height();
         height2 = $(".table-formula-data tr").eq(i).height();
@@ -817,6 +820,7 @@ fp.refreshHeightTable = function(){
             plusheight = 0;
         $(".table-formula-head tr").eq(i).css('height',heightSelect+plusheight);
         $(".table-formula-data tr").eq(i).css('height',heightSelect+plusheight);
+        $(".table-formula-headpinggir tr").css("height",$("#freazehead tr.searchsv").eq(0).height());
     }
     fp.boolHeightTable(1);
 };
@@ -992,8 +996,27 @@ ko.bindingHandlers.tooltip = {
         container: 'body'
     }
 };
-ko.bindingHandlers.numeric = {
-    init: function (element, valueAccessor) {
+// ko.bindingHandlers.numeric = {
+//     init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+//         $(element).on("keydown", function (event) {
+//             if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 ||
+//                 (event.keyCode == 65 && event.ctrlKey === true) ||
+//                 (event.keyCode == 188 || event.keyCode == 190 || event.keyCode == 110) ||
+//                 (event.keyCode >= 35 && event.keyCode <= 39)) {
+//                 return;
+//             }
+//             else {
+//                 if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105)) {
+//                     event.preventDefault();
+//                 }
+//             }
+//         });
+//     }
+// };
+ko.bindingHandlers.valueNumber = {
+    init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+        // This will be called when the binding is first applied to an element
+        // Set up any initial state, event handlers, etc. here
         $(element).on("keydown", function (event) {
             if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 ||
                 (event.keyCode == 65 && event.ctrlKey === true) ||
@@ -1007,6 +1030,28 @@ ko.bindingHandlers.numeric = {
                 }
             }
         });
+        var observable = valueAccessor(),
+            properties = allBindingsAccessor();
+
+        var interceptor = ko.computed({
+            read: function () {
+                // var format = properties.numberFormat || "n2";
+                // return kendo.toString(observable(), format);
+                return observable();
+            },
+            write: function (newValue) {
+                console.log(newValue);
+                var number = parseFloat(newValue);
+                if (number) {
+                    observable(number);
+                }
+            }
+        });
+        if (element.tagName.toLowerCase() === 'input') {
+            ko.applyBindingsToNode(element, { value: interceptor });
+        } else {
+            ko.applyBindingsToNode(element, { text: interceptor });
+        }
     }
 };
 
@@ -1041,5 +1086,9 @@ $(function (){
 	});
     $("#rundate1").kendoDatePicker({
         format: "dd MMM yyyy",
+    });
+    $('#sideTable').scroll(function(){
+        var a = $("#sideTable").scrollTop();
+        $(".freazerow").scrollTop(a);
     });
 });

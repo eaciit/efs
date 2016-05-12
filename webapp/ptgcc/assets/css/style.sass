@@ -815,7 +815,6 @@ body
 				color: whitesmoke
 
 .table-con-formula
-	float: left
 	display: inline-block
 
 .tooltip
@@ -829,11 +828,19 @@ body
 	width: 380px
 	float: left
 
-.table-formula-data .searchsv td
+#freazehead .searchsv td
 	width: 400px
+	padding: 10px
+	border-top: 1px solid #ddd
+	border-right: 1px solid #ddd
+	border-bottom: 1px solid #ddd
 
 .table-formula-data	tbody>tr.datafor>td
 	width: 400px
+
+.table-formula-headpinggir
+	border-right: 1px solid #ddd
+	margin-bottom: 0px
 
 .icon-efs
 	display: block
@@ -932,11 +939,22 @@ tbody tr.rightfreeze:nth-child(even)
 	background-color: #9EE7FF
 
 .table-formula-head
-	width: 40%
 	float: left
 
 .right-formula
 	overflow: auto
+	width: 60%
+
+.right-formula>div
+	overflow: auto
+
+.freazerow
+	overflow: hidden
+	height: 380px
+
+.headcol
+	float: left 
+	width: 40%
 
 .area-editor
 	margin-bottom: 6px
@@ -956,9 +974,6 @@ tbody tr.rightfreeze:nth-child(even)
 .searchversion2
 	float: left
 	width: 100%
-
-.headscroll
-	overflow: auto
 
 .headerright
 	text-align: right
