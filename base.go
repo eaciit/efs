@@ -62,12 +62,6 @@ func Delete(o orm.IModel) error {
 }
 
 func Save(o orm.IModel) error {
-	// if strings.Contains(toolkit.TypeName(o), "StatementVersion") {
-	// 	for i := 0; i < len(o.(*StatementVersion).Element); i++ {
-	// 		o.(*StatementVersion).Element[i].Countcomment = Countcomment(o.(*StatementVersion).Element[i].Sveid)
-	// 	}
-	// }
-
 	e := DB().Save(o)
 	if e != nil {
 		return errors.New("Save: " + e.Error())
@@ -96,6 +90,9 @@ func Find(o orm.IModel, filter *dbox.Filter, config toolkit.M) (dbox.ICursor, er
 		}
 		if config.Has("skip") {
 			dconf.Set("skip", config["skip"])
+		}
+		if config.Has("order") && toolkit.TypeName(config["order"]) == "[]string" {
+			dconf.Set("order", config["order"])
 		}
 	}
 

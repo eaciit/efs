@@ -1,21 +1,24 @@
 package efs
 
 import (
-	"time"
-
+	"errors"
+	"github.com/eaciit/dbox"
 	"github.com/eaciit/orm/v1"
+	"github.com/eaciit/toolkit"
+	// "math"
+	"strings"
+	"time"
 )
 
 type LedgerSummary struct {
 	orm.ModelBase `bson:"-",json:"-"`
-	ID            string `json:"_id",bson:"_id"`
-	TransDate     time.Time
-	// Amount        float64
-	Account string
-	Opening float64
-	In      float64
-	Out     float64
-	Balance float64
+	ID            string    `json:"_id",bson:"_id"`
+	SumDate       time.Time `json:"sumdate",bson:"sumdate"`
+	Account       string    `json:"account",bson:"account"`
+	Opening       float64   `json:"opening",bson:"opening"`
+	In            float64   `json:"in",bson:"in"`
+	Out           float64   `json:"out",bson:"out"`
+	Balance       float64   `json:"balance",bson:"balance"`
 }
 
 func (e *LedgerSummary) RecordID() interface{} {
@@ -29,6 +32,104 @@ func NewLedgerSummary() *LedgerSummary {
 
 func (e *LedgerSummary) TableName() string {
 	return "ledgersummaries"
+}
+
+func (l *LedgerSummary) GetLast(ssumdate, lsumdate time.Time, taccount string) (err error) {
+	cond := new(dbox.Filter)
+	conf := toolkit.M{}
+
+	if ssumdate.IsZero() {
+		cond = dbox.And(dbox.Lt("sumdate", lsumdate), dbox.Eq("account", taccount))
+		conf.Set("order", []string{"-sumdate"}).Set("take", 1)
+	} else {
+		cond = dbox.And(dbox.Gte("sumdate", ssumdate), dbox.Lt("sumdate", lsumdate), dbox.Eq("account", taccount))
+		conf.Set("order", []string{"sumdate"})
+	}
+	csr, err := Find(l, cond, conf)
+	if err != nil {
+		return errors.New("[Save] Get last ledger summary : " + err.Error())
+	}
+	defer csr.Close()
+	err = csr.Fetch(l, 1, false)
+	return
+}
+
+func (l *LedgerSummary) Save() error {
+	e := Save(l)
+	if e != nil {
+		return errors.New("Save: " + e.Error())
+	}
+	return e
+}
+
+// func (l *LedgerSummary) Delete() error {
+// 	e := Delete(l)
+// 	if e != nil {
+// 		return errors.New("Save: " + e.Error())
+// 	}
+// 	return e
+// }
+
+func updatesummary(lt *LedgerTrans, in, out float64) (err error) {
+
+	als := make([]LedgerSummary, 0, 0)
+	cond := dbox.And(dbox.Gte("sumdate", lt.TransDate), dbox.Eq("account", lt.Account))
+	csr, err := Find(new(LedgerSummary), cond, toolkit.M{}.Set("order", []string{"sumdate"}))
+	if err != nil {
+		return errors.New("[Save] Get ledger summary : " + err.Error())
+	}
+	defer csr.Close()
+	err = csr.Fetch(&als, 0, false)
+	if err != nil && !strings.Contains(err.Error(), "Not found") {
+		return errors.New("[Save] Get ledger summary : " + err.Error())
+	}
+
+	var lastbalace float64
+	for i, v := range als {
+		if i == 0 && v.SumDate.Equal(lt.TransDate) {
+			v.In = in
+			v.Out = out
+		} else if i == 0 {
+			tls := new(LedgerSummary)
+			tls.ID = toolkit.RandomString(32)
+			tls.SumDate = lt.TransDate
+			tls.Account = lt.Account
+			tls.Opening = v.Opening
+			tls.In = in
+			tls.Out = out
+			tls.Balance = tls.Opening + tls.In - tls.Out
+
+			err = tls.Save()
+
+			v.Opening = tls.Balance
+		} else {
+			v.Opening = lastbalace
+		}
+
+		v.Balance = v.Opening + v.In - v.Out
+		lastbalace = v.Balance
+		err = v.Save()
+	}
+
+	if len(als) == 0 {
+		tls := new(LedgerSummary)
+		err = tls.GetLast(time.Time{}, lt.TransDate, lt.Account)
+		if err != nil {
+			return
+		}
+
+		tls.ID = toolkit.RandomString(32)
+		tls.SumDate = lt.TransDate
+		tls.Account = lt.Account
+		tls.Opening = tls.Balance
+		tls.In = in
+		tls.Out = out
+		tls.Balance = tls.Opening + tls.In - tls.Out
+
+		err = tls.Save()
+	}
+
+	return
 }
 
 /*

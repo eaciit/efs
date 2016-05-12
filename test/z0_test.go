@@ -9,6 +9,7 @@ import (
 	"github.com/eaciit/toolkit"
 	"os"
 	"testing"
+	"time"
 )
 
 var wd, _ = os.Getwd()
@@ -19,10 +20,10 @@ var tkmdt = toolkit.M{}.Set("@1", 1).Set("@2", 2).Set("@3", 3).Set("@4", 4).Set(
 func prepareconnection() (conn dbox.IConnection, err error) {
 	// conn, err = dbox.NewConnection("mongo",
 	// 	&dbox.ConnectionInfo{"192.168.0.200:27017", "efspttgcc", "", "", toolkit.M{}.Set("timeout", 3)})
-	// conn, err = dbox.NewConnection("mongo",
-	// 	&dbox.ConnectionInfo{"localhost:27017", "efs", "", "", toolkit.M{}.Set("timeout", 3)})
-	conn, err = dbox.NewConnection("jsons",
-		&dbox.ConnectionInfo{wd, "", "", "", toolkit.M{}.Set("newfile", true)})
+	conn, err = dbox.NewConnection("mongo",
+		&dbox.ConnectionInfo{"localhost:27017", "efs", "", "", toolkit.M{}.Set("timeout", 3)})
+	// conn, err = dbox.NewConnection("jsons",
+	// 	&dbox.ConnectionInfo{wd, "", "", "", toolkit.M{}.Set("newfile", true)})
 	if err != nil {
 		return
 	}
@@ -70,7 +71,7 @@ func loaddatasample() (arrtkm []*efs.StatementElement, err error) {
 }
 
 func TestCreateStatement(t *testing.T) {
-	// t.Skip("Skip : Comment this line to do test")
+	t.Skip("Skip : Comment this line to do test")
 	arrdata, err := loaddatasample()
 	if err != nil {
 		t.Errorf("Error to load data sample: %s \n", err.Error())
@@ -166,7 +167,7 @@ func TestRunStatement(t *testing.T) {
 }
 
 func TestSaveStatementVersion(t *testing.T) {
-	// t.Skip("Skip : Comment this line to do test")
+	t.Skip("Skip : Comment this line to do test")
 	sid := "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j"
 
 	ds := new(efs.Statements)
@@ -227,4 +228,101 @@ func TestFormula(t *testing.T) {
 	xgot = f.Run(tkmdt)
 	toolkit.Printf("F3 : %s \n", toolkit.Jsonify(f))
 	toolkit.Printf("F3 : @10+@2+@3-@3-@1 = %v \n", xgot)
+}
+
+func TestRandomCode(t *testing.T) {
+	t.Skip("Skip : Comment this line to do test")
+	arstr := make([]string, 0, 0)
+	arstr = append(arstr, "satu")
+	arstr = append(arstr, "dua")
+	arstr = append(arstr, "tiga")
+
+	toolkit.Println(toolkit.TypeName(arstr))
+}
+
+func TestCreateAccount(t *testing.T) {
+	t.Skip("Skip : Comment this line to do test")
+	ac := new(efs.Accounts)
+	ac.ID = "T1234"
+	ac.Title = "TEST01"
+	ac.Type = efs.Account
+	ac.Group = []string{}
+
+	ls := new(efs.LedgerSummary)
+	ls.ID = toolkit.RandomString(32)
+	ls.SumDate = time.Date(2016, 1, 1, 0, 0, 0, 0, time.UTC)
+	ls.Account = ac.ID
+	ls.Opening = 10000 //get from input create account
+	ls.In = 0
+	ls.Out = 0
+	ls.Balance = ls.Opening
+
+	err := ac.Save(ls)
+	toolkit.Println(err)
+}
+
+func TestEditAccount(t *testing.T) {
+	t.Skip("Skip : Comment this line to do test")
+	ac := new(efs.Accounts)
+	ac.ID = "T1234"
+	ac.Title = "TEST01234"
+	ac.Type = efs.Account
+	ac.Group = []string{}
+
+	err := ac.Save(nil)
+	toolkit.Println(err)
+}
+
+func TestAddTransaction(t *testing.T) {
+	t.Skip("Skip : Comment this line to do test")
+	lt := new(efs.LedgerTrans)
+	lt.ID = toolkit.RandomString(32)
+	lt.Company = "100"
+	lt.JournalNo = "J00001"
+	lt.TransDate = time.Date(2016, 1, 5, 0, 0, 0, 0, time.UTC)
+	lt.Amount = 100
+	lt.Account = "T1234"
+
+	err := lt.Save()
+	toolkit.Println("Transaction 1 : ", err)
+
+	lt.ID = toolkit.RandomString(32)
+	lt.JournalNo = "J00002"
+	lt.TransDate = time.Date(2016, 1, 6, 0, 0, 0, 0, time.UTC)
+	lt.Amount = 150
+	lt.Account = "T1234"
+
+	err = lt.Save()
+	toolkit.Println("Transaction 2 : ", err)
+
+	lt.ID = toolkit.RandomString(32)
+	lt.JournalNo = "J00003"
+	lt.TransDate = time.Date(2016, 1, 2, 0, 0, 0, 0, time.UTC)
+	lt.Amount = -150
+	lt.Account = "T1234"
+
+	err = lt.Save()
+	toolkit.Println("Transaction 3 : ", err)
+
+	lt.ID = toolkit.RandomString(32)
+	lt.JournalNo = "J00001-1"
+	lt.TransDate = time.Date(2016, 1, 5, 0, 0, 0, 0, time.UTC)
+	lt.Amount = 100
+	lt.Account = "T1234"
+
+	err = lt.Save()
+	toolkit.Println("Transaction 4 : ", err)
+}
+
+//Krgi7sjaT_5HUjxWc-ZP8m6RLjllp8qx
+func TestDeleteTransaction(t *testing.T) {
+	t.Skip("Skip : Comment this line to do test")
+	lt := new(efs.LedgerTrans)
+	err := efs.Get(lt, "Krgi7sjaT_5HUjxWc-ZP8m6RLjllp8qx")
+	toolkit.Println("GET 1 : ", err)
+
+	if err == nil {
+		err = lt.Delete()
+		toolkit.Println("DELETE 1 : ", err)
+	}
 }
