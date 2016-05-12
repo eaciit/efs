@@ -87,7 +87,7 @@ func TestCreateStatement(t *testing.T) {
 
 	ds.Elements = append(ds.Elements, arrdata...)
 
-	err = efs.Save(ds)
+	err = ds.Save()
 	if err != nil {
 		t.Errorf("Error to save efs: %s \n", err.Error())
 		return
@@ -119,7 +119,7 @@ func TestLogic(t *testing.T) {
 }
 
 func TestRunStatement(t *testing.T) {
-	t.Skip("Skip : Comment this line to do test")
+	// t.Skip("Skip : Comment this line to do test")
 	sid := "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j"
 	// sid = "qZ-SesL2s0Q7VODxyWj6-RVlqsa56ZMJ"
 
@@ -131,7 +131,11 @@ func TestRunStatement(t *testing.T) {
 	}
 	// toolkit.Printf("Statements : %#v\n\n", ds)
 
-	tsv, _, _ := ds.Run(nil)
+	tsv, _, _ := ds.Run(toolkit.M{}.Set("mode", "fullrun"))
+	toolkit.Printf("First Run :%#v - %v \n", tsv.ID, tsv.Title)
+	for _, val := range tsv.Element {
+		toolkit.Printf("%v. %v:%v [%v - %v - %#v] \n", val.StatementElement.Index, val.StatementElement.Title1, val.StatementElement.Title2, val.Formula, val.ValueTxt, val.ValueNum)
+	}
 	// tsv.StatementID = sid
 
 	// ======================
@@ -139,6 +143,7 @@ func TestRunStatement(t *testing.T) {
 	// ======================
 	tsv.ID = toolkit.RandomString(32)
 	tsv.Title = "v.2015"
+	tsv.Rundate = time.Date(2016, 1, 30, 0, 0, 0, 0, time.UTC)
 
 	tsv.Element[0].ValueNum = 10000
 	tsv.Element[2].ValueNum = 1000
@@ -151,7 +156,7 @@ func TestRunStatement(t *testing.T) {
 	// tsv.Element[9].Formula = []string{"fn:IF(1+2*2<2+2*2,5,6)"}
 	// tsv.Element[9].Formula = []string{"@1", "+", "fn:SUM(@3..@5)"}
 	// ======================
-	ins := toolkit.M{}.Set("data", tsv)
+	ins := toolkit.M{}.Set("data", tsv).Set("mode", "fullrun")
 	sv, _, err := ds.Run(ins)
 	if err != nil {
 		t.Errorf("Error to get run, found : %s \n", err.Error())
@@ -161,9 +166,9 @@ func TestRunStatement(t *testing.T) {
 	}
 
 	toolkit.Printf("Statements Version :%#v - %v \n", sv.ID, sv.Title)
-	/*for _, val := range sv.Element {
+	for _, val := range sv.Element {
 		toolkit.Printf("%v. %v:%v [%v - %v - %#v] \n", val.StatementElement.Index, val.StatementElement.Title1, val.StatementElement.Title2, val.Formula, val.ValueTxt, val.ValueNum)
-	}*/
+	}
 }
 
 func TestSaveStatementVersion(t *testing.T) {

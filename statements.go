@@ -33,6 +33,23 @@ func (e *Statements) TableName() string {
 	return "statements"
 }
 
+func (e *Statements) NewStatementVersion() (sv *StatementVersion) {
+	sv = new(StatementVersion)
+	sv.ID = toolkit.RandomString(32)
+	sv.StatementID = e.ID
+	sv.Rundate = time.Date(time.Now().UTC().Year(), time.Now().UTC().Month(), time.Now().UTC().Day(), 0, 0, 0, 0, time.UTC)
+
+	for _, v := range e.Elements {
+		tve := new(VersionElement)
+		tve.StatementElement = v
+		tve.Comments = []string{}
+		tve.Formula = v.Formula
+		sv.Element = append(sv.Element, tve)
+	}
+
+	return
+}
+
 func (e *Statements) Save() error {
 	for i, val := range e.Elements {
 		if val.Eid == "" {
@@ -46,15 +63,20 @@ func (e *Statements) Save() error {
 	return nil
 }
 
-//mode : open/find, fullrun, default
+//mode : open/find, fullrun, basic
 func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion, comments []Comments, err error) {
-	sv = new(StatementVersion)
+	if ins == nil {
+		ins = toolkit.M{}
+	}
+
+	sv = e.NewStatementVersion()
 	comments = make([]Comments, 0, 0)
 	arrtkmcom := make([]toolkit.M, 0, 0)
 	elemopens := toolkit.M{}
 
 	//mode open
-	if ins.Has("mode") && (toolkit.ToString(ins["mode"]) == "open" || toolkit.ToString(ins["mode"]) == "find") {
+	strmode := toolkit.ToString(ins.Get("mode", ""))
+	if strmode == "open" || strmode == "find" {
 		if ins.Has("_id") && toolkit.ToString(ins["_id"]) != "" {
 			tsv := new(StatementVersion)
 			err = Get(tsv, toolkit.ToString(ins["_id"]))
@@ -70,13 +92,13 @@ func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion, comments []Commen
 
 	inst, aformula, tidcomment := toolkit.M{}, toolkit.M{}, make([][]string, 0, 0)
 	if ins.Has("data") && strings.Contains(toolkit.TypeName(ins["data"]), "StatementVersion") {
-		strmode := toolkit.ToString(ins.Get("mode", ""))
 		sv = ins["data"].(*StatementVersion)
-		inst, aformula, tidcomment, err = extractdatainput(ins["data"].(*StatementVersion), strmode)
 	} else if ins.Has("data") {
 		err = errors.New("Data has wrong format.")
 		return
 	}
+
+	inst, aformula, tidcomment, err = extractdatainput(sv, strmode)
 
 	commentArr := []interface{}{}
 	if ins.Has("comment") {
