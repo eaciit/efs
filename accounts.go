@@ -1,6 +1,7 @@
 package efs
 
 import (
+	"errors"
 	"github.com/eaciit/orm/v1"
 )
 
@@ -36,4 +37,29 @@ func (a AccountTypeEnum) String() string {
 	}
 
 	return "unknown"
+}
+
+//save account with initial summary
+func (a *Accounts) Save(ls *LedgerSummary) error {
+	e := Save(a)
+	if e != nil {
+		return errors.New("Save: " + e.Error())
+	}
+
+	if ls != nil {
+		e := Save(ls)
+		if e != nil {
+			return errors.New("Save: " + e.Error())
+		}
+	}
+
+	return e
+}
+
+func (a *Accounts) Delete() error {
+	e := Delete(a)
+	if e != nil {
+		return errors.New("Save: " + e.Error())
+	}
+	return e
 }

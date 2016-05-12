@@ -2,10 +2,12 @@ package efs
 
 import (
 	"errors"
+	"github.com/eaciit/dbox"
 	"github.com/eaciit/orm/v1"
 	"github.com/eaciit/toolkit"
 	"regexp"
 	"strings"
+	"time"
 )
 
 type Statements struct {
@@ -32,47 +34,50 @@ func (e *Statements) TableName() string {
 }
 
 func (e *Statements) Save() error {
+	for i, val := range e.Elements {
+		if val.Eid == "" {
+			e.Elements[i].Eid = toolkit.RandomString(32)
+		}
+	}
+
 	if err := Save(e); err != nil {
 		return err
 	}
 	return nil
 }
 
+//mode : open/find, fullrun, default
 func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion, comments []Comments, err error) {
 	sv = new(StatementVersion)
 	comments = make([]Comments, 0, 0)
 	arrtkmcom := make([]toolkit.M, 0, 0)
+	elemopens := toolkit.M{}
+
+	//mode open
+	if ins.Has("mode") && (toolkit.ToString(ins["mode"]) == "open" || toolkit.ToString(ins["mode"]) == "find") {
+		if ins.Has("_id") && toolkit.ToString(ins["_id"]) != "" {
+			tsv := new(StatementVersion)
+			err = Get(tsv, toolkit.ToString(ins["_id"]))
+			for _, val := range tsv.Element {
+				if val.IsTxt {
+					elemopens.Set(val.StatementElement.Eid, val.ValueTxt)
+				} else {
+					elemopens.Set(val.StatementElement.Eid, val.ValueNum)
+				}
+			}
+		}
+	}
 
 	inst, aformula, tidcomment := toolkit.M{}, toolkit.M{}, make([][]string, 0, 0)
 	if ins.Has("data") && strings.Contains(toolkit.TypeName(ins["data"]), "StatementVersion") {
+		strmode := toolkit.ToString(ins.Get("mode", ""))
 		sv = ins["data"].(*StatementVersion)
-		inst, aformula, tidcomment, err = extractdatainput(ins["data"].(*StatementVersion))
+		inst, aformula, tidcomment, err = extractdatainput(ins["data"].(*StatementVersion), strmode)
 	} else if ins.Has("data") {
 		err = errors.New("Data has wrong format.")
 		return
 	}
 
-	/*if ins.Has("comment") && strings.Contains(toolkit.TypeName(ins["comment"]), ".M") {
-		arrtkmcom = ins["comment"].([]toolkit.M)
-	} else if ins.Has("comment") {
-		err = errors.New("Comment has wrong format.")
-		return
-	}*/
-
-	//set array comments and set id for new id
-	/*for i, val := range arrtkmcom {
-		comment := Comments{}
-
-		if val.Has("type") && toolkit.ToString(val["type"]) != "delete" {
-			toolkit.Serde(val, &comment, "json")
-			if comment.ID == "" {
-				comment.ID = toolkit.RandomString(32)
-				val.Set("_id", comment.ID)
-				arrtkmcom[i] = val
-			}
-			comments = append(comments, comment)
-		}
-	}*/
 	commentArr := []interface{}{}
 	if ins.Has("comment") {
 		commentArr = ins["comment"].([]interface{})
@@ -118,11 +123,24 @@ func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion, comments []Commen
 		case v.Type == ElementNone:
 			tve.IsTxt = true
 			tve.ValueTxt = strings.Join(v.DataValue, " ")
+			if elemopens.Has(tve.StatementElement.Eid) {
+				tve.ValueTxt = toolkit.ToString(elemopens[tve.StatementElement.Eid])
+			}
 		case v.Type == ElementParmString || v.Type == ElementParmDate:
 			tve.IsTxt = true
 			tve.ValueTxt = toolkit.ToString(inst.Get(toolkit.Sprintf("@%v", v.Index), ""))
+
+			if elemopens.Has(tve.StatementElement.Eid) {
+				tve.ValueTxt = toolkit.ToString(elemopens[tve.StatementElement.Eid])
+			}
+
 		case v.Type == ElementParmNumber:
 			str := toolkit.ToString(inst.Get(toolkit.Sprintf("@%v", v.Index), ""))
+			if elemopens.Has(tve.StatementElement.Eid) {
+				str = toolkit.ToString(elemopens[tve.StatementElement.Eid])
+			}
+
+			str = toolkit.ToString(inst.Get(toolkit.Sprintf("@%v", v.Index), ""))
 			decimalPoint := len(str) - (strings.Index(str, ".") + 1)
 			tve.ValueNum = toolkit.ToFloat64(str, decimalPoint, toolkit.RoundingAuto)
 		case v.Type == ElementFormula:
@@ -131,6 +149,10 @@ func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion, comments []Commen
 				str = strings.Join(inst[toolkit.Sprintf("@%v", v.Index)].([]string), "")
 			} else {
 				str = toolkit.ToString(inst.Get(toolkit.Sprintf("@%v", v.Index), ""))
+			}
+
+			if elemopens.Has(tve.StatementElement.Eid) {
+				str = toolkit.ToString(elemopens[tve.StatementElement.Eid])
 			}
 
 			if isnum(str) {
@@ -145,7 +167,19 @@ func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion, comments []Commen
 			if aformula.Has(toolkit.Sprintf("@%v", v.Index)) {
 				tve.Formula = aformula[toolkit.Sprintf("@%v", v.Index)].([]string)
 			}
+		default:
+			str := toolkit.ToString(inst.Get(toolkit.Sprintf("@%v", v.Index), ""))
+			if elemopens.Has(tve.StatementElement.Eid) {
+				str = toolkit.ToString(elemopens[tve.StatementElement.Eid])
+			}
 
+			if isnum(str) {
+				decimalPoint := len(str) - (strings.Index(str, ".") + 1)
+				tve.ValueNum = toolkit.ToFloat64(str, decimalPoint, toolkit.RoundingAuto)
+			} else {
+				tve.IsTxt = true
+				tve.ValueTxt = str
+			}
 		}
 
 		sv.Element = append(sv.Element, tve)
@@ -157,7 +191,7 @@ func (e *Statements) Run(ins toolkit.M) (sv *StatementVersion, comments []Commen
 
 //= will be split to  helper ==
 
-func extractdatainput(inputsv *StatementVersion) (tkm, aformula toolkit.M, tidcomments [][]string, err error) {
+func extractdatainput(inputsv *StatementVersion, mode string) (tkm, aformula toolkit.M, tidcomments [][]string, err error) {
 	// toolkit.Println("ID of Statement version : ", inputsv.ID)
 	tkm, aformula, tidcomments = toolkit.M{}, toolkit.M{}, make([][]string, 0, 0)
 	arrint := make([]int, 0, 0)
@@ -167,15 +201,38 @@ func extractdatainput(inputsv *StatementVersion) (tkm, aformula toolkit.M, tidco
 		// arrsvid = append(arrsvid, val.Sveid)
 		tidcomm := []string{}
 		switch {
+		case val.StatementElement.Type == ElementCoA:
+			tkm.Set(toolkit.Sprintf("@%v", val.StatementElement.Index), val.ValueNum)
+			if mode != "fullrun" {
+				continue
+			}
+
+			tkm.Set(toolkit.Sprintf("@%v", val.StatementElement.Index),
+				getvalue(val.StatementElement.DataValue,
+					Account,
+					val.StatementElement.TransactionReadType,
+					val.StatementElement.TimeReadType,
+					inputsv.Rundate))
+
+		case val.StatementElement.Type == ElementGroup:
+			tkm.Set(toolkit.Sprintf("@%v", val.StatementElement.Index), val.ValueNum)
+			if mode != "fullrun" {
+				continue
+			}
+
+			tkm.Set(toolkit.Sprintf("@%v", val.StatementElement.Index),
+				getvalue(val.StatementElement.DataValue,
+					Group,
+					val.StatementElement.TransactionReadType,
+					val.StatementElement.TimeReadType,
+					inputsv.Rundate))
+
 		case val.StatementElement.Type == ElementFormula:
-			//get formula
 			arr := []string{}
 			for _, as := range val.Formula {
 				arr = append(arr, as)
 			}
 			aformula.Set(toolkit.Sprintf("@%v", val.StatementElement.Index), arr)
-			// ====
-
 			tkm.Set(toolkit.Sprintf("@%v", val.StatementElement.Index), val.Formula)
 		case val.StatementElement.Type == ElementParmString || val.StatementElement.Type == ElementParmDate:
 			tkm.Set(toolkit.Sprintf("@%v", val.StatementElement.Index), val.ValueTxt)
@@ -339,6 +396,89 @@ func updatecomment(index int, comments []string, arrtkmcom []toolkit.M) (lastcom
 
 	if len(add) > 0 {
 		lastcomments = append(lastcomments, add...)
+	}
+
+	return
+}
+
+func getvalue(data []string, atype AccountTypeEnum, readtype TransactionReadTypeEnum, timetype TimeReadTypeEnum, rundate time.Time) (retval float64) {
+	daccounts := make([]string, 0, 0)
+	if atype == Account {
+		daccounts = append(daccounts, data...)
+	} else {
+		var cond []*dbox.Filter
+		for _, v := range data {
+			cond = append(cond, dbox.Eq("group", v))
+		}
+		adata := []Accounts{}
+		csr, err := Find(new(Accounts), dbox.Or(cond...), nil)
+		if err != nil {
+			return
+		}
+		err = csr.Fetch(&adata, 0, false)
+		for _, v := range adata {
+			daccounts = append(daccounts, v.ID)
+		}
+		csr.Close()
+	}
+
+	if len(daccounts) == 0 {
+		return
+	}
+
+	var acond []*dbox.Filter
+	var cond *dbox.Filter
+	for _, v := range data {
+		acond = append(acond, dbox.Eq("account", v))
+	}
+
+	if len(acond) > 0 {
+		cond = dbox.Or(acond...)
+	}
+
+	var starttime time.Time
+	switch timetype {
+	case Timemtd:
+		starttime = rundate.AddDate(0, -1, 0)
+	case Timeqtd:
+		starttime = rundate.AddDate(0, -4, 0)
+	case Timeytd:
+		starttime = rundate.AddDate(-1, 0, 0)
+	case TimeLastMonth:
+		starttime = time.Date(rundate.Year(), rundate.Month(), 1, 0, 0, 0, 0, rundate.Location())
+	case TimeLastQuarter:
+		var monthint time.Month = 4*((rundate.Month()-1)/4) + 1
+		starttime = time.Date(rundate.Year(), monthint, 1, 0, 0, 0, 0, rundate.Location())
+	case TimeLastYear:
+		starttime = time.Date(rundate.Year(), 1, 1, 0, 0, 0, 0, rundate.Location())
+	}
+
+	cond = dbox.And(cond, dbox.Gte("sumdate", starttime.UTC()), dbox.Lt("sumdate", rundate.UTC()))
+	asum := []LedgerSummary{}
+	csr, err := Find(new(LedgerSummary), cond, nil)
+	if err != nil {
+		return
+	}
+	defer csr.Close()
+	err = csr.Fetch(&asum, 0, false)
+	//mark for possibility change
+	for _, v := range asum {
+		switch readtype {
+		case ReadOpening:
+			if v.SumDate == starttime.UTC() {
+				retval = v.Opening
+			}
+		case ReadBalance:
+			if v.SumDate == rundate.UTC() {
+				retval = v.Balance
+			}
+		case ReadIn:
+			retval = retval + v.In
+		case ReadOut:
+			retval = retval + v.Out
+		case ReadMovement:
+			retval = retval + (v.In - v.Out)
+		}
 	}
 
 	return

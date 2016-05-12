@@ -33,6 +33,7 @@ const (
 )
 
 type StatementElement struct {
+	Eid                 string
 	Index               int
 	Title1              string
 	Title2              string
