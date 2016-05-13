@@ -2,13 +2,13 @@ app.section('transaction');
 viewModel.Transaction = {}; var tr = viewModel.Transaction;
 tr.templateTransaction = {
 	_id: "",
-    Company: "",
-    Account: "",
-    ProfitCenter: "",
-    CostCenter: "",
-    TransDate: moment().format(),
-    Amount: 0,
-    JournalNo: "",
+    company: "",
+    account: "",
+    profitcenter: "",
+    costcenter: "",
+    transdate: moment().format(),
+    amount: 0,
+    journalno: "",
 }
 
 tr.transactionData = ko.observableArray([]);
@@ -21,13 +21,13 @@ tr.transactionColumns = ko.observableArray([
 			"<input type='checkbox' class='transactioncheck' idcheck='"+d._id+"' onclick=\"tr.checkDeleteData(this, 'transaction')\" />"
 		].join(" ");
 	}},
-	{ field: "JournalNo", title: "JournalNo" },
-	{ field: "Company", title: "Company" },
-	{ field: "Account", title: "Account" },
-	{ field: "ProfitCenter", title: "Profit Center" },
-	{ field: "CostCenter", title: "Cost Center" },
-	{ field: "TransDate", title: "Date", template: "<span>#=moment(TransDate).format('DD MMM YYYY')#</span>"},
-	{ field: "Amount", title: "Amount", template: "<span>#=kendo.toString(Amount,'n2')#</span>"},
+	{ field: "journalno", title: "JournalNo" },
+	{ field: "company", title: "Company" },
+	{ field: "account", title: "Account" },
+	{ field: "profitcenter", title: "Profit Center" },
+	{ field: "costcenter", title: "Cost Center" },
+	{ field: "transdate", title: "Date", template: "<span>#=moment(transdate).format('DD MMM YYYY')#</span>"},
+	{ field: "amount", title: "Amount", template: "<span>#=kendo.toString(amount,'n2')#</span>"},
 ]);
 
 tr.checkDeleteData = function(elem, e){
@@ -113,7 +113,7 @@ tr.editTransaction = function(_id){
 		app.resetValidation(".form-add-efs");
 		ko.mapping.fromJS(res.data, tr.configTransaction);
 		$('#accounttype').ecLookupDD("clear");
-		$('#accounttype').ecLookupDD("addLookup",{_id:res.data.Account});
+		$('#accounttype').ecLookupDD("addLookup",{_id:res.data.account});
 	});
 };
 tr.backToFront = function(){
@@ -128,10 +128,9 @@ tr.saveTransaction = function(){
 	}
 	var param = ko.mapping.toJS(tr.configTransaction), accounttype = $('#accounttype').ecLookupDD('get');
 	if (accounttype.length > 0){
-		param.Account = accounttype[0]._id;
+		param.account = accounttype[0]._id;
 	}
-	param.Amount = parseFloat(param.Amount);
-	console.log(param);
+	param.amount = parseFloat(param.Amount);
 	app.ajaxPost("/ledgertransaction/saveledgertransaction", param, function (res) {
         if (!app.isFine(res)) {
             return;
@@ -139,6 +138,84 @@ tr.saveTransaction = function(){
 		tr.backToFront();
     });
 };
+
+// Upload
+tr.templateUpload = {
+	_id: "",
+	filename: "",
+	physicalname: "",
+	desc: "",
+	date: moment().format(),
+	account: [],
+	process: 0,
+	status: "",
+}
+tr.uploadData = ko.observableArray([]);
+tr.configUpload = ko.mapping.fromJS(tr.templateUpload);
+tr.uploadColumns = ko.observableArray([
+	{headerTemplate: "<center><input type='checkbox' class='uploadcheckall' onclick=\"tr.checkDeleteData(this, 'uploadall')\"/></center>", width: 50, attributes: { style: "text-align: center;" }, template: function (d) {
+		return [
+			"<input type='checkbox' class='uploadcheck' idcheck='"+d._id+"' onclick=\"tr.checkDeleteData(this, 'upload')\" />"
+		].join(" ");
+	}},
+	{ field: "filename", title: "Filename" },
+	{ field: "desc", title: "Description" },
+	{ field: "date", title: "Date", template: "<span>#=moment(date).format('DD MMM YYYY')#</span>"},
+	{ field: "account", title: "Account", template: function (d) {
+		var html = [];
+		for (var i = 0; i < d.account.length; i++) {
+			html.push('<span>' + d.account[i] + '</span>');
+		}
+		return html.join(', ');
+	} },
+	{ field: "process", title: "Process", template: "<span>#=process#%</span>" },
+	{ title: "Action", width: 20, attributes: { style: "text-align: center; cursor: pointer;"}, template: function (d) {
+        return [
+			"<button class='btn btn-sm btn-default btn-text-success tooltipster'><span class='glyphicon glyphicon-play'></span></button>",
+		].join(" ");
+	} },
+]);
+tr.selectGridUpload = function(){
+
+};
+tr.getUpload = function(){
+	app.ajaxPost("/ledgertransfile/getledgertransfile", { }, function (res) {
+		if (!app.isFine(res)) {
+			return;
+		}
+		tr.uploadData(res.data);
+	});
+};
+tr.saveTransFile = function(){
+	if (!app.isFormValid(".form-add-transupload")) {
+		return;
+	}
+	// var param = ko.mapping.toJS(tr.configUpload);
+    var formData = new FormData();
+    formData.append("desc", tr.configUpload().desc());
+    formData.append("filename", tr.configUpload().filename());
+    
+    var attach = $(".form-add-transupload").find("#panel-data");
+    if (attach.val() !== "") {
+        formData.append("userfile", attach[0].files[0]);   
+    }
+    app.ajaxPost("/ledgertransfile/saveledgertransfile", formData, function (res) {
+        if (!app.isFine(res)) {
+            return;
+        }
+        tr.getUpload();
+    });
+};
+tr.uploadView = function(){
+	tr.getUpload();
+	app.mode("upload");
+	app.section("uploadtransaction");
+};
+tr.backTransaction = function(){
+	app.mode("");
+	app.section("transaction");
+};
+
 
 ko.bindingHandlers.numeric = {
     init: function (element, valueAccessor) {

@@ -10,7 +10,7 @@
 		        <button class="btn btn-sm btn-primary mgTop15" data-bind="click: getTransaction">
 		            <span class="glyphicon glyphicon-refresh"></span> Refresh
 		        </button>
-		        <button class="btn btn-sm btn-success mgTop15">
+		        <button class="btn btn-sm btn-success mgTop15" data-bind="click: uploadView">
 		            <span class="glyphicon glyphicon-upload"></span> Upload File
 		        </button>
 		        <button class="btn btn-sm btn-primary mgTop15" data-bind="click: addTransaction">
@@ -49,13 +49,13 @@
 			    		<div class="form-group">
 				    		<label class="col-md-3 databrowser-label">Journal No</label>
 				    		<div class="col-md-9">
-					    		<input type="text" class="form-control input-sm" name="costcenter" placeholder="Type the page journal Here" data-bind="value: JournalNo" />
+					    		<input type="text" class="form-control input-sm" name="costcenter" placeholder="Type the page journal Here" data-bind="value: journalno" />
 				    		</div>
 			    		</div>
 			    		<div class="form-group">
 				    		<label class="col-md-3 databrowser-label">Company</label>
 				    		<div class="col-md-9">
-					    		<input type="text" class="form-control input-sm" name="costcenter" placeholder="Type the page company Here" data-bind="value: Company" />
+					    		<input type="text" class="form-control input-sm" name="costcenter" placeholder="Type the page company Here" data-bind="value: company" />
 				    		</div>
 			    		</div>
 			    		<div class="form-group">
@@ -69,30 +69,73 @@
 			    		<div class="form-group">
 				    		<label class="col-md-3 databrowser-label">Profit Center</label>
 				    		<div class="col-md-9">
-					    		<input type="text" class="form-control input-sm" name="profitcenter" placeholder="Type the page profit center Here" data-bind="value: ProfitCenter" />
+					    		<input type="text" class="form-control input-sm" name="profitcenter" placeholder="Type the page profit center Here" data-bind="value: profitcenter" />
 				    		</div>
 			    		</div>
 			    		<div class="form-group">
 				    		<label class="col-md-3 databrowser-label">Cost Center</label>
 				    		<div class="col-md-9">
-					    		<input type="text" class="form-control input-sm" name="costcenter" placeholder="Type the page cost center Here" data-bind="value: CostCenter" />
+					    		<input type="text" class="form-control input-sm" name="costcenter" placeholder="Type the page cost center Here" data-bind="value: costcenter" />
 				    		</div>
 			    		</div>
 			    		<div class="form-group">
 				    		<label class="col-md-3 databrowser-label">Amount</label>
 				    		<div class="col-md-9">
-					    		<input type="text" class="form-control input-sm" name="amount" placeholder="Type the page amount Here" data-bind="value: Amount, numeric" />
+					    		<input type="text" class="form-control input-sm" name="amount" placeholder="Type the page amount Here" data-bind="value: amount, numeric" />
 				    		</div>
 			    		</div>
 			    		<div class="form-group">
 				    		<label class="col-md-3 databrowser-label">Date</label>
 				    		<div class="col-md-9">
-					    		<input type="text" class="form-control input-sm" name="costcenter" data-bind="kendoDatePicker:{format:'dd MMM yyyy', value:TransDate}" />
+					    		<input type="text" class="form-control input-sm" name="costcenter" data-bind="kendoDatePicker:{format:'dd MMM yyyy', value:transdate}" />
 				    		</div>
 			    		</div>
 			    	</div>
 			    </form>
 			</div>
+		</div>
+	</div>
+	<div class="col-md-12" data-bind="visible: (app.section() == 'uploadtransaction')">
+		<h1>Upload Transaction</h1>
+		<nav class="navbar" data-bind="visible: (app.mode() == 'upload')">
+			<div class="btn-group" role="group">
+				<button class="btn btn-sm btn-warning mgTop15" data-bind="click: backTransaction">
+		            <span class="glyphicon glyphicon-chevron-left"></span> Back
+		        </button>
+		        <button class="btn btn-sm btn-primary mgTop15" data-bind="click: getUpload">
+		            <span class="glyphicon glyphicon-refresh"></span> Refresh
+		        </button>
+		        <button class="btn btn-sm btn-success mgTop15" data-bind="click: saveTransFile">
+		            <span class="glyphicon glyphicon-save"></span> Save
+		        </button>
+		    </div>
+		</nav>
+		<div class="panel" data-bind="visible: (app.mode() == 'upload')">
+			<div class="panel-body">
+				<form class="form-horizontal form-add-transupload" data-bind="with: configUpload" novalidate>
+					<div class="col-md-6">
+						<div class="form-group">
+				    		<label class="col-md-3 databrowser-label">Description</label>
+				    		<div class="col-md-9">
+					    		<input required type="text" class="form-control input-sm" name="_id" placeholder="Type the description Here" data-bind="value: desc">
+								<span class="k-invalid-msg" data-for="desc"></span>
+				    		</div>
+			    		</div>
+			    		<div class="form-group">
+				    		<label class="col-md-3 databrowser-label">File</label>
+				    		<div class="col-md-9">
+					    		<input id="panel-data" type="file" class="form-control" data-bind="fileUpload: { property: 'Document' }, fileSrc: filename" />
+				    		</div>
+			    		</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="panel" data-bind="visible: (app.mode() == 'upload')">
+			<div class="panel-body">
+		    	<div class="grid grid-upload" data-bind="kendoGrid: { dataSource: { pageSize: 15 }, data: tr.uploadData, selectable: 'multiple, row', change: tr.selectGridUpload, columns: tr.uploadColumns, filterfable: false, pageable: true }"></div>
+		    </div>
+		    <!-- <p class="bg-danger bgcustom">Please click row to edit!</p> -->
 		</div>
 	</div>
 </div>

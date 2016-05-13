@@ -1,0 +1,82 @@
+.notif {
+  position: fixed;
+  bottom: 0;
+  width: 120px;
+  right: 15px;
+  z-index: 1200;
+  background: #233D6C;
+  border: 1px solid #233D6C;
+  height: 30px;
+  overflow: hidden; }
+  .notif .btn {
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    color: #FFFFFF;
+    font-size: 14px; }
+  .notif .status {
+    font-size: 14px;
+    margin-top: 3px;
+    color: #03cc03; }
+  .notif .media-body > small {
+    display: block;
+    margin-bottom: -2px;
+    font-size: 9px;
+    margin-top: 10px;
+    color: #000; }
+  .notif .content-notif .media > [class*="pull-"] {
+    margin: 0; }
+  .notif .footer-notif {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    position: relative;
+    margin: 0; }
+    .notif .footer-notif textarea {
+      background: transparent;
+      border: 0;
+      color: #333;
+      box-shadow: none;
+      font-size: 12px; }
+    .notif .footer-notif .pull-left {
+      border-right: 1px solid rgba(51, 51, 51, 0.17); }
+    .notif .footer-notif .pull-right {
+      border-right: 1px solid rgba(51, 51, 51, 0.17); }
+    .notif .footer-notif [class*="pull-"] {
+      color: #7A7A7A;
+      font-size: 14px;
+      padding: 17px 7px;
+      margin: 0; }
+      .notif .footer-notif [class*="pull-"]:hover {
+        color: #000;
+        cursor: pointer; }
+  .notif .content-notif {
+    background: #887c5a;
+    height: 277px;
+    overflow: auto;
+    padding: 10px;
+    width: 300px; }
+    .notif .content-notif .media-body {
+      min-width: 100px;
+      background: #D6E0F7;
+      color: #000;
+      min-height: 50px;
+      padding: 5px;
+      font-size: 11px; }
+
+.ijo {
+  color: #03cc03; }
+
+.media-body {
+  width: 300px;
+  border-radius: 3px; }
+
+.media, .media-body {
+  overflow: hidden;
+  zoom: 1; }
+
+.notif.toggled {
+  width: auto;
+  height: 350px; }
+
+/*# sourceMappingURL=ecnotif.css.map */
