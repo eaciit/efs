@@ -56,12 +56,11 @@ func (ac *AccountController) GetAccount(r *knot.WebContext) interface{} {
 		startdate = time.Date(2016, 1, 1, 0, 0, 0, 0, time.UTC)
 		enddate = startdate.AddDate(0, 1, 0)
 	}
-
 	mdatas := make([]toolkit.M, 0, 0)
 	for _, v := range data {
 		mdata := toolkit.M{}
 		mdata.Set("_id", v.ID).Set("title", v.Title).Set("type", v.Type).Set("group", v.Group)
-		opening, in, out, balace := efs.GetOpeningInOutBalace(v.ID, v.Type, startdate, enddate)
+		opening, in, out, balace := efs.GetOpeningInOutBalace(v.ID, v.Type, startdate.UTC(), enddate.UTC())
 		mdata.Set("opening", opening).Set("in", in).Set("out", out).Set("balance", balace)
 		mdatas = append(mdatas, mdata)
 	}
