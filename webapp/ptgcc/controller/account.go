@@ -1,10 +1,12 @@
 package controller
 
 import (
+	"github.com/eaciit/efs"
 	"github.com/eaciit/efs/webapp/ptgcc/helper"
 	"github.com/eaciit/efs/webapp/ptgcc/model"
 	"github.com/eaciit/knot/knot.v1"
 	"github.com/eaciit/toolkit"
+	"time"
 )
 
 type AccountController struct {
@@ -32,7 +34,7 @@ func (ac *AccountController) SaveAccount(r *knot.WebContext) interface{} {
 
 func (ac *AccountController) GetAccount(r *knot.WebContext) interface{} {
 	r.Config.OutputType = knot.OutputJson
-
+	var startdate, enddate time.Time
 	payload := toolkit.M{}
 	if err := r.GetPayload(&payload); err != nil {
 		return helper.CreateResult(false, nil, err.Error())
@@ -44,7 +46,26 @@ func (ac *AccountController) GetAccount(r *knot.WebContext) interface{} {
 	if err != nil {
 		return helper.CreateResult(false, nil, err.Error())
 	}
-	return helper.CreateResult(true, data, "")
+
+	if payload.Has("startdate") && payload.Has("enddate") {
+		_ = toolkit.Serde(payload["startdate"], &startdate, "json")
+		_ = toolkit.Serde(payload["enddate"], &enddate, "json")
+	}
+
+	if startdate.IsZero() || enddate.IsZero() {
+		startdate = time.Date(2016, 1, 1, 0, 0, 0, 0, time.UTC)
+		enddate = startdate.AddDate(0, 1, 0)
+	}
+
+	mdatas := make([]toolkit.M, 0, 0)
+	for _, v := range data {
+		mdata := toolkit.M{}
+		mdata.Set("_id", v.ID).Set("title", v.Title).Set("type", v.Type).Set("group", v.Group)
+		opening, in, out, balace := efs.GetOpeningInOutBalace(v.ID, v.Type, startdate, enddate)
+		mdata.Set("opening", opening).Set("in", in).Set("out", out).Set("balance", balace)
+		mdatas = append(mdatas, mdata)
+	}
+	return helper.CreateResult(true, mdatas, "")
 }
 
 func (ac *AccountController) GetAllGroup(r *knot.WebContext) interface{} {

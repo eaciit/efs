@@ -132,6 +132,64 @@ func updatesummary(lt *LedgerTrans, in, out float64) (err error) {
 	return
 }
 
+func GetOpeningInOutBalace(data string, atype AccountTypeEnum, startdate, enddate time.Time) (opening, in, out, balance float64) {
+	daccounts := make([]string, 0, 0)
+	if atype == Account {
+		daccounts = append(daccounts, data)
+	} else {
+		var cond []*dbox.Filter
+		for _, v := range data {
+			cond = append(cond, dbox.Eq("group", v))
+		}
+		adata := []Accounts{}
+		csr, err := Find(new(Accounts), dbox.Or(cond...), nil)
+		if err != nil {
+			return
+		}
+		err = csr.Fetch(&adata, 0, false)
+		for _, v := range adata {
+			daccounts = append(daccounts, v.ID)
+		}
+		csr.Close()
+	}
+
+	if len(daccounts) == 0 {
+		return
+	}
+
+	var acond []*dbox.Filter
+	var cond *dbox.Filter
+	for _, v := range data {
+		acond = append(acond, dbox.Eq("account", v))
+	}
+
+	if len(acond) > 0 {
+		cond = dbox.Or(acond...)
+	}
+
+	cond = dbox.And(cond, dbox.Gte("sumdate", startdate.UTC()), dbox.Lt("sumdate", enddate.UTC()))
+	asum := []LedgerSummary{}
+	csr, err := Find(new(LedgerSummary), cond, toolkit.M{}.Set("order", []string{"sumdate"}))
+	if err != nil {
+		return
+	}
+	defer csr.Close()
+	err = csr.Fetch(&asum, 0, false)
+
+	for i, v := range asum {
+
+		if i == 0 {
+			opening = v.Opening
+		}
+
+		in += v.In
+		out += v.Out
+		balance = v.Balance
+	}
+
+	return
+}
+
 /*
 LedgerSummaries:
 [

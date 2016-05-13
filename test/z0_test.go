@@ -71,7 +71,7 @@ func loaddatasample() (arrtkm []*efs.StatementElement, err error) {
 }
 
 func TestCreateStatement(t *testing.T) {
-	t.Skip("Skip : Comment this line to do test")
+	// t.Skip("Skip : Comment this line to do test")
 	arrdata, err := loaddatasample()
 	if err != nil {
 		t.Errorf("Error to load data sample: %s \n", err.Error())
@@ -80,7 +80,7 @@ func TestCreateStatement(t *testing.T) {
 
 	// toolkit.Println(arrdata)
 	ds := efs.NewStatements()
-	// ds.ID = toolkit.RandomString(32)
+	ds.ID = toolkit.RandomString(32)
 	ds.ID = "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j"
 	ds.Title = "donation"
 	ds.Elements = make([]*efs.StatementElement, 0, 0)
@@ -119,7 +119,7 @@ func TestLogic(t *testing.T) {
 }
 
 func TestRunStatement(t *testing.T) {
-	// t.Skip("Skip : Comment this line to do test")
+	t.Skip("Skip : Comment this line to do test")
 	sid := "bid1EWFRZwL-at1uyFvzJYUjPu3yuh3j"
 	// sid = "qZ-SesL2s0Q7VODxyWj6-RVlqsa56ZMJ"
 
@@ -246,7 +246,7 @@ func TestRandomCode(t *testing.T) {
 }
 
 func TestCreateAccount(t *testing.T) {
-	t.Skip("Skip : Comment this line to do test")
+	// t.Skip("Skip : Comment this line to do test")
 	ac := new(efs.Accounts)
 	ac.ID = "T1234"
 	ac.Title = "TEST01"
@@ -267,7 +267,7 @@ func TestCreateAccount(t *testing.T) {
 }
 
 func TestEditAccount(t *testing.T) {
-	t.Skip("Skip : Comment this line to do test")
+	// t.Skip("Skip : Comment this line to do test")
 	ac := new(efs.Accounts)
 	ac.ID = "T1234"
 	ac.Title = "TEST01234"
@@ -279,7 +279,7 @@ func TestEditAccount(t *testing.T) {
 }
 
 func TestAddTransaction(t *testing.T) {
-	t.Skip("Skip : Comment this line to do test")
+	// t.Skip("Skip : Comment this line to do test")
 	lt := new(efs.LedgerTrans)
 	lt.ID = toolkit.RandomString(32)
 	lt.Company = "100"

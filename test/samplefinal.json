@@ -466,5 +466,20 @@
       "negatevalue":false,
       "negatedisplay":true,
       "column":2
+   },
+   {
+      "index":37,
+      "title1":"Calculate Account T1234",
+      "title2":"",
+      "type":1,
+      "datavalue":["T1234"],
+      "show":true,
+      "showformula":false,
+      "bold":false,
+      "negatevalue":false,
+      "negatedisplay":true,
+      "column":2,
+      "TransactionReadType":2,
+      "TimeReadType":0
    }
 ]
