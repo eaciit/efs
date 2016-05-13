@@ -47,7 +47,8 @@ ll.ledgerListColumns = ko.observableArray([
 		}
 		return html.join(', ');
 	} },
-	{ field: "period", title: "Period" },
+	// { field: "period", title: "Period" },
+	{ field: "opening", title: "Opening" },
 	{ field: "in", title: "In" },
 	{ field: "out", title: "Out" },
 	{ field: "balance", title: "Balance" },
