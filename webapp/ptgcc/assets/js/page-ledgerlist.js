@@ -55,13 +55,13 @@ ll.ledgerListColumns = ko.observableArray([
 ]);
 
 ll.getMonthDateRange = function() {
-    var startDate = moment([parseInt(moment().format('YYYY')), parseInt(moment().format('MM')) - 1]);
-    var endDate = moment(startDate).endOf('month');
+    var startDate = moment([parseInt(moment().format('YYYY')), parseInt(moment().format('MM')) - 1]).startOf('day');
+    var endDate = moment(startDate).endOf('month').startOf('day');
     ll.configFilter.startdate(startDate.toDate());
     ll.configFilter.enddate(endDate.toDate());
 }
 ll.getLedgerList = function(){
-	app.ajaxPost("/account/getaccount", { search: ll.searchField(), startdate: ll.configFilter.startdate(), enddate: ll.configFilter.enddate() }, function (res) {
+	app.ajaxPost("/account/getaccount", { search: ll.searchField(), startdate: moment(ll.configFilter.startdate()).add(1, 'days'), enddate: moment(ll.configFilter.enddate()).add(1, 'days') }, function (res) {
 		if (!app.isFine(res)) {
 			return;
 		}
