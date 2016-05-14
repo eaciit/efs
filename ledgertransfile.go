@@ -2,7 +2,11 @@ package efs
 
 import (
 	"errors"
+	"github.com/eaciit/dbox"
+	_ "github.com/eaciit/dbox/dbc/csv"
 	"github.com/eaciit/orm/v1"
+	"github.com/eaciit/toolkit"
+	"strings"
 	"time"
 )
 
@@ -16,6 +20,7 @@ type LedgerTransFile struct {
 	Account       []string  `json:"account",bson:"account"`
 	Process       float64   `json:"process",bson:"process"`
 	Status        string    `json:"status",bson:"status"`
+	Note          string    `json:"note",bson:"note"`
 }
 
 func (e *LedgerTransFile) RecordID() interface{} {
@@ -26,14 +31,65 @@ func (e *LedgerTransFile) TableName() string {
 	return "ledgertransfile"
 }
 
-func (ltf *LedgerTransFile) Save(fileloc string) error {
-	//Process File
+func (ltf *LedgerTransFile) Save() error {
 	e := Save(ltf)
 	if e != nil {
 		return errors.New("Save: " + e.Error())
 	}
 
 	return e
+}
+
+func (ltf *LedgerTransFile) ProcessFile(loc, connector string) (err error) {
+	conn, err := dbox.NewConnection(connector,
+		&dbox.ConnectionInfo{loc, "", "", "", toolkit.M{}.Set("useheader", true)})
+	if err != nil {
+		err = errors.New(toolkit.Sprintf("Process File error found : %v", err.Error()))
+		return
+	}
+
+	err = conn.Connect()
+	if err != nil {
+		err = errors.New(toolkit.Sprintf("Process File error found : %v", err.Error()))
+		return
+	}
+
+	c, err := conn.NewQuery().Select().Cursor(nil)
+	if err != nil {
+		return
+	}
+
+	arrlt := make([]*LedgerTrans, 0, 0)
+	err = c.Fetch(&arrlt, 0, false)
+	if err != nil {
+		if strings.Contains(err.Error(), "Not found") {
+			err = nil
+			return
+		}
+		err = errors.New(toolkit.Sprintf("Process File error found : %v", err.Error()))
+		return
+	}
+
+	go func(arrlt []*LedgerTrans, ltf *LedgerTransFile) {
+		for i, v := range arrlt {
+			ltf.Process = float64(i) / float64(len(arrlt)) * 100
+			err := v.Save()
+			if err != nil {
+				ltf.Note = toolkit.Sprintf("Process-%d error found : %v", i, err.Error())
+				_ = ltf.Save()
+				return
+			}
+
+			if toolkit.ToInt(ltf.Process, toolkit.RoundingAuto)%5 == 0 {
+				_ = ltf.Save()
+			}
+
+		}
+		ltf.Process = 100
+		_ = ltf.Save()
+	}(arrlt, ltf)
+
+	return
 }
 
 func (ltf *LedgerTransFile) Delete() error {
