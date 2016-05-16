@@ -22,11 +22,11 @@ func CreateAccountController(s *knot.Server) *AccountController {
 func (ac *AccountController) SaveAccount(r *knot.WebContext) interface{} {
 	r.Config.OutputType = knot.OutputJson
 
-	payload := new(efscore.Account)
+	payload := toolkit.M{}
 	if err := r.GetPayload(&payload); err != nil {
 		return helper.CreateResult(false, nil, err.Error())
 	}
-	if err := payload.Save(); err != nil {
+	if err := new(efscore.Account).SaveAcc(payload); err != nil {
 		return helper.CreateResult(false, nil, err.Error())
 	}
 	return helper.CreateResult(true, nil, "")

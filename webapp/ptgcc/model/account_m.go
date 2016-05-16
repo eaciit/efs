@@ -66,13 +66,30 @@ func (ac *Account) GetById() error {
 	return nil
 }
 
-func (ac *Account) Save() error {
-	if ac.ID == "" {
-		ac.ID = toolkit.RandomString(32)
-	}
-	if err := efs.Save(ac); err != nil {
+func (ac *Account) SaveAcc(payload toolkit.M) error {
+	ls := new(efs.LedgerSummary)
+	ls.ID = toolkit.RandomString(32)
+	ls.SumDate = toolkit.ToDate(payload.Get("periode").(string), "")
+	ls.Account = toolkit.ToString(payload.Get("_id", ""))
+	ls.Opening = toolkit.ToFloat64(payload.Get("opening"), 6, toolkit.RoundingAuto)
+	ls.In = 0
+	ls.Out = 0
+	ls.Balance = ls.Opening
+
+	payload.Unset("periode")
+	payload.Unset("in")
+	payload.Unset("opening")
+	payload.Unset("out")
+	payload.Unset("periode")
+
+	if err := toolkit.Serde(payload, ac, ""); err != nil {
 		return err
 	}
+
+	if err := ac.Save(ls); err != nil {
+		return err
+	}
+
 	return nil
 }
 
