@@ -64,3 +64,22 @@ func ImageUploadHandler(r *knot.WebContext, filename, dstpath string) (error, st
 
 	return nil, newImageName
 }
+
+func UploadFileHandler(r *knot.WebContext, tempfile, dstpath, filename string) (error, string, string) {
+	file, handler, err := r.Request.FormFile(tempfile)
+	if err != nil {
+		return err, "", ""
+	}
+	defer file.Close()
+
+	newFileName := filename + filepath.Ext(handler.Filename)
+	dstSource := dstpath + toolkit.PathSeparator + newFileName
+	f, err := os.OpenFile(dstSource, os.O_WRONLY|os.O_CREATE, 0666)
+	if err != nil {
+		return err, "", ""
+	}
+	defer f.Close()
+	io.Copy(f, file)
+
+	return nil, handler.Filename, newFileName
+}

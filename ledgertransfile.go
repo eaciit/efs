@@ -126,7 +126,7 @@ func (ltf *LedgerTransFile) GetAccountFile(loc, connector string) (err error) {
 	err = c.Fetch(&arrtmk, 0, false)
 	for _, v := range arrtmk {
 		str := toolkit.ToString(v.Get("Account", ""))
-		if str != "" && toolkit.HasMember(ltf.Account, str) {
+		if str != "" && !toolkit.HasMember(ltf.Account, str) {
 			ltf.Account = append(ltf.Account, str)
 		}
 	}
