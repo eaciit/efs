@@ -12,7 +12,7 @@ ly.varMenu = [{"id":"formula", "title":"EFS", "childrens":[], "link":"/web/index
 				{"id":"transaction", "title":"Transaction", "childrens":[], "link":"/web/transaction"},
 			], "link":"#"},];
 ly.element = function(data){
-	console.log(data.length);
+	// console.log(data.length);
 	$parent = $('#nav-ul');
 	$navbar = $('<ul class="nav navbar-nav"></ul>');
 	$navbar.appendTo($parent);
@@ -38,7 +38,23 @@ ly.element = function(data){
 		});
 	}
 
-}
+};
+ly.getFileTransaction = function(){
+	app.ajaxPost("/ledgertransfile/getltfonprocess", { }, function (res) {
+		if (!app.isFine(res)) {
+			return;
+		}
+		var tempFile = new Array();
+		for (var i in res.data){
+			tempFile.push({
+				id: res.data[i]._id,
+				text: res.data[i].filename + "<br/>" + res.data[i].account.toString(),
+			});
+		}
+		console.log(tempFile);
+		$('.content-notif').ecNotif('addMultiple',{notif:false,data:tempFile});
+	});
+};
 
 ly.getLogout = function(){
 	//alert('masuk');
@@ -85,5 +101,6 @@ ly.getLoadMenu = function(){
 
 
 $(function (){
+	ly.getFileTransaction();
 	ly.getLoadMenu();
 });

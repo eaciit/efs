@@ -153,22 +153,22 @@ tr.templateUpload = {
 tr.uploadData = ko.observableArray([]);
 tr.configUpload = ko.mapping.fromJS(tr.templateUpload);
 tr.uploadColumns = ko.observableArray([
-	{headerTemplate: "<center><input type='checkbox' class='uploadcheckall' onclick=\"tr.checkDeleteData(this, 'uploadall')\"/></center>", width: 50, attributes: { style: "text-align: center;" }, template: function (d) {
+	{headerTemplate: "<center><input type='checkbox' class='uploadcheckall' onclick=\"tr.checkDeleteData(this, 'uploadall')\"/></center>", width: 10, attributes: { style: "text-align: center;" }, template: function (d) {
 		return [
 			"<input type='checkbox' class='uploadcheck' idcheck='"+d._id+"' onclick=\"tr.checkDeleteData(this, 'upload')\" />"
 		].join(" ");
 	}},
-	{ field: "filename", title: "Filename" },
-	{ field: "desc", title: "Description" },
-	{ field: "date", title: "Date", template: "<span>#=moment(date).format('DD MMM YYYY')#</span>"},
-	{ field: "account", title: "Account", template: function (d) {
+	{ field: "filename", width: 60, title: "Filename" },
+	{ field: "desc", width: 100, title: "Description" },
+	{ field: "date", width: 50, title: "Date", template: "<span>#=moment(date).format('DD MMM YYYY')#</span>"},
+	{ field: "account", width: 50, title: "Account", template: function (d) {
 		var html = [];
 		for (var i = 0; i < d.account.length; i++) {
 			html.push('<span>' + d.account[i] + '</span>');
 		}
 		return html.join(', ');
 	} },
-	{ field: "process", title: "Process", template: "<span>#=process#%</span>" },
+	{ field: "process", width: 20, title: "Process", template: "<span>#=process#%</span>" },
 	{ title: "Action", width: 20, attributes: { style: "text-align: center; cursor: pointer;"}, template: function (d) {
         return [
 			"<button class='btn btn-sm btn-default btn-text-success tooltipster'><span class='glyphicon glyphicon-play'></span></button>",
