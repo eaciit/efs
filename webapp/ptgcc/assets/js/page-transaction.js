@@ -192,8 +192,8 @@ tr.saveTransFile = function(){
 	}
 	// var param = ko.mapping.toJS(tr.configUpload);
     var formData = new FormData();
-    formData.append("desc", tr.configUpload().desc());
-    formData.append("filename", tr.configUpload().filename());
+    formData.append("desc", tr.configUpload.desc());
+    // formData.append("filename", tr.configUpload.filename());
     
     var attach = $(".form-add-transupload").find("#panel-data");
     if (attach.val() !== "") {
