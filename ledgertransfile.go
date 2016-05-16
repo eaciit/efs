@@ -101,8 +101,8 @@ func (ltf *LedgerTransFile) Delete() error {
 	return e
 }
 
-func GetAccount(loc, connector string) (arrstr []string) {
-	arrstr = make([]string, 0, 0)
+func (ltf *LedgerTransFile) GetAccountFile(loc, connector string) (err error) {
+	ltf.Account = make([]string, 0, 0)
 
 	conn, err := dbox.NewConnection(connector,
 		&dbox.ConnectionInfo{loc, "", "", "", toolkit.M{}.Set("useheader", true)})
@@ -126,8 +126,8 @@ func GetAccount(loc, connector string) (arrstr []string) {
 	err = c.Fetch(&arrtmk, 0, false)
 	for _, v := range arrtmk {
 		str := toolkit.ToString(v.Get("Account", ""))
-		if str != "" && toolkit.HasMember(arrstr, str) {
-			arrstr = append(arrstr, str)
+		if str != "" && toolkit.HasMember(ltf.Account, str) {
+			ltf.Account = append(ltf.Account, str)
 		}
 	}
 

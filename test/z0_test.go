@@ -71,7 +71,7 @@ func loaddatasample() (arrtkm []*efs.StatementElement, err error) {
 }
 
 func TestCreateStatement(t *testing.T) {
-	// t.Skip("Skip : Comment this line to do test")
+	t.Skip("Skip : Comment this line to do test")
 	arrdata, err := loaddatasample()
 	if err != nil {
 		t.Errorf("Error to load data sample: %s \n", err.Error())
@@ -236,17 +236,36 @@ func TestFormula(t *testing.T) {
 }
 
 func TestRandomCode(t *testing.T) {
-	t.Skip("Skip : Comment this line to do test")
-	arstr := make([]string, 0, 0)
-	arstr = append(arstr, "satu")
-	arstr = append(arstr, "dua")
-	arstr = append(arstr, "tiga")
+	// t.Skip("Skip : Comment this line to do test")
+	conn, err := dbox.NewConnection("csv",
+		&dbox.ConnectionInfo{toolkit.Sprintf("%v/sampletrans.csv", wd), "", "", "", toolkit.M{}.Set("useheader", true)})
+	if err != nil {
+		return
+	}
 
-	toolkit.Println(toolkit.TypeName(arstr))
+	err = conn.Connect()
+	if err != nil {
+		return
+	}
+
+	c, err := conn.NewQuery().Select().Cursor(nil)
+	if err != nil {
+		return
+	}
+
+	arrtkm := make([]*efs.LedgerTrans, 0, 0)
+	// arrtkm := make([]toolkit.M, 0, 0)
+	err = c.Fetch(&arrtkm, 0, false)
+	// for k, v := range arrtkm[0] {
+	// 	toolkit.Printfn("%v - %v", k, toolkit.TypeName(v))
+	// }
+	toolkit.Printfn("%v", arrtkm[0])
+
+	return
 }
 
 func TestCreateAccount(t *testing.T) {
-	// t.Skip("Skip : Comment this line to do test")
+	t.Skip("Skip : Comment this line to do test")
 	ac := new(efs.Accounts)
 	ac.ID = "T1234"
 	ac.Title = "TEST01"
@@ -267,7 +286,7 @@ func TestCreateAccount(t *testing.T) {
 }
 
 func TestEditAccount(t *testing.T) {
-	// t.Skip("Skip : Comment this line to do test")
+	t.Skip("Skip : Comment this line to do test")
 	ac := new(efs.Accounts)
 	ac.ID = "T1234"
 	ac.Title = "TEST01234"
@@ -279,7 +298,7 @@ func TestEditAccount(t *testing.T) {
 }
 
 func TestAddTransaction(t *testing.T) {
-	// t.Skip("Skip : Comment this line to do test")
+	t.Skip("Skip : Comment this line to do test")
 	lt := new(efs.LedgerTrans)
 	lt.ID = toolkit.RandomString(32)
 	lt.Company = "100"
