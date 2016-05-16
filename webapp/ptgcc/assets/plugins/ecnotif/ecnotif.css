@@ -1,7 +1,7 @@
 .notif {
   position: fixed;
   bottom: 0;
-  width: 120px;
+  width: 150px;
   right: 15px;
   z-index: 1200;
   background: #233D6C;
@@ -51,7 +51,7 @@
         color: #000;
         cursor: pointer; }
   .notif .content-notif {
-    background: #887c5a;
+    background: #FFFFFF;
     height: 277px;
     overflow: auto;
     padding: 10px;
@@ -62,7 +62,7 @@
       color: #000;
       min-height: 50px;
       padding: 5px;
-      font-size: 11px; }
+      font-size: 13px; }
 
 .ijo {
   color: #03cc03; }
@@ -73,7 +73,8 @@
 
 .media, .media-body {
   overflow: hidden;
-  zoom: 1; }
+  zoom: 1;
+  margin-top: 8px; }
 
 .notif.toggled {
   width: auto;
