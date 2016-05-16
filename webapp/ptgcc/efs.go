@@ -42,6 +42,7 @@ func main() {
 	server.Register(controller.CreateStatementController(server), "")
 	server.Register(controller.CreateStatementVersionController(server), "")
 	server.Register(controller.CreateLedgerTransactionController(server), "")
+	server.Register(controller.CreateLedgerTransFileController(server), "")
 	server.Register(controller.CreateAccountController(server), "")
 	server.Register(controller.CreateLoginController(server), "")
 
@@ -76,12 +77,12 @@ func main() {
 }
 
 func prepareconnection() (conn dbox.IConnection, err error) {
-	// conn, err = dbox.NewConnection("mongo",
-	// 	&dbox.ConnectionInfo{"192.168.0.200:27017", "efspttgcc", "", "", toolkit.M{}.Set("timeout", 3)})
+	conn, err = dbox.NewConnection("mongo",
+		&dbox.ConnectionInfo{"192.168.0.200:27017", "efspttgcc", "", "", toolkit.M{}.Set("timeout", 3)})
 
-	db := filepath.Join(controller.EFS_DATA_PATH, "db")
-	conn, err = dbox.NewConnection("jsons",
-		&dbox.ConnectionInfo{db, "", "", "", toolkit.M{}.Set("newfile", true)})
+	// db := filepath.Join(controller.EFS_DATA_PATH, "db")
+	// conn, err = dbox.NewConnection("jsons",
+	// 	&dbox.ConnectionInfo{db, "", "", "", toolkit.M{}.Set("newfile", true)})
 
 	if err != nil {
 		return
