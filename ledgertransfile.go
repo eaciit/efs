@@ -18,8 +18,8 @@ type LedgerTransFile struct {
 	Desc          string    `json:"desc",bson:"desc"`
 	Date          time.Time `json:"date",bson:"date"`
 	Account       []string  `json:"account",bson:"account"`
-	Process       float64   `json:"process",bson:"process"`
-	Status        string    `json:"status",bson:"status"`
+	Process       float64   `json:"process",bson:"process"` // 0
+	Status        string    `json:"status",bson:"status"`   // ready, done, failed, onprocess
 	Note          string    `json:"note",bson:"note"`
 }
 
@@ -40,6 +40,7 @@ func (ltf *LedgerTransFile) Save() error {
 	return e
 }
 
+//Validasi check account, change status,
 func (ltf *LedgerTransFile) ProcessFile(loc, connector string) (err error) {
 	conn, err := dbox.NewConnection(connector,
 		&dbox.ConnectionInfo{loc, "", "", "", toolkit.M{}.Set("useheader", true)})
@@ -98,4 +99,37 @@ func (ltf *LedgerTransFile) Delete() error {
 		return errors.New("Save: " + e.Error())
 	}
 	return e
+}
+
+func GetAccount(loc, connector string) (arrstr []string) {
+	arrstr = make([]string, 0, 0)
+
+	conn, err := dbox.NewConnection(connector,
+		&dbox.ConnectionInfo{loc, "", "", "", toolkit.M{}.Set("useheader", true)})
+	if err != nil {
+		err = errors.New(toolkit.Sprintf("Process File error found : %v", err.Error()))
+		return
+	}
+
+	err = conn.Connect()
+	if err != nil {
+		err = errors.New(toolkit.Sprintf("Process File error found : %v", err.Error()))
+		return
+	}
+
+	c, err := conn.NewQuery().Select("Account").Cursor(nil)
+	if err != nil {
+		return
+	}
+
+	arrtmk := make([]toolkit.M, 0, 0)
+	err = c.Fetch(&arrtmk, 0, false)
+	for _, v := range arrtmk {
+		str := toolkit.ToString(v.Get("Account", ""))
+		if str != "" && toolkit.HasMember(arrstr, str) {
+			arrstr = append(arrstr, str)
+		}
+	}
+
+	return
 }
