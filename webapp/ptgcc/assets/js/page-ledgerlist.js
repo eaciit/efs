@@ -8,7 +8,7 @@ ll.templateLedgerList = {
     group: [],
     periode: moment().format(),
     opening: 0,
-    date: moment().format(),
+    date: new Date(),
     in: 0,
     out: 0,
     balance: 0,
