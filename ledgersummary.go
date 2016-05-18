@@ -137,12 +137,24 @@ func GetOpeningInOutBalace(data string, atype AccountTypeEnum, startdate, enddat
 	if atype == Account {
 		daccounts = append(daccounts, data)
 	} else {
-		var cond []*dbox.Filter
+		/*var cond []*dbox.Filter
 		for _, v := range data {
 			cond = append(cond, dbox.Eq("group", v))
 		}
 		adata := []Accounts{}
 		csr, err := Find(new(Accounts), dbox.Or(cond...), nil)
+		if err != nil {
+			return
+		}
+		err = csr.Fetch(&adata, 0, false)
+		for _, v := range adata {
+			daccounts = append(daccounts, v.ID)
+		}
+		csr.Close()*/
+		var cond *dbox.Filter
+		cond = dbox.Eq("_id", data)
+		adata := []Accounts{}
+		csr, err := Find(new(Accounts), cond, nil)
 		if err != nil {
 			return
 		}
@@ -157,7 +169,7 @@ func GetOpeningInOutBalace(data string, atype AccountTypeEnum, startdate, enddat
 		return
 	}
 
-	var acond []*dbox.Filter
+	/*var acond []*dbox.Filter
 	var cond *dbox.Filter
 	for _, v := range data {
 		acond = append(acond, dbox.Eq("account", v))
@@ -175,9 +187,31 @@ func GetOpeningInOutBalace(data string, atype AccountTypeEnum, startdate, enddat
 	}
 	defer csr.Close()
 	err = csr.Fetch(&asum, 0, false)
+	toolkit.Println("asum", asum)
 
 	for i, v := range asum {
 
+		if i == 0 {
+			opening = v.Opening
+		}
+
+		in += v.In
+		out += v.Out
+		balance = v.Balance
+	}*/
+
+	var cond *dbox.Filter
+
+	cond = dbox.And(dbox.Eq("account", data), dbox.Gte("sumdate", startdate.UTC()), dbox.Lte("sumdate", enddate.UTC()))
+	asum := []LedgerSummary{}
+	csr, err := Find(new(LedgerSummary), cond, toolkit.M{}.Set("order", []string{"sumdate"}))
+	if err != nil {
+		return
+	}
+	defer csr.Close()
+	err = csr.Fetch(&asum, 0, false)
+
+	for i, v := range asum {
 		if i == 0 {
 			opening = v.Opening
 		}
