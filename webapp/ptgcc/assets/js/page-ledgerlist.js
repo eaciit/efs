@@ -22,6 +22,7 @@ ll.dataType = ko.observableArray([
 	{text: "Account", value: 0},
 ]);
 ll.searchField = ko.observable('');
+ll.modeApp = ko.observable(true);
 ll.configLedgerList = ko.mapping.fromJS(ll.templateLedgerList);
 ll.configFilter = ko.mapping.fromJS(ll.templateFilter);
 ll.ledgerListData = ko.observableArray([]);
@@ -72,6 +73,7 @@ ll.getLedgerList = function(){
 };
 ll.addLedgerList = function() {
 	app.mode("edit");
+	ll.modeApp(true);
 	ko.mapping.fromJS(ll.templateLedgerList, ll.configLedgerList);
 };
 ll.removeLedgerList = function(){
@@ -120,6 +122,7 @@ ll.editLedger = function(_id){
 		}
 
 		app.mode("edit");	
+		ll.modeApp(false);
 		app.resetValidation(".form-add-efs");
 		ko.mapping.fromJS(res.data, ll.configLedgerList);
 		for (var i in res.data.group){
@@ -129,7 +132,9 @@ ll.editLedger = function(_id){
 };
 ll.backToFront = function(){
 	app.mode("");
+	ll.modeApp(true);
 	ll.getLedgerList();
+	ll.tempCheckIdLedger([]);
 	$('#grouptype').ecLookupDD('clear');
 };
 ll.saveLedgerList = function(){
