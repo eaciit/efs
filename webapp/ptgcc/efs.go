@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/eaciit/dbox"
-	"github.com/eaciit/efs"
+	// "github.com/eaciit/acl"
+	// "github.com/eaciit/dbox"
+	// "github.com/eaciit/efs"
 	"github.com/eaciit/efs/webapp/ptgcc/controller"
 	"github.com/eaciit/efs/webapp/ptgcc/installation"
 	"github.com/eaciit/efs/webapp/ptgcc/model"
@@ -62,7 +63,7 @@ func main() {
 		return true
 	})
 
-	conn, err := prepareconnection()
+	/*conn, err := prepareconnection()
 
 	if err != nil {
 		toolkit.Printf("Error connecting to database: %s \n", err.Error())
@@ -71,12 +72,16 @@ func main() {
 	err = efs.SetDb(conn)
 	if err != nil {
 		toolkit.Printf("Error set database to efs: %s \n", err.Error())
+	}*/
+
+	if err := setAclDatabase(); err != nil {
+		toolkit.Printf("Error set database to efs: %s \n", err.Error())
 	}
 
 	server.Listen()
 }
 
-func prepareconnection() (conn dbox.IConnection, err error) {
+/*func prepareconnection() (conn dbox.IConnection, err error) {
 	conn, err = dbox.NewConnection("mongo",
 		&dbox.ConnectionInfo{"192.168.0.200:27017", "efspttgcc", "", "", toolkit.M{}.Set("timeout", 3)})
 
@@ -90,4 +95,20 @@ func prepareconnection() (conn dbox.IConnection, err error) {
 
 	err = conn.Connect()
 	return
+}*/
+
+func setAclDatabase() error {
+	if err := efscore.InitialSetDatabase(); err != nil {
+		return err
+	}
+
+	if efscore.GetConfig("default_username") == nil {
+		efscore.SetConfig("default_username", "eaciit")
+		efscore.SetConfig("default_password", "Password.1")
+	}
+
+	if err := efscore.PrepareDefaultUser(); err != nil {
+		return err
+	}
+	return nil
 }

@@ -6,6 +6,11 @@ import (
 	"github.com/eaciit/toolkit"
 )
 
+const (
+	CONF_DB_ACL string = "db_acl"
+	CONF_DB_EFS string = "db_efs"
+)
+
 type Databases struct {
 	orm.ModelBase
 	ID   string      `json:"_id",bson:"_id"`
@@ -16,6 +21,51 @@ type Ports struct {
 	orm.ModelBase
 	ID   string `json:"_id",bson:"_id"`
 	Port int    `json:"port",bson:"port"`
+}
+
+type Configuration struct {
+	orm.ModelBase
+	ID    string `json:"_id",bson:"_id"`
+	Value interface{}
+}
+
+func (a *Configuration) TableName() string {
+	return "configurations"
+}
+
+func (a *Configuration) RecordID() interface{} {
+	return a.ID
+}
+
+func GetConfig(key string, args ...string) interface{} {
+	var res interface{} = nil
+	if len(args) > 0 {
+		res = args[0]
+	}
+
+	cursor, err := Find(new(Configuration), dbox.Eq("_id", key))
+	if err != nil {
+		return res
+	}
+
+	if cursor.Count() == 0 {
+		return res
+	}
+
+	data := Configuration{}
+	err = cursor.Fetch(&data, 1, false)
+	if err != nil {
+		return res
+	}
+
+	return data.Value
+}
+
+func SetConfig(key string, value interface{}) {
+	o := new(Configuration)
+	o.ID = key
+	o.Value = value
+	Save(o)
 }
 
 func (p *Ports) TableName() string {
@@ -52,19 +102,9 @@ func (a *Databases) RecordID() interface{} {
 }
 
 func GetDB(key string) interface{} {
-	cursor, err := Find(new(Databases), dbox.Eq("_id", key))
-	if err != nil {
-		return nil
-	}
-
-	if cursor.Count() == 0 {
-		return nil
-	}
-
-	data := Databases{}
-	err = cursor.Fetch(&data, 1, false)
-	if err != nil {
-		return nil
+	data := new(Databases)
+	if err := Get(data, key); err != nil {
+		return err
 	}
 
 	return data.Data
