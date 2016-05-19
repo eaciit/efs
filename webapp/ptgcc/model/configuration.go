@@ -1,7 +1,6 @@
 package efscore
 
 import (
-	"github.com/eaciit/dbox"
 	"github.com/eaciit/orm/v1"
 	"github.com/eaciit/toolkit"
 )
@@ -38,26 +37,10 @@ func (a *Configuration) RecordID() interface{} {
 }
 
 func GetConfig(key string, args ...string) interface{} {
-	var res interface{} = nil
-	if len(args) > 0 {
-		res = args[0]
+	data := new(Configuration)
+	if err := Get(data, key); err != nil {
+		return err
 	}
-
-	cursor, err := Find(new(Configuration), dbox.Eq("_id", key))
-	if err != nil {
-		return res
-	}
-
-	if cursor.Count() == 0 {
-		return res
-	}
-
-	data := Configuration{}
-	err = cursor.Fetch(&data, 1, false)
-	if err != nil {
-		return res
-	}
-
 	return data.Value
 }
 
